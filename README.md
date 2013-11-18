@@ -54,7 +54,7 @@ Be sure to map ports for the following services:
 
 *Note: Be sure to specify the UDP protocol for the Statsd port.*
 
-It's also a good idea to mount volumes for Graphite's Sqlite database, configuration, & log files.
+It's also a good idea to mount volumes for Graphite's SQLite database, configuration, & log files.
 
 * `/opt/graphite/storage`
 * `/opt/graphite/conf`
@@ -79,18 +79,15 @@ See Docker's [working with volumes](http://docs.docker.io/en/latest/use/working_
 
 ## Use Graphite
 
-*Note: These examples assume that you are running Graphite in the Vagrant virtual machine.*
-
 ### Send Some Stats
 
 We'll fake some stats with a random counter to prove things are working.
-
-*Note: We are sending stats to both the carbon back-end & the statsd proxy.*
+*Note: This examples assume that you are running Graphite in the Vagrant virtual machine.*
 
 ```
 while true
 do
-  value=$(((RANDOM % 10) + 1))
+  value="$(((RANDOM % 10) + 1))"
   echo $value
   # echo "example.carbon.counter.changed $value `date -d -${value}min +%s`" | nc localhost 2003
   echo -n "example.statsd.counter.changed:$value|c" | nc -w 1 -u localhost 8125
@@ -98,7 +95,7 @@ do
 done
 ```
 
-## Visualize the Data
+### Visualize the Data
 
 From the host machine visit: [http://localhost:3000/dashboard](http://localhost:3000/dashboard)
 
@@ -110,10 +107,8 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
 * password: root
 * email: root.graphite@mailinator.com
 
-```
-http://localhost:3000/account/login
-http://localhost:3000/admin/auth/user/1/
-```
+First login at: [http://localhost:3000/account/login](http://localhost:3000/account/login)
+Then update the root user's profile at: [](http://localhost:3000/admin/auth/user/1/)
 
 2. Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
 
