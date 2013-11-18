@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# start carbon data collection daemon - default port: 2003 --------------------
+mkdir -p /var/log/carbon
+/opt/graphite/bin/carbon-cache.py start --logdir=/var/log/carbon
+
+# configure graphite ----------------------------------------------------------
+mkdir -p /var/log/graphite
+cat << EOF > /opt/graphite/webapp/graphite/local_settings.py
+LOG_DIR = '/var/log/graphite'
+SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
+EOF
+
+# start graphite web app cgi server -------------------------------------------
+python /opt/graphite/webapp/graphite/manage.py runfcgi host=127.0.0.1 port=8080
+
+# start nginx -----------------------------------------------------------------
+service nginx start
+
+# start statsd ----------------------------------------------------------------
+node /opt/statsd/stats.js /opt/statsd/config.js &
+

@@ -1,0 +1,151 @@
+#!/bin/bash
+
+
+
+# install dependencies --------------------------------------------------------
+apt-get -y --force-yes install lsb-release
+echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
+apt-get update
+
+apt-get -y --force-yes install vim
+
+apt-get -y --force-yes install nginx
+apt-get -y --force-yes install python-flup
+apt-get -y --force-yes install expect
+apt-get -y --force-yes install git
+apt-get -y --force-yes install memcached
+apt-get -y --force-yes install sqlite3
+apt-get -y --force-yes install libcairo2
+apt-get -y --force-yes install libcairo2-dev
+apt-get -y --force-yes install python-cairo
+apt-get -y --force-yes install pkg-config
+
+wget -P /opt http://python-distribute.org/distribute_setup.py
+python /opt/distribute_setup.py
+easy_install pip
+
+pip install django==1.3
+pip install python-memcached==1.53
+pip install django-tagging==0.3.1
+pip install whisper==0.9.12
+pip install twisted==11.1.0
+pip install txAMQP==0.6.2
+
+
+
+
+# get source code -------------------------------------------------------------
+cd /usr/local/src
+git clone https://github.com/graphite-project/graphite-web.git
+cd graphite-web
+git checkout 0.9.12
+
+cd /usr/local/src
+git clone https://github.com/graphite-project/whisper.git
+cd whisper
+git checkout 0.9.12
+
+cd /usr/local/src
+git clone https://github.com/graphite-project/carbon.git
+cd carbon
+git checkout 0.9.12
+
+cd /opt
+git clone https://github.com/etsy/statsd.git
+cd statsd
+git checkout v0.6.0
+
+
+
+
+# install apps ----------------------------------------------------------------
+cd /usr/local/src/graphite-web
+python ./setup.py install
+
+cd /usr/local/src/whisper-src
+python ./setup.py install
+
+cd /usr/local/src/carbon
+python ./setup.py install
+
+
+
+
+# configure django admin user -------------------------------------------------
+cat << EOF > /tmp/graphite_syncdb
+#!/usr/bin/env expect
+
+set timeout -1
+spawn python /opt/graphite/webapp/graphite/manage.py syncdb
+
+expect "Would you like to create one now" {
+  send "yes\r"
+}
+
+expect "Username *:" {
+  send "root\r"
+}
+
+expect "E-mail address:" {
+  send "root.graphite@mailinator.com\r"
+}
+
+expect "Password:" {
+  send "root\r"
+}
+
+expect "Password *:" {
+  send "root\r"
+}
+
+expect "Superuser created successfully"
+EOF
+chmod 775 /tmp/graphite_syncdb
+/tmp/graphite_syncdb
+rm /tmp/graphite_syncdb
+
+
+
+
+# configure carbon ------------------------------------------------------------
+cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf
+cp /opt/graphite/conf/storage-schemas.conf.example /opt/graphite/conf/storage-schemas.conf
+
+
+
+
+# configure nginx -------------------------------------------------------------
+mkdir -p /var/log/nginx
+rm /etc/nginx/sites-enabled/default
+cat << EOF > /etc/nginx/sites-available/graphite
+server {
+    listen 80;
+    root /opt/graphite/webapp/content;
+    index index.html;
+
+    location / {
+      # checks for static file, if not found proxy to app
+      try_files \$uri @app;
+    }
+
+    location @app {
+        include fastcgi_params;
+        fastcgi_split_path_info ^()(.*)$;
+        fastcgi_pass 127.0.0.1:8080;
+    }
+}
+EOF
+ln -s /etc/nginx/sites-available/graphite /etc/nginx/sites-enabled/graphite
+
+
+
+
+# configure statsd ------------------------------------------------------------
+cat << EOF > /opt/statsd/config.js
+{
+  graphiteHost: "127.0.0.1",
+  graphitePort: 2003,
+  port: 8125
+}
+EOF
+
