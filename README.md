@@ -1,6 +1,6 @@
 # Docker Image for Graphite
 
-This image includes the following.
+This image includes the following:
 
 * [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
 * [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end storage
@@ -19,7 +19,8 @@ The intent is to mitigate issues that arise from
 
 ## Vagrant
 
-This project ships with a `Vagrantfile` to simplify using and/or building the image.
+This project ships with a `Vagrantfile` to simplify using and/or building the image,
+but Vagrant isn't required.
 
 ### Clone the Project
 
@@ -37,13 +38,13 @@ vagrant up
 vagrant ssh
 ```
 
-## Build the Image
+### Build the Image
 
 ```
 sudo docker build -t hopsoft/graphite /vagrant
 ```
 
-## Use the Image
+### Use the Image
 
 Be sure to map ports for the following services:
 
@@ -60,8 +61,9 @@ It's also a good idea to mount volumes for Graphite's Sqlite database, configura
 * `/var/log`
 
 ```
-sudo mkdir /var/log/graphite
-sudo docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite bash
+sudo su -
+mkdir /var/log/graphite
+docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite bash
 # manually tweak the container if desired
 /opt/hopsoft/graphite/start
 ```
@@ -96,11 +98,9 @@ do
 done
 ```
 
-### View the Dashbaord
+## Visualize the Data
 
-```
-http://localhost:3000/dashboard
-```
+From the host machine visit: [http://localhost:3000/dashboard](http://localhost:3000/dashboard)
 
 ## What Next?
 
