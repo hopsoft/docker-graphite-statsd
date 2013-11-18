@@ -44,7 +44,7 @@ vagrant ssh
 sudo docker build -t hopsoft/graphite /vagrant
 ```
 
-### Use the Image
+### Start a Container
 
 Be sure to map ports for the following services:
 
@@ -77,7 +77,7 @@ configuration & data should something happen to the original container.
 
 See Docker's [working with volumes](http://docs.docker.io/en/latest/use/working_with_volumes/#create-a-new-container-using-existing-volumes-from-an-existing-container).
 
-## Use Graphite
+## Start Using Graphite
 
 ### Send Some Stats
 
