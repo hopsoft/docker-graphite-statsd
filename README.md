@@ -19,7 +19,7 @@ The intent is to mitigate issues that arise from
 
 ## Vagrant
 
-This project ships with a `Vagrantfile` to simplify the process of using and/or building the image.
+This project ships with a `Vagrantfile` to simplify using and/or building the image.
 
 ### Clone the Project
 
@@ -30,7 +30,7 @@ cd docker-graphite
 
 ### Start the Virtual Machine & Login
 
-*Note: Ports 3000, 4000, & 5000 are mapped between the host & the virtual machine.*
+*Ports 3000, 4000, & 5000 are mapped between the host & the virtual machine.*
 
 ```
 vagrant up
@@ -45,30 +45,30 @@ sudo docker build -t hopsoft/graphite /vagrant
 
 ## Use the Image
 
-The image includes a start-up script that simplifies the process of starting
-the various services that Graphite uses.
-
 Be sure to map ports for the following services:
 
-* __80__ - Nginx which is reverse proxying to the Django front-end dashboard
-* __2003__ - Carbon daemon for backend storage
-* __8125__ - Statsd daemon for the UDP based storage proxy
+* `80` - nginx which is reverse proxying to the Django front-end dashboard
+* `2003` - carbon daemon for backend storage
+* `8125` - statsd daemon for the UDP based storage proxy
 
 *Note: Be sure to specify the UDP protocol for the Statsd port.*
 
-It's also a good idea to mount volumes for Graphite's Sqlite database, configuration, & any log files.
+It's also a good idea to mount volumes for Graphite's Sqlite database, configuration, & log files.
 
 * `/opt/graphite/storage`
 * `/opt/graphite/conf`
 * `/var/log`
 
 ```
+sudo mkdir /var/log/graphite
 sudo docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite bash
 # manually tweak the container if desired
 /opt/hopsoft/graphite/start
 ```
 
 Exit the container with: `CTL-P CTL-Q`
+
+---
 
 Using data volumes will allow you to start a new container while preserving the
 configuration & data should something happen to the original container.
