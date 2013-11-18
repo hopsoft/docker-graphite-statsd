@@ -13,7 +13,7 @@ The notable files for building the Docker image are:
   * `install` - the install script
 
 The majority of the install logic resides in the
-[assets/install](https://github.com/hopsoft/docker-graphite/blob/master/assets/install) script.
+[assets/install](https://github.com/hopsoft/docker-graphite-statsd/blob/master/assets/install) script.
 The intent is to mitigate issues that arise from
 [stacking too many AUFS layers](https://github.com/dotcloud/docker/issues/1171).
 
@@ -25,8 +25,8 @@ but Vagrant isn't required.
 ### Clone the Project
 
 ```
-git clone https://github.com/hopsoft/docker-graphite.git
-cd docker-graphite
+git clone https://github.com/hopsoft/docker-graphite-statsd.git
+cd docker-graphite-statsd
 ```
 
 ### Start the Virtual Machine & Login
@@ -41,7 +41,7 @@ vagrant ssh
 ### Build the Image
 
 ```
-sudo docker build -t hopsoft/graphite /vagrant
+sudo docker build -t hopsoft/graphite-statsd /vagrant
 ```
 
 ### Start a Container
@@ -63,9 +63,9 @@ It's also a good idea to mount volumes for Graphite's SQLite database, configura
 ```
 sudo su -
 mkdir /var/log/graphite
-docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite bash
+docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite-statsd bash
 # manually tweak the container if desired
-/opt/hopsoft/graphite/start
+/opt/hopsoft/graphite-statsd/start
 ```
 
 Exit the container with: `CTL-P CTL-Q`
