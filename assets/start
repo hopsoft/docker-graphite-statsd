@@ -18,5 +18,5 @@ python /opt/graphite/webapp/graphite/manage.py runfcgi host=127.0.0.1 port=8080
 service nginx start
 
 # start statsd ----------------------------------------------------------------
-node /opt/statsd/stats.js /opt/statsd/config.js &
+node /opt/statsd/stats.js /opt/statsd/config.js 2>&1 >> /var/log/statsd.log &
 

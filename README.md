@@ -63,7 +63,7 @@ It's also a good idea to mount volumes for Graphite's Sqlite database, configura
 * `/var/log`
 
 ```
-sudo docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite bash
+sudo docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite bash
 # manually tweak the container if desired
 /opt/hopsoft/graphite/start
 ```
@@ -91,7 +91,7 @@ do
   value=$(((RANDOM % 10) + 1))
   echo $value
   # echo "example.carbon.counter.changed $value `date -d -${value}min +%s`" | nc localhost 2003
-  echo "example.statsd.counter.changed:$value|c" | nc -w 1 -u localhost 8125
+  echo -n "example.statsd.counter.changed:$value|c" | nc -w 1 -u localhost 8125
   sleep 1
 done
 ```
