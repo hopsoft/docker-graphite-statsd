@@ -103,12 +103,12 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
 
 1. Update the default Django admin user account. _The default is insecure._
 
-* username: root
-* password: root
-* email: root.graphite@mailinator.com
+  * username: root
+  * password: root
+  * email: root.graphite@mailinator.com
 
-First login at: [http://localhost:3000/account/login](http://localhost:3000/account/login)
-Then update the root user's profile at: [](http://localhost:3000/admin/auth/user/1/)
+  First login at: [http://localhost:3000/account/login](http://localhost:3000/account/login)
+  Then update the root user's profile at: [http://localhost:3000/admin/auth/user/1/](http://localhost:3000/admin/auth/user/1/)
 
 2. Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
 
