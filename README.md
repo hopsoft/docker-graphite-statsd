@@ -3,8 +3,8 @@
 This image includes the following:
 
 * [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
-* [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end storage
-* [Statsd](https://github.com/etsy/statsd/wiki) - UDP based storage proxy
+* [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end
+* [Statsd](https://github.com/etsy/statsd/wiki) - UDP based back-end proxy
 
 The notable files for building the Docker image are:
 
