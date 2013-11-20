@@ -111,10 +111,9 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   Then update the root user's profile at: [http://localhost:3000/admin/auth/user/1/](http://localhost:3000/admin/auth/user/1/)
 
 2. Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
+  Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
 
-  You should focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
-
-  **Note:** If you change settings in `storage-schemas.conf`, be sure to run `whisper-resize.py` afterwards.
+  **Note:** If you change settings in `storage-schemas.conf`, be sure to run `whisper-resize.py` to resize the whisper files.
 
   For example, if you update the config to look something like this:
 
@@ -147,6 +146,8 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   retentions = 10s:12h # OK
   retentions = 60s:12h # OK
   ```
+
+  [Read more on this subject.](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
 
 3. Learn about [Statsd](https://github.com/etsy/statsd/).
 
