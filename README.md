@@ -114,7 +114,6 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
 
   **Note:** If you change settings in `storage-schemas.conf`, be sure to run `whisper-resize.py` to resize the whisper files.
-
   For example, if you update the config to look something like this:
 
   ```
@@ -130,7 +129,6 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   ```
 
   **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
-
   For example, if `/opt/statsd/config.js` looks like this.
 
   ```
@@ -147,7 +145,7 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   retentions = 60s:12h # OK
   ```
 
-  [Read more on this subject.](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
+  [Read more about synching Statsd with Graphite configs.](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
 
 3. Learn about [Statsd](https://github.com/etsy/statsd/).
 
