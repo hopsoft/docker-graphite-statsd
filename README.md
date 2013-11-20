@@ -132,7 +132,7 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   For example, if `/opt/statsd/config.js` looks like this.
 
   ```
-  flushInterval: 10
+  flushInterval: 10000
   ```
 
   Ensure that `storage-schemas.conf` retentions are no finer grained than 10 seconds.
