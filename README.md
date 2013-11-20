@@ -112,6 +112,42 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
 
 2. Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
 
+  You should focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
+
+  **Note:** If you change settings in `storage-schemas.conf`, be sure to run `whisper-resize.py` afterwards.
+
+  For example, if you update the config to look something like this:
+
+  ```
+  [all]
+  pattern = .*
+  retentions = 10s:12h,1m:7d,10m:5y
+  ```
+
+  Resize the storage files by running this command.
+
+  ```
+  find /opt/graphite/storage -type f -name '*.wsp' -exec whisper-resize.py --nobackup {} 10s:12h 1m:7d 10m:5y \;
+  ```
+
+  **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
+
+  For example, if `/opt/statsd/config.js` looks like this.
+
+  ```
+  flushInterval: 10
+  ```
+
+  Ensure that `storage-schemas.conf` retentions are no finer grained than 10 seconds.
+
+  ```
+  [all]
+  pattern = .*
+  retentions = 5s:12h # WRONG
+  retentions = 10s:12h # OK
+  retentions = 60s:12h # OK
+  ```
+
 3. Learn about [Statsd](https://github.com/etsy/statsd/).
 
 4. Start sending stats from your apps.
