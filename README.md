@@ -154,4 +154,5 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
 ## Additional Reading
 
 * [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
-
+* [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
+* [Configuring Graphite for StatsD](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
