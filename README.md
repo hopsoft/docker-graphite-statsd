@@ -10,10 +10,10 @@ The notable files for building the Docker image are:
 
 * `Dockerfile`
 * `assets` - files copied to the image
-  * `install` - the install script
+  * `build` - the build script
 
-The majority of the install logic resides in the
-[assets/install](https://github.com/hopsoft/docker-graphite-statsd/blob/master/assets/install) script.
+The majority of the build logic resides in the
+[assets/install](https://github.com/hopsoft/docker-graphite-statsd/blob/master/assets/build) script.
 The intent is to mitigate issues that arise from
 [stacking too many AUFS layers](https://github.com/dotcloud/docker/issues/1171).
 

@@ -7,18 +7,17 @@ apt-get -y --force-yes install lsb-release
 echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 apt-get update
 
-apt-get -y --force-yes install vim
-
-apt-get -y --force-yes install nginx
-apt-get -y --force-yes install python-flup
-apt-get -y --force-yes install expect
-apt-get -y --force-yes install git
-apt-get -y --force-yes install memcached
-apt-get -y --force-yes install sqlite3
-apt-get -y --force-yes install libcairo2
-apt-get -y --force-yes install libcairo2-dev
-apt-get -y --force-yes install python-cairo
-apt-get -y --force-yes install pkg-config
+apt-get -y --force-yes install vim \
+  nginx \
+  python-flup \
+  expect \
+  git \
+  memcached \
+  sqlite3 \
+  libcairo2 \
+  libcairo2-dev \
+  python-cairo \
+  pkg-config
 
 wget -P /opt http://python-distribute.org/distribute_setup.py
 python /opt/distribute_setup.py
