@@ -1,5 +1,18 @@
 # Docker Image for Graphite
 
+## Quickstart for the Lazy
+
+Get up & running fast.
+
+```
+git clone https://github.com/hopsoft/docker-graphite-statsd.git
+cd docker-graphite-statsd
+vagrant up
+vagrant ssh
+/vagrant/bin/build
+/vagrant/bin/start
+```
+
 This image includes the following:
 
 * [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
