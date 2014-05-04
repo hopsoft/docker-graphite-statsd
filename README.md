@@ -13,6 +13,8 @@ vagrant ssh
 /vagrant/bin/start
 ```
 
+## Overview
+
 This image includes the following:
 
 * [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
