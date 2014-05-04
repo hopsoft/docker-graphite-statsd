@@ -44,7 +44,21 @@ vagrant ssh
 sudo docker build -t hopsoft/graphite-statsd /vagrant
 ```
 
+Or use the helper script.
+
+```
+/vagrant/bin/build
+```
+
 ### Start a Container
+
+#### The easy way
+
+```
+/vagrant/bin/start
+```
+
+#### The manual way
 
 Be sure to map ports for the following services:
 

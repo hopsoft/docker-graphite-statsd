@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# configure carbon ------------------------------------------------------------
+files=(/usr/local/src/carbon/conf/*.conf.example)
+for file in ${files[@]}
+do
+	name=${file#/usr/local/src/carbon/conf/}
+	name=${name%.example}
+	newfile="/opt/graphite/conf/$name"
+	if [[ ! -e "$newfile" ]]; then
+		cp -v "$file" "$newfile"
+	fi
+done
+
 # start carbon data collection daemon - default port: 2003 --------------------
 mkdir -p /var/log/carbon
 /opt/graphite/bin/carbon-cache.py start --logdir=/var/log/carbon
@@ -21,3 +33,4 @@ service nginx start
 # start statsd ----------------------------------------------------------------
 node /opt/statsd/stats.js /opt/statsd/config.js 2>&1 >> /var/log/statsd.log &
 
+tail -f /var/log/**/*.log

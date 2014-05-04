@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e
-
-export DEBIAN_FRONTEND=noninteractive
-apt-get -qq update
-apt-get -y --force-yes install curl
-curl http://get.docker.io | sh
-
