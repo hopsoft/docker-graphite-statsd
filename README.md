@@ -13,7 +13,7 @@ The notable files for building the Docker image are:
   * `build` - the build script
 
 The majority of the build logic resides in the
-[assets/install](https://github.com/hopsoft/docker-graphite-statsd/blob/master/assets/build) script.
+[assets/build](https://github.com/hopsoft/docker-graphite-statsd/blob/master/assets/build) script.
 The intent is to mitigate issues that arise from
 [stacking too many AUFS layers](https://github.com/dotcloud/docker/issues/1171).
 
@@ -63,12 +63,21 @@ It's also a good idea to mount volumes for Graphite's SQLite database, configura
 ```
 sudo su -
 mkdir /var/log/graphite
-docker run -i -t -p 3000:80 -p 2003:2003 -p 8125:8125/udp -v /var/log/graphite:/var/log -v /opt/graphite/storage -v /opt/graphite/conf hopsoft/graphite-statsd bash
+
+docker run -i -t \
+-p 3000:80 \
+-p 2003:2003 \
+-p 8125:8125/udp \
+-v /var/log/graphite:/var/log \
+-v /opt/graphite/storage \
+-v /opt/graphite/conf \
+hopsoft/graphite-statsd bash
+
 # manually tweak the container if desired
 /opt/hopsoft/graphite-statsd/start
 ```
 
-Exit the container with: `CTL-P CTL-Q`
+Exit the container with: `<CTL-P><CTL-Q>`
 
 ---
 
@@ -125,7 +134,8 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
   Resize the storage files by running this command.
 
   ```
-  find /opt/graphite/storage -type f -name '*.wsp' -exec whisper-resize.py --nobackup {} 10s:12h 1m:7d 10m:5y \;
+  find /opt/graphite/storage -type f -name '*.wsp' \
+  -exec whisper-resize.py --nobackup {} 10s:12h 1m:7d 10m:5y \;
   ```
 
   **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
@@ -153,6 +163,5 @@ From the host machine visit: [http://localhost:3000/dashboard](http://localhost:
 
 ## Additional Reading
 
-* [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
 * [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
 * [Configuring Graphite for StatsD](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
