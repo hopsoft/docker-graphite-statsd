@@ -7,7 +7,7 @@ This Docker image will help you get up & running quickly.
 
 ## Quick Start
 
-```
+```sh
 git clone https://github.com/hopsoft/docker-graphite-statsd.git
 ./docker-graphite-statsd/bin/start
 ```
@@ -43,13 +43,13 @@ This starts a Docker container named: **graphite**
 
 Let's fake some stats with a random counter to prove things are working.
 
-```
+```sh
 ./docker-graphite-statsd/bin/send_stats
 ```
 
 ### Visualize the Data
 
-From the host machine visit: [http://localhost/dashboard](http://localhost/dashboard)
+Open Graphite in a browser at [http://localhost/dashboard](http://localhost/dashboard).
 
 ## Update the Configuration
 
@@ -76,7 +76,7 @@ From the host machine visit: [http://localhost/dashboard](http://localhost/dashb
 
   Resize the storage files by running the following.
 
-  ```
+  ```sh
   docker attach graphite
   find /opt/graphite/storage -type f -name '*.wsp' \
   -exec whisper-resize.py --nobackup {} 10s:12h 1m:7d 10m:5y \;
@@ -108,7 +108,7 @@ From the host machine visit: [http://localhost/dashboard](http://localhost/dashb
 
 ## Useful Docker Commands
 
-```
+```sh
 docker attach graphite # attaches to the running container
 <CTL-P><CTL-Q>         # detaches from the container
 
