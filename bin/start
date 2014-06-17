@@ -3,7 +3,7 @@
 docker_tag=${1:-"hopsoft/graphite-statsd"}
 container_name=${2:-"graphite"}
 
-sudo docker run \
+docker run \
 	--name="$container_name" \
 	-d -i -t \
 	-p 80:80 \
