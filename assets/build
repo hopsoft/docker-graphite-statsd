@@ -132,7 +132,7 @@ server {
         fastcgi_split_path_info ^()(.*)$;
         fastcgi_pass 127.0.0.1:8080;
         add_header 'Access-Control-Allow-Origin' '*';
-        add_header 'Access-Control-Allow-Methods' 'GET, POST';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
         add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type';
         add_header 'Access-Control-Allow-Credentials' 'true';
     }
