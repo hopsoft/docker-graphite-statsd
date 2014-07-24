@@ -23,6 +23,45 @@ LOG_DIR = '/var/log/graphite'
 SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
 EOF
 
+
+# configure django admin user -------------------------------------------------
+if [ ! -f /opt/graphite_syncdb ]; then
+
+cat << EOF > /opt/graphite_syncdb
+#!/usr/bin/env expect
+
+set timeout -1
+spawn python /opt/graphite/webapp/graphite/manage.py syncdb
+
+expect "Would you like to create one now" {
+  send "yes\r"
+}
+
+expect "Username *:" {
+  send "root\r"
+}
+
+expect "E-mail address:" {
+  send "root.graphite@mailinator.com\r"
+}
+
+expect "Password:" {
+  send "root\r"
+}
+
+expect "Password *:" {
+  send "root\r"
+}
+
+expect "Superuser created successfully"
+EOF
+chmod 775 /opt/graphite_syncdb
+/opt/graphite_syncdb
+
+fi
+
+
+
 # start graphite web app cgi server -------------------------------------------
 python /opt/graphite/webapp/graphite/manage.py runfcgi host=127.0.0.1 port=8080
 
