@@ -122,6 +122,11 @@ server {
     root /opt/graphite/webapp/content;
     index index.html;
 
+    location /media {
+      # django admin static files
+      alias /usr/local/lib/python2.7/dist-packages/django/contrib/admin/media/;
+    }
+    
     location / {
       # checks for static file, if not found proxy to app
       try_files \$uri @app;
