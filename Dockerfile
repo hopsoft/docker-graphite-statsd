@@ -3,6 +3,7 @@ MAINTAINER Nathan Hopkins <natehop@gmail.com>
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN apt-get -y update
+RUN apt-get -y upgrade
 
 # dependencies
 RUN apt-get -y --force-yes install vim \
@@ -32,7 +33,7 @@ RUN pip install django==1.3 \
 RUN git clone -b 0.9.12 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
-COPY scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 COPY conf/graphite/ /opt/graphite/conf/
 
 # install whisper
@@ -47,22 +48,35 @@ RUN python ./setup.py install
 
 # install statsd
 RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
-COPY conf/statsd/config.js /opt/statsd/config.js
+ADD conf/statsd/config.js /opt/statsd/config.js
 
 # config nginx
 RUN mkdir -p /var/log/nginx
 RUN rm /etc/nginx/sites-enabled/default
-COPY conf/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
+ADD conf/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
 # init django admin
-COPY scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
+ADD scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
 RUN /usr/local/bin/django_admin_init.exp
 
-RUN mkdir -p /var/log/carbon
-RUN mkdir -p /var/log/graphite
-RUN mkdir -p /var/log/nginx
+# logging support
+RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
+ADD conf/logrotate /etc/logrotate.d/graphite
 
+# daemons
+ADD daemons/carbon.sh /etc/service/carbon/run
+ADD daemons/graphite.sh /etc/service/graphite/run
+ADD daemons/statsd.sh /etc/service/statsd/run
+ADD daemons/nginx.sh /etc/service/nginx/run
+
+# cleanup
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# defaults
+EXPOSE ["80", "2003", "8125/udp"]
+VOLUME ["/opt/graphite/storage", "/opt/graphite/conf", "/var/log"]
+ENV HOME /root
+CMD ["/sbin/my_init"]
