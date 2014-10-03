@@ -21,9 +21,6 @@ RUN apt-get -y --force-yes install vim \
   nodejs
 
 # python dependencies
-#ADD http://python-distribute.org/distribute_setup.py /opt/distribute_setup.py
-#RUN python /opt/distribute_setup.py
-#RUN easy_install pip
 RUN pip install django==1.3 \
   python-memcached==1.53 \
   django-tagging==0.3.1 \
@@ -35,6 +32,8 @@ RUN pip install django==1.3 \
 RUN git clone -b 0.9.12 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
+COPY scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+COPY conf/graphite/ /opt/graphite/conf/
 
 # install whisper
 RUN git clone -b 0.9.12 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -45,17 +44,20 @@ RUN python ./setup.py install
 RUN git clone -b 0.9.12 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
 RUN python ./setup.py install
-RUN cp /opt/graphite/conf/carbon.conf.example /opt/graphite/conf/carbon.conf
-RUN cp /opt/graphite/conf/storage-schemas.conf.example /opt/graphite/conf/storage-schemas.conf
 
 # install statsd
 RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
-ADD conf/statsd/config.js /opt/statsd/config.js
+COPY conf/statsd/config.js /opt/statsd/config.js
 
+# config nginx
+RUN mkdir -p /var/log/nginx
+RUN rm /etc/nginx/sites-enabled/default
+COPY conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
+RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
-
-
-
+# init django admin
+COPY scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
+RUN /usr/local/bin/django_admin_init.exp
 
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

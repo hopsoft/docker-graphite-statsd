@@ -1,5 +1,0 @@
-#!/bin/bash
-
-docker_tag=${1:-'hopsoft/graphite-statsd'}
-
-sudo docker build -t "$docker_tag" /vagrant
