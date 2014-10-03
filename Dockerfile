@@ -60,5 +60,9 @@ RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/grap
 COPY scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
 RUN /usr/local/bin/django_admin_init.exp
 
+RUN mkdir -p /var/log/carbon
+RUN mkdir -p /var/log/graphite
+RUN mkdir -p /var/log/nginx
+
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
