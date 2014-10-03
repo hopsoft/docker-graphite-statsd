@@ -76,7 +76,7 @@ RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
-EXPOSE ["80", "2003", "8125/udp"]
-VOLUME ["/opt/graphite/storage", "/opt/graphite/conf", "/var/log"]
+EXPOSE 80:80 2003:2003 8125:8125/udp
+VOLUME ["/opt/graphite/storage", "/opt/graphite/conf", "/etc/nginx/sites-available", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 ENV HOME /root
 CMD ["/sbin/my_init"]
