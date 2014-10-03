@@ -1,4 +1,3 @@
 #!/bin/bash
 
-service nginx start
-
+/usr/sbin/nginx -c /etc/nginx/nginx.conf

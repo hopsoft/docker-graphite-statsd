@@ -52,6 +52,7 @@ COPY conf/statsd/config.js /opt/statsd/config.js
 # config nginx
 RUN mkdir -p /var/log/nginx
 RUN rm /etc/nginx/sites-enabled/default
+COPY conf/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
