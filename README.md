@@ -47,10 +47,10 @@ That's it, you're done ... almost.
 
 ### Base Image
 
-Built using [Phusion's baseimage](https://github.com/phusion/baseimage-docker).
+Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
 
-* All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/)
-* Includes additional services such as logrotate
+* All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/).
+* Includes additional services such as logrotate.
 
 ## Start Using Graphite & Statsd
 
@@ -86,13 +86,13 @@ Then update the root user's profile at: [http://localhost/admin/auth/user/1/](ht
 Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
 Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
 
-1. Stop the container. `docker stop graphite`
-1. Find the configuration files on the host by inspecting the container. `docker inspect graphite`
+1. Stop the container `docker stop graphite`.
+1. Find the configuration files on the host by inspecting the container `docker inspect graphite`.
 1. Update the desired config files.
-1. Restart the container. `docker start graphite`
+1. Restart the container `docker start graphite`.
 
 **Note**: If you change settings in `/opt/graphite/conf/storage-schemas.conf`
-be sure to delete the old whisper files under `/opt/graphite/storage/whisper/`
+be sure to delete the old whisper files under `/opt/graphite/storage/whisper/`.
 
 ---
 
@@ -143,7 +143,7 @@ you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
 
 Build the image yourself.
 
-### OSX Users
+### OSX
 
 1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
 1. `cd docker-graphite-statsd`
@@ -151,9 +151,9 @@ Build the image yourself.
 1. `vagrant ssh`
 1. `sudo docker build -t hopsoft/graphite-statsd /vagrant`
 
-**Note**: Pay attention to the forwarded ports in the [Vagrantfile](https://github.com/hopsoft/docker-graphite-statsd/blob/master/Vagrantfile)
+**Note**: Pay attention to the forwarded ports in the [Vagrantfile](https://github.com/hopsoft/docker-graphite-statsd/blob/master/Vagrantfile).
 
-### Linux Users
+### Linux
 
 1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
 1. `sudo docker build -t hopsoft/graphite-statsd ./docker-graphite-statsd`
