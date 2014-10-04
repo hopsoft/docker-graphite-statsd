@@ -101,3 +101,14 @@ retentions = 60s:12h # OK
 * [Official Statsd Documentation](https://github.com/etsy/statsd/)
 * [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
 * [Configuring Graphite for StatsD](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
+
+## Contributors
+
+Build the image yourself.
+
+1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
+1. `cd docker-graphite-statsd`
+1. `vagrant up`
+1. `vagrant ssh`
+1. `sudo docker build -t hopsoft/graphite-statsd /vagrant`
+
