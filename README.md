@@ -107,9 +107,15 @@ retentions = 60s:12h # OK
 
 Build the image yourself.
 
+### OSX Users
+
 1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
 1. `cd docker-graphite-statsd`
 1. `vagrant up`
 1. `vagrant ssh`
 1. `sudo docker build -t hopsoft/graphite-statsd /vagrant`
 
+### Linux Users
+
+1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
+1. `sudo docker build -t hopsoft/graphite-statsd ./docker-graphite-statsd`
