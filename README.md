@@ -17,6 +17,7 @@ sudo docker run -d \
 ```
 
 This starts a Docker container named: **graphite**
+
 That's it, you're done ... almost.
 
 ### Includes the following components
