@@ -1,0 +1,10 @@
+/var/log/*.log /var/log/carbon/*.log  /var/log/graphite/*.log /var/log/nginx/*.log {
+  weekly
+  size 50M
+  missingok
+  rotate 10
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}

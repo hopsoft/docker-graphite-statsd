@@ -1,18 +1,24 @@
-# Docker Image for Graphite
+# Docker Image for Graphite & Statsd
 
-## Deploy Graphite & Statsd with a single click... almost
+## Get Graphite & Statsd running instantly
 
-Graphite & Statsd can be a pain in the ass to setup.
-This Docker image will help you get up & running quickly.
+Graphite & Statsd can be complex to setup.
+This image will have you running & collecting stats in just a few minutes.
 
 ## Quick Start
 
 ```sh
-git clone https://github.com/hopsoft/docker-graphite-statsd.git
-./docker-graphite-statsd/bin/start
+sudo docker run -d \
+  --name graphite \
+  -p 80:80 \
+  -p 2003:2003 \
+  -p 8125:8125/udp \
+  hopsoft/graphite-statsd
 ```
 
 This starts a Docker container named: **graphite**
+
+That's it, you're done ... almost.
 
 ### Includes the following components
 
@@ -23,19 +29,28 @@ This starts a Docker container named: **graphite**
 
 ### Mapped Ports
 
-| Service | Host | Container |
-| ------- | ---- | --------- |
-| nginx   |   80 |        80 |
-| carbon  | 2003 |      2003 |
-| statsd  | 8125 |      8125 |
+| Host | Container | Service |
+| ---- | --------- | ------- |
+|   80 |        80 | nginx   |
+| 2003 |      2003 | carbon  |
+| 8125 |      8125 | statsd  |
 
 ### Mounted Volumes
 
-| Host              | Container             |
-| ----------------- | --------------------- |
-| /var/log/graphite | /var/log              |
-| DOCKER ASSIGNED   | /opt/graphite/storage |
-| DOCKER ASSIGNED   | /opt/graphite/conf    |
+| Host              | Container                  | Notes                           |
+| ----------------- | -------------------------- | ------------------------------- |
+| DOCKER ASSIGNED   | /opt/graphite              | graphite config & stats storage |
+| DOCKER ASSIGNED   | /etc/nginx                 | nginx config                    |
+| DOCKER ASSIGNED   | /opt/statsd                | statsd config                   |
+| DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config                |
+| DOCKER ASSIGNED   | /var/log                   | log files                       |
+
+### Base Image
+
+Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
+
+* All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/).
+* Includes additional services such as logrotate.
 
 ## Start Using Graphite & Statsd
 
@@ -44,83 +59,101 @@ This starts a Docker container named: **graphite**
 Let's fake some stats with a random counter to prove things are working.
 
 ```sh
-./docker-graphite-statsd/bin/send_stats
+while true
+do
+  echo -n "example.statsd.counter.changed:$(((RANDOM % 10) + 1))|c" | nc -w 1 -u localhost 8125
+done
+<CTL-C>
 ```
 
 ### Visualize the Data
 
 Open Graphite in a browser at [http://localhost/dashboard](http://localhost/dashboard).
 
-## Update the Configuration
+## Secure the Django Admin
 
-1. Update the default Django admin user account. _The default is insecure._
+Update the default Django admin user account. _The default is insecure._
 
   * username: root
   * password: root
   * email: root.graphite@mailinator.com
 
-  First login at: [http://localhost/account/login](http://localhost/account/login)
-  Then update the root user's profile at: [http://localhost/admin/auth/user/1/](http://localhost/admin/auth/user/1/)
+First login at: [http://localhost/account/login](http://localhost/account/login)
+Then update the root user's profile at: [http://localhost/admin/auth/user/1/](http://localhost/admin/auth/user/1/)
 
-2. Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
-  Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
+## Change the Configuration
 
-  **Note:** If you change settings in `storage-schemas.conf`, be sure to run `whisper-resize.py` to resize the whisper files.
-  For example, if you update the config to look something like this:
+Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
+Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
 
-  ```
-  [all]
-  pattern = .*
-  retentions = 10s:12h,1m:7d,10m:5y
-  ```
+1. Stop the container `docker stop graphite`.
+1. Find the configuration files on the host by inspecting the container `docker inspect graphite`.
+1. Update the desired config files.
+1. Restart the container `docker start graphite`.
 
-  Resize the storage files by running the following.
+**Note**: If you change settings in `/opt/graphite/conf/storage-schemas.conf`
+be sure to delete the old whisper files under `/opt/graphite/storage/whisper/`.
 
-  ```sh
-  docker attach graphite
-  find /opt/graphite/storage -type f -name '*.wsp' \
-  -exec whisper-resize.py --nobackup {} 10s:12h 1m:7d 10m:5y \;
-  <CTL-P><CTL-Q> # detaches from the container
-  ```
+---
 
-  **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
-  For example, if `/opt/statsd/config.js` looks like this.
+**Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
+For example, if `/opt/statsd/config.js` looks like this.
 
-  ```
-  flushInterval: 10000
-  ```
-
-  Ensure that `storage-schemas.conf` retentions are no finer grained than 10 seconds.
-
-  ```
-  [all]
-  pattern = .*
-  retentions = 5s:12h # WRONG
-  retentions = 10s:12h # OK
-  retentions = 60s:12h # OK
-  ```
-
-  [Read more about synching Statsd with Graphite configs.](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
-
-3. Learn about [Statsd](https://github.com/etsy/statsd/).
-
-4. Start sending stats from your apps.
-
-## Useful Docker Commands
-
-```sh
-docker attach graphite # attaches to the running container
-<CTL-P><CTL-Q>         # detaches from the container
-
-docker stop graphite   # stops the container
-
-docker start graphite  # starts the container (after it's been stopped)
-
-docker rm graphite     # removes the container
 ```
+flushInterval: 10000
+```
+
+Ensure that `storage-schemas.conf` retentions are no finer grained than 10 seconds.
+
+```
+[all]
+pattern = .*
+retentions = 5s:12h # WRONG
+retentions = 10s:12h # OK
+retentions = 60s:12h # OK
+```
+
+## A Note on Disk Space
+
+If running this image on cloud infrastructure such as AWS,
+you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
+
+1. Configure the host to mount a large EBS volume.
+1. Specify the volume mounts when starting the container.
+
+    ```
+    sudo docker run -d \
+      --name graphite \
+      -v /path/to/ebs/graphite:/opt/graphite \
+      -v /path/to/ebs/log:/var/log \
+      -p 80:80 \
+      -p 2003:2003 \
+      -p 8125:8125/udp \
+      hopsoft/graphite-statsd
+    ```
 
 ## Additional Reading
 
 * [Introduction to Docker](http://docs.docker.io/#introduction)
+* [Official Statsd Documentation](https://github.com/etsy/statsd/)
 * [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
 * [Configuring Graphite for StatsD](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
+
+## Contributors
+
+Build the image yourself.
+
+### OSX
+
+1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
+1. `cd docker-graphite-statsd`
+1. `vagrant up`
+1. `vagrant ssh`
+1. `sudo docker build -t hopsoft/graphite-statsd /vagrant`
+
+**Note**: Pay attention to the forwarded ports in the [Vagrantfile](https://github.com/hopsoft/docker-graphite-statsd/blob/master/Vagrantfile).
+
+### Linux
+
+1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
+1. `sudo docker build -t hopsoft/graphite-statsd ./docker-graphite-statsd`
