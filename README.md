@@ -115,6 +115,8 @@ Build the image yourself.
 1. `vagrant ssh`
 1. `sudo docker build -t hopsoft/graphite-statsd /vagrant`
 
+**Note**: Pay attention to the forwarded ports in the [Vagrantfile](https://github.com/hopsoft/docker-graphite-statsd/blob/master/Vagrantfile)
+
 ### Linux Users
 
 1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
