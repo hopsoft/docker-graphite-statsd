@@ -64,14 +64,14 @@ Update the default Django admin user account. _The default is insecure._
 First login at: [http://localhost/account/login](http://localhost/account/login)
 Then update the root user's profile at: [http://localhost/admin/auth/user/1/](http://localhost/admin/auth/user/1/)
 
-## Updating the Configuration
+## Change the Configuration
 
 Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
 Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
 
 1. Stop the container. `docker stop graphite`
 1. Find the configuration files on the host by inspecting the container. `docker inspect graphite`
-1. Update the configuration.
+1. Update the desired config files.
 1. Restart the container. `docker start graphite`
 
 **Note**: If you change settings in `/opt/graphite/conf/storage-schemas.conf`
