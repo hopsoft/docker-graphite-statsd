@@ -3,6 +3,7 @@
 ## Get Graphite & Statsd running instantly
 
 Graphite & Statsd can be complex to setup.
+This image will have you running & collecting stats in just a few minutes.
 
 ## Quick Start
 
