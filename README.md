@@ -8,7 +8,12 @@ This image will have you running & collecting stats in just a few minutes.
 ## Quick Start
 
 ```sh
-sudo docker run --name graphite -p 80:80 -p 2003:2003 -p 8125:8125/udp -d hopsoft/graphite-statsd
+sudo docker run -d \
+  --name graphite \
+  -p 80:80 \
+  -p 2003:2003 \
+  -p 8125:8125/udp \
+  hopsoft/graphite-statsd
 ```
 
 This starts a Docker container named: **graphite**
@@ -38,6 +43,13 @@ This starts a Docker container named: **graphite**
 | DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config                |
 | DOCKER ASSIGNED   | /var/log                   | log files                       |
 
+### Base Image
+
+Built using [Phusion's baseimage](https://github.com/phusion/baseimage-docker).
+
+* All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/)
+* Includes additional services such as logrotate
+
 ## Start Using Graphite & Statsd
 
 ### Send Some Stats
@@ -45,7 +57,10 @@ This starts a Docker container named: **graphite**
 Let's fake some stats with a random counter to prove things are working.
 
 ```sh
-while true; do echo -n "example.statsd.counter.changed:$(((RANDOM % 10) + 1))|c" | nc -w 1 -u localhost 8125; done
+while true
+do
+  echo -n "example.statsd.counter.changed:$(((RANDOM % 10) + 1))|c" | nc -w 1 -u localhost 8125
+done
 <CTL-C>
 ```
 
@@ -95,6 +110,25 @@ retentions = 5s:12h # WRONG
 retentions = 10s:12h # OK
 retentions = 60s:12h # OK
 ```
+
+## A Note on Disk Space
+
+If running this image on cloud infrastructure such as AWS,
+you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
+
+1. Configure the host to mount a large EBS volume.
+1. Specify the volume mounts when starting the container.
+
+    ```
+    sudo docker run -d \
+      --name graphite \
+      -v /path/to/ebs/graphite:/opt/graphite \
+      -v /path/to/ebs/log:/var/log \
+      -p 80:80 \
+      -p 2003:2003 \
+      -p 8125:8125/udp \
+      hopsoft/graphite-statsd
+    ```
 
 ## Additional Reading
 
