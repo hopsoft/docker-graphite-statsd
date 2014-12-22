@@ -1,4 +1,4 @@
-/var/log/*.log /var/log/carbon/*.log  /var/log/graphite/*.log /var/log/nginx/*.log {
+/var/log/*.log /var/log/*/*.log {
   weekly
   size 50M
   missingok
@@ -7,4 +7,5 @@
   delaycompress
   notifempty
   copytruncate
+  su root syslog
 }
