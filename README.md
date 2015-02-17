@@ -1,3 +1,5 @@
+[![Gratipay](//img.shields.io/gratipay/hopsoft.svg?style=flat)](https://gratipay.com/hopsoft/)
+
 # Docker Image for Graphite & Statsd
 
 ## Get Graphite & Statsd running instantly
