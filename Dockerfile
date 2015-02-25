@@ -60,7 +60,6 @@ ADD scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
 RUN /usr/local/bin/django_admin_init.exp
 
 # logging support
-RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
 ADD conf/logrotate /etc/logrotate.d/graphite
 
 # daemons
@@ -70,12 +69,22 @@ ADD daemons/graphite.sh /etc/service/graphite/run
 ADD daemons/statsd.sh /etc/service/statsd/run
 ADD daemons/nginx.sh /etc/service/nginx/run
 
+# rename the storage directory to storage_orig in the image
+# it will be renamed back in entrypoint.sh when a container starts for the first time
+WORKDIR /opt/graphite
+RUN mv storage storage_orig
+
+# entrypoint
+ENV HOME /root
+ADD scripts/entrypoint.sh /root/
+
 # cleanup
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
 EXPOSE 80:80 2003:2003 8125:8125/udp
-VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
-ENV HOME /root
-CMD ["/sbin/my_init"]
+VOLUME ["/etc/nginx", "/etc/logrotate.d", "/opt/statsd", "/opt/graphite/conf", "/opt/graphite/storage", "/var/log"]
+ENTRYPOINT ["/root/entrypoint.sh"]
+CMD ["my_init"]
+
