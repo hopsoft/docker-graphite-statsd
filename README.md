@@ -1,3 +1,4 @@
+[![Docker Hub](http://img.shields.io/badge/docker-view-brightgreen.svg?style=flat)](https://registry.hub.docker.com/u/hopsoft/graphite-statsd/)
 [![Gratipay](http://img.shields.io/badge/gratipay-contribute-009bef.svg?style=flat)](https://gratipay.com/hopsoft/)
 
 # Docker Image for Graphite & Statsd
