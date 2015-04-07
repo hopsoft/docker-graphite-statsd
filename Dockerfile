@@ -74,6 +74,6 @@ ADD scripts/init_conf_files.sh /etc/my_init.d/01_init_conf_files.sh
 
 # defaults
 EXPOSE 80:80 2003:2003 8125:8125/udp
-VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/conf-custom"]
+VOLUME ["/opt/graphite", "/opt/graphite/storage/whisper", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/conf-custom"]
 ENV HOME /root
 CMD ["/sbin/my_init"]
