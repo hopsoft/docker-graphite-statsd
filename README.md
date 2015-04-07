@@ -94,7 +94,8 @@ If we want to make changes to these configuration files, we have two options:
 
 1. Stop the container `docker stop graphite`.
 1. Find the configuration files on the host by inspecting the container `docker inspect graphite`.
-1. Update the desired config files.
+1. Update the desired config files. **Note**: If the config files are updated by the image, you need to change them in `/conf-default` and
+not in the target destination (like _/opt/graphite..._)
 1. Restart the container `docker start graphite`.
 
 **Note**: If you change settings in `/opt/graphite/conf/storage-schemas.conf`
