@@ -32,8 +32,6 @@ RUN pip install django==1.3\
 RUN git clone -b 0.9.12 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
-ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-ADD conf/graphite/ /opt/graphite/conf/
 
 # install whisper
 RUN git clone -b 0.9.12 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -47,12 +45,9 @@ RUN python ./setup.py install
 
 # install statsd
 RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
-ADD conf/statsd/config.js /opt/statsd/config.js
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
-ADD conf/nginx/nginx.conf /etc/nginx/nginx.conf
-ADD conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
 # init django admin
@@ -61,7 +56,6 @@ RUN /usr/local/bin/django_admin_init.exp
 
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
-ADD conf/logrotate /etc/logrotate.d/graphite
 
 # daemons
 ADD daemons/carbon.sh /etc/service/carbon/run
@@ -74,8 +68,11 @@ ADD daemons/nginx.sh /etc/service/nginx/run
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Add the init_conf_files script to initialize configuration files at container startup
+ADD scripts/init_conf_files.sh /etc/my_init.d/01_init_conf_files.sh
+
 # defaults
 EXPOSE 80:80 2003:2003 8125:8125/udp
-VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
+VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/usr-conf"]
 ENV HOME /root
 CMD ["/sbin/my_init"]
