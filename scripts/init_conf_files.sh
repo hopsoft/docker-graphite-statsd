@@ -13,7 +13,7 @@ set -e
 DIR_CONF_DEFAULT=/conf-default
 DIR_CONF_CUSTOM=/conf-custom
 DIR_GRAPHITE=/opt/graphite/conf
-DIR_GRAPHITE_WEB=/opt/graphite/webapp
+DIR_GRAPHITE_WEB=/opt/graphite/webapp/graphite
 DIR_STATSD=/opt/statsd
 DIR_NGINX=/etc/nginx
 DIR_LOGROTATE=/etc/logrotate.d

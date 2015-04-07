@@ -68,11 +68,12 @@ ADD daemons/nginx.sh /etc/service/nginx/run
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Add the init_conf_files script to initialize configuration files at container startup
+# Add the default config files and the init_conf_files script to initialize configuration files at container startup
+ADD conf /conf-default
 ADD scripts/init_conf_files.sh /etc/my_init.d/01_init_conf_files.sh
 
 # defaults
 EXPOSE 80:80 2003:2003 8125:8125/udp
-VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/usr-conf"]
+VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/conf-custom"]
 ENV HOME /root
 CMD ["/sbin/my_init"]
