@@ -14,6 +14,7 @@ DIR_CONF_DEFAULT=/conf-default
 DIR_CONF_CUSTOM=/conf-custom
 DIR_GRAPHITE=/opt/graphite/conf
 DIR_GRAPHITE_WEB=/opt/graphite/webapp/graphite
+DIR_GRAPHITE_STORAGE=/opt/graphite/storage
 DIR_STATSD=/opt/statsd
 DIR_NGINX=/etc/nginx
 DIR_LOGROTATE=/etc/logrotate.d
@@ -45,3 +46,11 @@ fi
 if [[ -d $DIR_CONF_CUSTOM/logrotate ]]; then
   cp $DIR_CONF_CUSTOM/logrotate $DIR_LOGROTATE/graphite
 fi
+
+# Copy graphite.db to storage dir in case it doesn't exist yet.
+# graphite.db is the only file that obviously cannot be recreated by Graphite
+# if we start it with an empty storage volume
+if [[ ! -e $DIR_GRAPHITE_STORAGE/graphite.db ]]; then
+  cp $DIR_CONF_DEFAULT/graphite-storage/graphite.db $DIR_GRAPHITE_STORAGE
+fi
+
