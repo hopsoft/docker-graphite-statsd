@@ -40,13 +40,14 @@ That's it, you're done ... almost.
 
 ### Mounted Volumes
 
-| Host              | Container                  | Notes                           |
-| ----------------- | -------------------------- | ------------------------------- |
-| DOCKER ASSIGNED   | /opt/graphite              | graphite config & stats storage |
-| DOCKER ASSIGNED   | /etc/nginx                 | nginx config                    |
-| DOCKER ASSIGNED   | /opt/statsd                | statsd config                   |
-| DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config                |
-| DOCKER ASSIGNED   | /var/log                   | log files                       |
+| Host              | Container                  | Notes              |
+| ----------------- | -------------------------- | -------------------|
+| DOCKER ASSIGNED   | /etc/nginx                 | nginx config       |
+| DOCKER ASSIGNED   | /opt/statsd                | statsd config      |
+| DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config   |
+| DOCKER ASSIGNED   | /opt/graphite/conf         | graphite config    |
+| DOCKER ASSIGNED   | /opt/graphite/storage      | graphite storage   |
+| DOCKER ASSIGNED   | /var/log                   | log files   |
 
 ### Base Image
 
@@ -119,7 +120,7 @@ retentions = 60s:12h # OK
 ## A Note on Disk Space
 
 If running this image on cloud infrastructure such as AWS,
-you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
+you should consider mounting `/opt/graphite/storage` & `/var/log` on a larger volume.
 
 1. Configure the host to mount a large EBS volume.
 1. Specify the volume mounts when starting the container.
@@ -127,7 +128,7 @@ you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
     ```
     sudo docker run -d \
       --name graphite \
-      -v /path/to/ebs/graphite:/opt/graphite \
+      -v /path/to/ebs/graphite:/opt/graphite/storage \
       -v /path/to/ebs/log:/var/log \
       -p 80:80 \
       -p 2003:2003 \
