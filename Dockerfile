@@ -99,7 +99,6 @@ RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
-EXPOSE 80:80 81:81 2003:2003 8125:8125/udp
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["my_init"]
 
