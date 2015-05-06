@@ -1,16 +1,17 @@
 # Based on: https://github.com/hopsoft/docker-graphite-statsd many thanks!
 
-# Docker Image for Graphite & Statsd
+# Docker Image for Graphite & Statsd & Grafana
 
-## Get Graphite & Statsd running instantly
+## Get Graphite & Statsd & Grafana running instantly
 
-Graphite & Statsd can be complex to setup.
+Graphite & Statsd & Grafana can be complex to setup.
 This image will have you running & collecting stats in just a few minutes.
 
 ## Quick Start
 
 ```sh
-sudo docker run -d --name graphite --net host docker-graphite-statsd
+sudo docker build -t graphite .
+sudo docker run -d --name graphite --net host graphite
 ```
 
 This starts a Docker container named: **graphite**
@@ -76,6 +77,7 @@ http://localhost/#/dashboard/file/default.json for example,
 add/update the graphs, then export to mydashboard.json for instance, 
 save it in the directory which is mounted to /opt/grafana/app/dashboards in the container. 
 Open http://localhost/#/dashboard/file/mydashboard.json in a browser to view the new dashboard.
+
 
 ## Secure the Django Admin
 
