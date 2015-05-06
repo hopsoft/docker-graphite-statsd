@@ -20,10 +20,10 @@ That's it, you're done ... almost.
 
 ### Includes the following components
 
-* [Nginx](http://nginx.org/) - reverse proxies the grafana/graphite dashboard
-* [Grafana](http://grafana.org/) - nicer graphing graphite dashboard
-* [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
-* [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end
+* [Nginx](http://nginx.org/) - reverse proxies the grafana & graphite dashboards
+* [Grafana](http://grafana.org/) - nicer graphing dashboard
+* [Graphite](http://graphite.readthedocs.org/en/latest/) - graphite native dashboard
+* [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - graphite back-end
 * [Statsd](https://github.com/etsy/statsd/wiki) - UDP based back-end proxy
 
 ### Mapped Ports (when start with --net host)
