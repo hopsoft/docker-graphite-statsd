@@ -37,10 +37,10 @@ That's it, you're done ... almost.
 
 ### Recommended volumes:
 
-grafana/dashboards:/opt/grafana/app/dashboards
-graphite/config:/opt/graphite/conf
-graphite/storage:/opt/graphite/storage
-logs:/var/log
+    grafana/dashboards:/opt/grafana/app/dashboards
+    graphite/config:/opt/graphite/conf
+    graphite/storage:/opt/graphite/storage
+    logs:/var/log
 
 ### Base Image
 
