@@ -14,7 +14,7 @@ if [ ! -f /opt/graphite/storage/graphite.db ]; then
 fi
 
 # ensure log directories
-mkdir -p /var/log/graphite /var/log/nginx
+mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx /var/log/statsd
 
 if [ "$1" == "my_init" ]; then
   /sbin/my_init

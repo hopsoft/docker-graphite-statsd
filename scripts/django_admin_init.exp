@@ -8,19 +8,20 @@ expect "Would you like to create one now" {
 }
 
 expect "Username *:" {
-  send "root\r"
+  send "admin\r"
 }
 
 expect "E-mail address:" {
-  send "root.graphite@mailinator.com\r"
+  send "admin@admin.com\r"
 }
 
 expect "Password:" {
-  send "root\r"
+  send "admin-secret\r"
 }
 
 expect "Password *:" {
-  send "root\r"
+  send "admin-secret\r"
 }
 
 expect "Superuser created successfully"
+

@@ -1,5 +1,5 @@
-FROM phusion/baseimage:0.9.15
-MAINTAINER Nathan Hopkins <natehop@gmail.com>
+FROM phusion/baseimage:0.9.16
+# Info of base image, see: https://github.com/phusion/baseimage-docker
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN apt-get -y update\
@@ -19,7 +19,8 @@ RUN apt-get -y --force-yes install vim\
  libcairo2-dev\
  python-cairo\
  pkg-config\
- nodejs
+ nodejs \
+ wget
 
 # python dependencies
 RUN pip install django==1.3\
@@ -32,8 +33,6 @@ RUN pip install django==1.3\
 RUN git clone -b 0.9.12 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
-ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-ADD conf/graphite/ /opt/graphite/conf/
 
 # install whisper
 RUN git clone -b 0.9.12 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -47,13 +46,30 @@ RUN python ./setup.py install
 
 # install statsd
 RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
+
+# Install Grafana
+RUN mkdir /opt/grafana
+RUN wget http://grafanarel.s3.amazonaws.com/grafana-1.9.1.tar.gz -O /opt/grafana.tar.gz &&\
+    tar -xzf /opt/grafana.tar.gz -C /opt/grafana --strip-components=1 &&\
+    rm /opt/grafana.tar.gz
+
+# configure graphite
+ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+ADD conf/graphite/ /opt/graphite/conf/
+
+# configure statsd
 ADD conf/statsd/config.js /opt/statsd/config.js
 
-# config nginx
+# configure nginx
 RUN rm /etc/nginx/sites-enabled/default
 ADD conf/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
+ADD conf/nginx/grafana.conf  /etc/nginx/sites-available/grafana.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
+RUN ln -s /etc/nginx/sites-available/grafana.conf /etc/nginx/sites-enabled/grafana.conf
+
+# configure grafana
+ADD conf/grafana/config.js /opt/grafana/config.js
 
 # init django admin
 ADD scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
@@ -83,8 +99,7 @@ RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
-EXPOSE 80:80 2003:2003 8125:8125/udp
-VOLUME ["/etc/nginx", "/etc/logrotate.d", "/opt/statsd", "/opt/graphite/conf", "/opt/graphite/storage", "/var/log"]
+EXPOSE 80:80 81:81 2003:2003 8125:8125/udp
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["my_init"]
 
