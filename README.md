@@ -25,7 +25,7 @@ That's it, you're done ... almost.
 * [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end
 * [Statsd](https://github.com/etsy/statsd/wiki) - UDP based back-end proxy
 
-### Mapped Ports
+### Mapped Ports (when start with --net host)
 
 | Host | Container |     Service    |
 | ---- | --------- | -------------- |
@@ -33,6 +33,13 @@ That's it, you're done ... almost.
 |   81 |        81 | nginx/graphite |
 | 2003 |      2003 | carbon         |
 | 8125 |      8125 | statsd         |
+
+### Recommended volumes:
+
+grafana/dashboards:/opt/grafana/app/dashboards
+graphite/config:/opt/graphite/conf
+graphite/storage:/opt/graphite/storage
+logs:/var/log
 
 ### Base Image
 
@@ -57,7 +64,18 @@ done
 
 ### Visualize the Data
 
-Open Graphite in a browser at [http://localhost/dashboard](http://localhost/dashboard).
+Open Grafana in a browser at [http://localhost](http://localhost).
+Open Graphite in a browser at [http://localhost:81](http://localhost:81).
+
+### How to edit or create grafana dashboards
+
+Elastic search is not installed in this image, 
+hence the dashboards are to be created or updated, 
+then exported as JSON files.  Base on the default dashboard 
+http://localhost/#/dashboard/file/default.json for example, 
+add/update the graphs, then export to mydashboard.json for instance, 
+save it in the directory which is mounted to /opt/grafana/app/dashboards in the container. 
+Open http://localhost/#/dashboard/file/mydashboard.json in a browser to view the new dashboard.
 
 ## Secure the Django Admin
 
@@ -125,5 +143,4 @@ you should consider mounting `/opt/graphite/storage` & `/var/log` on a larger vo
 * [Official Statsd Documentation](https://github.com/etsy/statsd/)
 * [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
 * [Configuring Graphite for StatsD](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
-
 

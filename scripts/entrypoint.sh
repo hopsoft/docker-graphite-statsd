@@ -1,17 +1,15 @@
 #!/bin/bash
 set -e
 
-if [ ! -f /opt/graphite/storage/graphite.db ]; then
-  if [ -d /opt/graphite/storage ]; then
-    ## running for the first time with storage volume mounted
-    ## copy everything
-    cp -r /opt/graphite/storage_orig/* /opt/graphite/storage/
-  else
-    ## running for the fist time without storage volume mounted
-    ## simply rename
-    mv /opt/graphite/storage_orig /opt/graphite/storage
+for i in $EASY_MOUNTS; do
+  if [ ! -d $i ]; then
+    # directory not exist, simply rename the _orig directory back
+    mv ${i}_orig $i
+  elif [ "$(find $i -maxdepth 0 -empty -exec echo empty \;)" ]; then
+    # empty directory, mounted from host? copy contents
+    cp -r ${i}_orig/* $i/
   fi
-fi
+done
 
 # ensure log directories
 mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx /var/log/statsd

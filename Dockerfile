@@ -85,10 +85,13 @@ ADD daemons/graphite.sh /etc/service/graphite/run
 ADD daemons/statsd.sh /etc/service/statsd/run
 ADD daemons/nginx.sh /etc/service/nginx/run
 
-# rename the storage directory to storage_orig in the image
-# it will be renamed back in entrypoint.sh when a container starts for the first time
-WORKDIR /opt/graphite
-RUN mv storage storage_orig
+# rename the commonly mounted directories to xxx_orig in the image
+# they are renamed back in entrypoint.sh when a container starts for the first time
+ENV EASY_MOUNTS /opt/grafana/app/dashboards \
+                /opt/graphite/conf \
+                /opt/graphite/storage
+
+RUN for i in $EASY_MOUNTS; do mv $i ${i}_orig; done
 
 # entrypoint
 ENV HOME /root
@@ -99,6 +102,7 @@ RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
+WORKDIR /
 ENTRYPOINT ["/root/entrypoint.sh"]
 CMD ["my_init"]
 
