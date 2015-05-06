@@ -1,4 +1,4 @@
-[![Gratipay](http://img.shields.io/gratipay/hopsoft.svg?style=flat)](https://gratipay.com/hopsoft/)
+# Based on: https://github.com/hopsoft/docker-graphite-statsd many thanks!
 
 # Docker Image for Graphite & Statsd
 
