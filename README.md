@@ -13,6 +13,7 @@ This image will have you running & collecting stats in just a few minutes.
 ```sh
 sudo docker run -d \
   --name graphite \
+  --restart=always \
   -p 80:80 \
   -p 2003:2003 \
   -p 8125:8125/udp \
@@ -127,6 +128,7 @@ you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
     ```
     sudo docker run -d \
       --name graphite \
+      --restart=always \
       -v /path/to/ebs/graphite:/opt/graphite \
       -v /path/to/ebs/log:/var/log \
       -p 80:80 \
