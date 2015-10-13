@@ -70,7 +70,15 @@ ADD conf/logrotate /etc/logrotate.d/graphite
 RUN chmod 644 /etc/logrotate.d/graphite
 
 # daemons
-ADD daemons/carbon.sh /etc/service/carbon/run
+ADD daemons/carbon-cache-a.sh /etc/service/carbon-cache-a/run
+ADD daemons/carbon-cache-b.sh /etc/service/carbon-cache-b/run
+ADD daemons/carbon-cache-c.sh /etc/service/carbon-cache-c/run
+ADD daemons/carbon-cache-d.sh /etc/service/carbon-cache-d/run
+ADD daemons/carbon-cache-e.sh /etc/service/carbon-cache-e/run
+ADD daemons/carbon-cache-f.sh /etc/service/carbon-cache-f/run
+ADD daemons/carbon-cache-g.sh /etc/service/carbon-cache-g/run
+ADD daemons/carbon-cache-h.sh /etc/service/carbon-cache-h/run
+
 ADD daemons/carbon-aggregator.sh /etc/service/carbon-aggregator/run
 ADD daemons/graphite.sh /etc/service/graphite/run
 # ADD daemons/statsd.sh /etc/service/statsd/run
