@@ -66,8 +66,8 @@ RUN /usr/local/bin/django_admin_init.exp
 
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
-ADD conf/logrotate /etc/logrotate.d/graphite
-RUN chmod 644 /etc/logrotate.d/graphite
+# ADD conf/logrotate /etc/logrotate.d/graphite
+# RUN chmod 644 /etc/logrotate.d/graphite
 
 # daemons
 ADD daemons/carbon-cache-a.sh /etc/service/carbon-cache-a/run
@@ -79,7 +79,7 @@ ADD daemons/carbon-cache-f.sh /etc/service/carbon-cache-f/run
 ADD daemons/carbon-cache-g.sh /etc/service/carbon-cache-g/run
 ADD daemons/carbon-cache-h.sh /etc/service/carbon-cache-h/run
 
-ADD daemons/carbon-aggregator.sh /etc/service/carbon-aggregator/run
+# ADD daemons/carbon-aggregator.sh /etc/service/carbon-aggregator/run
 ADD daemons/graphite.sh /etc/service/graphite/run
 # ADD daemons/statsd.sh /etc/service/statsd/run
 ADD daemons/carbon-c-relay.sh /etc/service/carbon-c-relay/run
