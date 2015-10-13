@@ -45,6 +45,11 @@ RUN git clone -b 0.9.12 https://github.com/graphite-project/carbon.git /usr/loca
 WORKDIR /usr/local/src/carbon
 RUN python ./setup.py install
 
+# install carbon-c-relay
+RUN git clone -b v0.44 https://github.com/grobian/carbon-c-relay.git /usr/local/src/carbon-c-relay
+WORKDIR /usr/local/src/carbon-c-relay
+RUN make
+
 # install statsd
 # RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
 # ADD conf/statsd/config.js /opt/statsd/config.js
@@ -69,6 +74,7 @@ ADD daemons/carbon.sh /etc/service/carbon/run
 ADD daemons/carbon-aggregator.sh /etc/service/carbon-aggregator/run
 ADD daemons/graphite.sh /etc/service/graphite/run
 # ADD daemons/statsd.sh /etc/service/statsd/run
+ADD daemons/carbon-c-relay.sh /etc/service/carbon-c-relay/run
 ADD daemons/nginx.sh /etc/service/nginx/run
 
 # cleanup
