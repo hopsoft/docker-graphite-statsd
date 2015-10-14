@@ -17,6 +17,7 @@ sudo docker run -d \
   -p 80:80 \
   -p 2003:2003 \
   -p 8125:8125/udp \
+  -p 8126:8126 \
   hopsoft/graphite-statsd
 ```
 
@@ -38,6 +39,7 @@ That's it, you're done ... almost.
 |   80 |        80 | nginx   |
 | 2003 |      2003 | carbon  |
 | 8125 |      8125 | statsd  |
+| 8216 |      8126 | admin   |
 
 ### Mounted Volumes
 
@@ -116,6 +118,17 @@ retentions = 5s:12h # WRONG
 retentions = 10s:12h # OK
 retentions = 60s:12h # OK
 ```
+
+## Statsd Admin Management Interface
+
+A management interface (default on port 8126) allows you to manage statsd and retrieve stats 
+
+```sh
+# show all current counters
+echo counters | nc localhost 8126
+```
+
+more info and additional commands: [admin_interface](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md) 
 
 ## A Note on Disk Space
 
