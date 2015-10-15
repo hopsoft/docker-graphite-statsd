@@ -39,7 +39,7 @@ That's it, you're done ... almost.
 |   80 |        80 | nginx   |
 | 2003 |      2003 | carbon  |
 | 8125 |      8125 | statsd  |
-| 8216 |      8126 | admin   |
+| 8126 |      8126 | admin   |
 
 ### Mounted Volumes
 
