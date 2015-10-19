@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.9.15
-MAINTAINER Nathan Hopkins <natehop@gmail.com>
+MAINTAINER Matthew Tse <mtse@google.com>
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN apt-get -y update\
@@ -50,9 +50,11 @@ RUN git clone -b v0.44 https://github.com/grobian/carbon-c-relay.git /usr/local/
 WORKDIR /usr/local/src/carbon-c-relay
 RUN make
 
-# install statsd
-# RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
-# ADD conf/statsd/config.js /opt/statsd/config.js
+# install grafana
+WORKDIR /usr/local/src/grafana
+RUN curl https://grafanarel.s3.amazonaws.com/builds/grafana-2.1.3.linux-x64.tar.gz -o grafana-2.1.3.linux-x64.tar.gz
+RUN tar -xzvf grafana-2.1.3.linux-x64.tar.gz
+ADD conf/grafana/defaults.ini /etc/grafana/conf/defaults.ini
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
@@ -84,6 +86,7 @@ ADD daemons/graphite.sh /etc/service/graphite/run
 # ADD daemons/statsd.sh /etc/service/statsd/run
 ADD daemons/carbon-c-relay.sh /etc/service/carbon-c-relay/run
 ADD daemons/nginx.sh /etc/service/nginx/run
+ADD daemons/grafana.sh /etc/service/grafana/run
 
 # cleanup
 RUN apt-get clean\
