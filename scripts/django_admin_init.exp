@@ -7,11 +7,11 @@ expect "Would you like to create one now" {
   send "yes\r"
 }
 
-expect "Username *:" {
+expect "Username:" {
   send "root\r"
 }
 
-expect "E-mail address:" {
+expect "Email address:" {
   send "root.graphite@mailinator.com\r"
 }
 
