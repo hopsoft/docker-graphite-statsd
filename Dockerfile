@@ -22,14 +22,14 @@ RUN apt-get -y --force-yes install vim\
  nodejs
 
 # python dependencies
-RUN pip install django==1.3\
+RUN pip install django==1.4\
  python-memcached==1.53\
  django-tagging==0.3.1\
  twisted==11.1.0\
  txAMQP==0.6.2
 
 # install graphite
-RUN git clone -b 0.9.12 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
+RUN git clone -b 0.9.13-pre1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
 
