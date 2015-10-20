@@ -89,7 +89,7 @@ RUN apt-get clean\
 # Configs
 ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 ADD conf/graphite/ /opt/graphite/conf/
-ADD conf/grafana/defaults.ini /etc/grafana/conf/defaults.ini
+ADD conf/grafana/defaults.ini /usr/local/src/grafana/defaults.ini
 ADD conf/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
 RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
