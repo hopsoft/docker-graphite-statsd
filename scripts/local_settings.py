@@ -192,7 +192,7 @@
 # and a common scheme is to use 7102 for instance b, 7202 for instance c, etc.
 #
 # You *should* use 127.0.0.1 here in most cases
-#CARBONLINK_HOSTS = ["127.0.0.1:7002:a", "127.0.0.1:7102:b", "127.0.0.1:7202:c"]
+CARBONLINK_HOSTS = ["127.0.0.1:7102:a", "127.0.0.1:7202:b", "127.0.0.1:7302:c", "127.0.0.1:7402:d", "127.0.0.1:7502:e", "127.0.0.1:7602:f", "127.0.0.1:7702:g", "127.0.0.1:7802:h"]
 #CARBONLINK_TIMEOUT = 1.0
 
 #####################################
