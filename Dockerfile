@@ -32,8 +32,6 @@ RUN pip install django==1.3\
 RUN git clone -b 0.9.12 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
-ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-ADD conf/graphite/ /opt/graphite/conf/
 
 # install whisper
 RUN git clone -b 0.9.12 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -54,13 +52,9 @@ RUN make
 WORKDIR /usr/local/src/grafana
 RUN curl https://grafanarel.s3.amazonaws.com/builds/grafana-2.1.3.linux-x64.tar.gz -o grafana-2.1.3.linux-x64.tar.gz
 RUN tar -xzvf grafana-2.1.3.linux-x64.tar.gz
-ADD conf/grafana/defaults.ini /etc/grafana/conf/defaults.ini
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
-ADD conf/nginx/nginx.conf /etc/nginx/nginx.conf
-ADD conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
-RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
 
 # init django admin
 ADD scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
@@ -92,8 +86,14 @@ ADD daemons/grafana.sh /etc/service/grafana/run
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Configs
+ADD scripts/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+ADD conf/graphite/ /opt/graphite/conf/
+ADD conf/grafana/defaults.ini /etc/grafana/conf/defaults.ini
+ADD conf/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD conf/nginx/graphite.conf /etc/nginx/sites-available/graphite.conf
+RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
+
 # defaults
-EXPOSE 80:80 2003:2003
-VOLUME ["/opt/graphite", "/etc/nginx", "/etc/logrotate.d", "/var/log"]
 ENV HOME /root
 CMD ["/sbin/my_init"]
