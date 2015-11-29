@@ -1,4 +1,4 @@
 #!/bin/bash
 
-/usr/bin/nodejs /opt/statsd/stats.js /opt/statsd/config.js 2>&1 >> /var/log/statsd.log
+/usr/bin/nodejs /opt/statsd/stats.js /opt/statsd/config.js >> /var/log/statsd.log 2>&1
 
