@@ -120,14 +120,14 @@ retentions = 60s:12h # OK
 
 ## Statsd Admin Management Interface
 
-A management interface (default on port 8126) allows you to manage statsd and retrieve stats
+A management interface (default on port 8126) allows you to manage statsd & retrieve stats.
 
 ```sh
 # show all current counters
 echo counters | nc localhost 8126
 ```
 
-more info and additional commands: [admin_interface](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
+More info & additional commands: [admin_interface](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
 
 ## A Note on Disk Space
 
