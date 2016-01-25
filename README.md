@@ -11,7 +11,7 @@ This image will have you running & collecting stats in just a few minutes.
 ## Quick Start
 
 ```sh
-sudo docker run -d \
+docker run -d \
   --name graphite \
   --restart=always \
   -p 80:80 \
@@ -63,11 +63,7 @@ Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
 Let's fake some stats with a random counter to prove things are working.
 
 ```sh
-while true
-do
-  echo -n "example.statsd.counter.changed:$(((RANDOM % 10) + 1))|c" | nc -w 1 -u localhost 8125
-done
-<CTL-C>
+while true; do echo -n "example:$((RANDOM % 10))|c" | nc -w 1 -u localhost 8125; done
 ```
 
 ### Visualize the Data
@@ -126,7 +122,7 @@ you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
 1. Specify the volume mounts when starting the container.
 
     ```
-    sudo docker run -d \
+    docker run -d \
       --name graphite \
       --restart=always \
       -v /path/to/ebs/graphite:/opt/graphite \
@@ -148,17 +144,5 @@ you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
 
 Build the image yourself.
 
-### OSX
-
 1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
-1. `cd docker-graphite-statsd`
-1. `vagrant up`
-1. `vagrant ssh`
-1. `sudo docker build -t hopsoft/graphite-statsd /vagrant`
-
-**Note**: Pay attention to the forwarded ports in the [Vagrantfile](https://github.com/hopsoft/docker-graphite-statsd/blob/master/Vagrantfile).
-
-### Linux
-
-1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
-1. `sudo docker build -t hopsoft/graphite-statsd ./docker-graphite-statsd`
+1. `docker build -t hopsoft/graphite-statsd .`
