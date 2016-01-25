@@ -65,12 +65,15 @@ Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
 Let's fake some stats with a random counter to prove things are working.
 
 ```sh
-while true; do echo -n "example:$((RANDOM % 10))|c" | nc -w 1 -u localhost 8125; done
+while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u localhost 8125; done
 ```
 
 ### Visualize the Data
 
-Open Graphite in a browser at [http://localhost/dashboard](http://localhost/dashboard).
+Open Graphite in a browser.
+
+http://localhost/dashboard
+http://localhost/render?from=-10mins&until=now&target=stats.example
 
 ## Secure the Django Admin
 
@@ -117,14 +120,14 @@ retentions = 60s:12h # OK
 
 ## Statsd Admin Management Interface
 
-A management interface (default on port 8126) allows you to manage statsd and retrieve stats 
+A management interface (default on port 8126) allows you to manage statsd and retrieve stats
 
 ```sh
 # show all current counters
 echo counters | nc localhost 8126
 ```
 
-more info and additional commands: [admin_interface](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md) 
+more info and additional commands: [admin_interface](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
 
 ## A Note on Disk Space
 
