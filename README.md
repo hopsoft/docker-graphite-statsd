@@ -89,7 +89,7 @@ Then update the root user's profile at: [http://localhost/admin/auth/user/1/](ht
 ## Change the Configuration
 
 Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
-Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
+Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf).
 
 1. Stop the container `docker stop graphite`.
 1. Find the configuration files on the host by inspecting the container `docker inspect graphite`.
@@ -127,7 +127,7 @@ A management interface (default on port 8126) allows you to manage statsd & retr
 echo counters | nc localhost 8126
 ```
 
-More info & additional commands: [admin_interface](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
+[More info & additional commands.](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
 
 ## A Note on Disk Space
 
