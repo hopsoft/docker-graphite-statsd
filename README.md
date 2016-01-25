@@ -72,8 +72,8 @@ while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u localhost 8125
 
 Open Graphite in a browser.
 
-http://localhost/dashboard
-http://localhost/render?from=-10mins&until=now&target=stats.example
+* http://localhost/dashboard
+* http://localhost/render?from=-10mins&until=now&target=stats.example
 
 ## Secure the Django Admin
 
