@@ -11,14 +11,15 @@ This image will have you running & collecting stats in just a few minutes.
 ## Quick Start
 
 ```sh
-docker run -d \
-  --name graphite \
-  --restart=always \
-  -p 80:80 \
-  -p 2003:2003 \
-  -p 8125:8125/udp \
-  -p 8126:8126 \
-  hopsoft/graphite-statsd
+docker run -d\
+ --name graphite\
+ --restart=always\
+ -p 80:80\
+ -p 2003-2004:2003-2004\
+ -p 2023-2024:2023-2024\
+ -p 8125:8125/udp\
+ -p 8126:8126\
+ hopsoft/graphite-statsd
 ```
 
 This starts a Docker container named: **graphite**
@@ -34,22 +35,25 @@ That's it, you're done ... almost.
 
 ### Mapped Ports
 
-| Host | Container | Service |
-| ---- | --------- | ------- |
-|   80 |        80 | nginx   |
-| 2003 |      2003 | carbon  |
-| 8125 |      8125 | statsd  |
-| 8126 |      8126 | admin   |
+Host | Container | Service
+---- | --------- | -------------------------------------------------------------------------------------------------------------------
+  80 |        80 | [nginx](https://www.nginx.com/resources/admin-guide/)
+2003 |      2003 | [carbon](https://graphite.readthedocs.org/en/latest/feeding-carbon.html)
+2004 |      2004 | [carbon aggregator](https://graphite.readthedocs.org/en/latest/carbon-daemons.html#carbon-aggregator-py)
+2023 |      2023 | [carbon pickle](https://graphite.readthedocs.org/en/latest/feeding-carbon.html#the-pickle-protocol)
+2024 |      2024 | [carbon aggregator pickle](https://graphite.readthedocs.org/en/latest/feeding-carbon.html#the-pickle-protocol)
+8125 |      8125 | [statsd](https://github.com/etsy/statsd/blob/master/docs/server.md)
+8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
 
 ### Mounted Volumes
 
-| Host              | Container                  | Notes                           |
-| ----------------- | -------------------------- | ------------------------------- |
-| DOCKER ASSIGNED   | /opt/graphite              | graphite config & stats storage |
-| DOCKER ASSIGNED   | /etc/nginx                 | nginx config                    |
-| DOCKER ASSIGNED   | /opt/statsd                | statsd config                   |
-| DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config                |
-| DOCKER ASSIGNED   | /var/log                   | log files                       |
+Host              | Container                  | Notes
+----------------- | -------------------------- | -------------------------------
+DOCKER ASSIGNED   | /opt/graphite              | graphite config & stats storage
+DOCKER ASSIGNED   | /etc/nginx                 | nginx config
+DOCKER ASSIGNED   | /opt/statsd                | statsd config
+DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config
+DOCKER ASSIGNED   | /var/log                   | log files
 
 ### Base Image
 
