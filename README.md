@@ -142,15 +142,17 @@ you should consider mounting `/opt/graphite` & `/var/log` on a larger volume.
 1. Specify the volume mounts when starting the container.
 
     ```
-    docker run -d \
-      --name graphite \
-      --restart=always \
-      -v /path/to/ebs/graphite:/opt/graphite \
-      -v /path/to/ebs/log:/var/log \
-      -p 80:80 \
-      -p 2003:2003 \
-      -p 8125:8125/udp \
-      hopsoft/graphite-statsd
+    docker run -d\
+     --name graphite\
+     --restart=always\
+     -v /path/to/ebs/graphite:/opt/graphite\
+     -v /path/to/ebs/log:/var/log\
+     -p 80:80\
+     -p 2003-2004:2003-2004\
+     -p 2023-2024:2023-2024\
+     -p 8125:8125/udp\
+     -p 8126:8126\
+     hopsoft/graphite-statsd
     ```
 
 ## Additional Reading
