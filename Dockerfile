@@ -1,6 +1,8 @@
 FROM phusion/baseimage:0.9.18
 MAINTAINER Nathan Hopkins <natehop@gmail.com>
 
+ENV TZ="America/Los_Angeles"
+
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN apt-get -y update\
  && apt-get -y upgrade

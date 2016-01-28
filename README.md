@@ -25,6 +25,14 @@ That's it, you're done ... almost.
 * [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end
 * [Statsd](https://github.com/etsy/statsd/wiki) - UDP based back-end proxy
 
+### Timezone support
+
+It is possible to set the timezone using the environment variable `'TZ'`.
+
+  -e TZ='America/Los_Angeles'
+
+This affects both the operating system itself and the Graphite web application.
+
 ### Mapped Ports
 
 Host | Container | Service
