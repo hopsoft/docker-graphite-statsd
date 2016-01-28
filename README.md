@@ -51,6 +51,7 @@ Host | Container | Service
 docker run -d\
  --name graphite\
  --restart=always\
+ -e TZ="America/Los_Angeles"
  -p 80:80\
  -p 2003-2004:2003-2004\
  -p 2023-2024:2023-2024\
