@@ -98,18 +98,39 @@ Then update the root user's profile at: [http://localhost/admin/auth/user/1/](ht
 
 ## Change the Configuration
 
-Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
-Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf).
+The image contains a set of default configuration files: https://github.com/hopsoft/docker-graphite-statsd/tree/master/conf
+
+If we want to make changes to these configuration files, we have two options:
+
+### Change the configuration of a running container
 
 1. Stop the container `docker stop graphite`.
 1. Find the configuration files on the host by inspecting the container `docker inspect graphite`.
-1. Update the desired config files.
+1. Update the desired config files. **Note**: If the config files are updated by the image, you need to change them in `/conf-default` and
+not in the target destination (like _/opt/graphite..._)
 1. Restart the container `docker start graphite`.
 
 **Note**: If you change settings in `/opt/graphite/conf/storage-schemas.conf`
 be sure to delete the old whisper files under `/opt/graphite/storage/whisper/`.
 
+### Supply custom config files in a volume
+
+The image contains a volume */conf-custom* that will be scanned for configuration files. If files exist, they will replace
+any default files contained in the image. Note that the path of the file needs to correspond to the path of the
+default config files in the image (check out https://github.com/hopsoft/docker-graphite-statsd/tree/master/conf). An example:
+
+1. Create a config directory in the host, e.g. `mkdir /myConf`
+1. Add the config files that we want to overwrite, e.g. `mkdir /myConf/graphite; vi /myConf/graphite/storage-schemas.conf`
+1. Run the container with the _/config-custom_ volume mounted: `sudo docker run -d --name graphite -v /myConf:/conf-custom hopsoft/graphite-statsd`
+1. The init scripts will automatically replace the `storage-schemas.conf` config file with our custom config file
+
+Custom config files can also be changed (or added) for a running container. In this case, we need to restart the container: `sudo docker restart graphite`
+
 ---
+
+Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
+Focus on the [storage-schemas.conf](https://graphite.readthedocs.org/en/latest/config-carbon.html#storage-schemas-conf)
+
 
 **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
 For example, if `/opt/statsd/config.js` looks like this.
