@@ -153,8 +153,6 @@ docker run -d\
  -v /path/to/graphite/configs:/opt/graphite/conf\
  -v /path/to/graphite/data:/opt/graphite/storage\
  -v /path/to/statsd:/opt/statsd\
- -v /path/to/nginx/configs:/etc/nginx\
- -v /path/to/logrotate/configs:/etc/logrotate.d
  hopsoft/graphite-statsd
 ```
 
