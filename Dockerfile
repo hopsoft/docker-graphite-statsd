@@ -51,6 +51,7 @@ ADD conf/opt/statsd/config.js /opt/statsd/config.js
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
+RUN mkdir -p /var/log/nginx
 ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
 
