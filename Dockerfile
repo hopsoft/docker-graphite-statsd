@@ -32,6 +32,8 @@ RUN pip install django==1.5.12\
 RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
+ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
+ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 
 # install whisper
 RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -45,35 +47,39 @@ RUN python ./setup.py install
 
 # install statsd
 RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
+ADD conf/opt/statsd/config.js /opt/statsd/config.js
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
-RUN ln -s /etc/nginx/sites-available/graphite.conf /etc/nginx/sites-enabled/graphite.conf
+ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
 
 # init django admin
-ADD scripts/django_admin_init.exp /usr/local/bin/django_admin_init.exp
+ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
 RUN /usr/local/bin/django_admin_init.exp
 
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
+ADD conf/etc/logrotate.d/graphite-statsd /etc/logrotate.d/graphite-statsd
 
 # daemons
-ADD daemons/carbon.sh /etc/service/carbon/run
-ADD daemons/carbon-aggregator.sh /etc/service/carbon-aggregator/run
-ADD daemons/graphite.sh /etc/service/graphite/run
-ADD daemons/statsd.sh /etc/service/statsd/run
-ADD daemons/nginx.sh /etc/service/nginx/run
+ADD conf/etc/service/carbon/run /etc/service/carbon/run
+ADD conf/etc/service/carbon-aggregator/run /etc/service/carbon-aggregator/run
+ADD conf/etc/service/graphite/run /etc/service/graphite/run
+ADD conf/etc/service/statsd/run /etc/service/statsd/run
+ADD conf/etc/service/nginx/run /etc/service/nginx/run
+
+# default conf setup
+ADD conf /etc/graphite-statsd/conf
+ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
 # cleanup
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Add the default config files and the init_conf_files script to initialize configuration files at container startup
-ADD conf /conf-default
-ADD scripts/init_conf_files.sh /etc/my_init.d/01_init_conf_files.sh
-
 # defaults
 EXPOSE 80:80 2003-2004:2003-2004 2023-2024:2023-2024 8125:8125/udp 8126:8126
-VOLUME ["/opt/graphite", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
+WORKDIR /
 ENV HOME /root
 CMD ["/sbin/my_init"]
