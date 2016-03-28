@@ -1,4 +1,4 @@
 #!/bin/bash
 
 mkdir -p /var/log/nginx
-/usr/sbin/nginx -c /etc/nginx/nginx.conf
+exec /usr/sbin/nginx -c /etc/nginx/nginx.conf
