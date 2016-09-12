@@ -16,7 +16,15 @@ This image will have you running & collecting stats in just a few minutes.
 ## Quick Start
 
 ```sh
-docker run -d --name graphite --restart=always hopsoft/graphite-statsd
+docker run -d\
+ --name graphite\
+ --restart=always\
+ -p 80:80\
+ -p 2003-2004:2003-2004\
+ -p 2023-2024:2023-2024\
+ -p 8125:8125/udp\
+ -p 8126:8126\
+ hopsoft/graphite-statsd
 ```
 
 This starts a Docker container named: **graphite**
@@ -42,19 +50,6 @@ Host | Container | Service
 8125 |      8125 | [statsd](https://github.com/etsy/statsd/blob/master/docs/server.md)
 8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
 
-**Note**: You can override the default port mappings by specifying them when starting the container.
-
-```sh
-docker run -d\
- --name graphite\
- --restart=always\
- -p 80:80\
- -p 2003-2004:2003-2004\
- -p 2023-2024:2023-2024\
- -p 8125:8125/udp\
- -p 8126:8126\
- hopsoft/graphite-statsd
-```
 
 ### Mounted Volumes
 
