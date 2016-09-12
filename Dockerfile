@@ -79,7 +79,7 @@ RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
-EXPOSE 80:80 2003-2004:2003-2004 2023-2024:2023-2024 8125:8125/udp 8126:8126
+EXPOSE 80 2003-2004 2023-2024 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 WORKDIR /
 ENV HOME /root
