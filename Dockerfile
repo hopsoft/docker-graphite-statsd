@@ -19,6 +19,7 @@ RUN apt-get -y --force-yes install vim\
  libcairo2\
  libcairo2-dev\
  python-cairo\
+ python-rrdtool\
  pkg-config\
  nodejs
 
