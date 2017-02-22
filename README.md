@@ -7,11 +7,6 @@
 Graphite & Statsd can be complex to setup.
 This image will have you running & collecting stats in just a few minutes.
 
-## Todo
-
-- [ ] Proxy Graphite's Django admin behind Nginx
-
-
 ## Quick Start
 
 ```sh
