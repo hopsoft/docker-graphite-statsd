@@ -36,6 +36,7 @@ WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
 
 # install whisper
 RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
