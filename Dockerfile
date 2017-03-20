@@ -83,7 +83,6 @@ RUN apt-get clean\
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8125/udp 8126
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 WORKDIR /
 ENV HOME /root
 CMD ["/sbin/my_init"]
