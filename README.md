@@ -70,7 +70,7 @@ Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
 Let's fake some stats with a random counter to prove things are working.
 
 ```sh
-while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u localhost 8125; done
+while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u 127.0.0.1 8125; done
 ```
 
 ### Visualize the Data
