@@ -202,5 +202,14 @@
 # MIDDLEWARE_CLASSES or APPS
 #from graphite.app_settings import *
 
+import os
+
 LOG_DIR = '/var/log/graphite'
 SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
+
+if (os.getenv("MEMCACHE_HOST") is not None):
+    MEMCACHE_HOSTS = os.getenv("MEMCACHE_HOST").split(",")
+
+if (os.getenv("DEFAULT_CACHE_DURATION") is not None):
+    DEFAULT_CACHE_DURATION = int(os.getenv("CACHE_DURATION"))
+
