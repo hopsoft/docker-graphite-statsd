@@ -31,7 +31,7 @@ RUN pip install django==1.5.12\
  txAMQP==0.6.2
 
 # install graphite
-RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
+RUN git clone -b 1.0.1 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN python ./setup.py install
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
@@ -40,12 +40,12 @@ ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graph
 RUN python /opt/graphite/webapp/graphite/manage.py collectstatic --noinput
 
 # install whisper
-RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
+RUN git clone -b 1.0.1 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
 WORKDIR /usr/local/src/whisper
 RUN python ./setup.py install
 
 # install carbon
-RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
+RUN git clone -b 1.0.1 --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
 RUN python ./setup.py install
 
