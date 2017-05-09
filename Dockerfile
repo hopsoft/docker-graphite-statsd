@@ -28,7 +28,8 @@ RUN pip install django==1.5.12\
  python-memcached==1.53\
  django-tagging==0.3.1\
  twisted==11.1.0\
- txAMQP==0.6.2
+ txAMQP==0.6.2\
+ pytz
 
 # install graphite
 RUN git clone -b 1.0.1 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
@@ -37,7 +38,7 @@ RUN python ./setup.py install
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
-RUN python /opt/graphite/webapp/graphite/manage.py collectstatic --noinput
+RUN python /usr/local/src/graphite-web/webapp/manage.py collectstatic --noinput
 
 # install whisper
 RUN git clone -b 1.0.1 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -59,6 +60,7 @@ ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
 
 # init django admin
+RUN mkdir -p /usr/local/src/graphite-web/storage/log/webapp
 ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
 RUN /usr/local/bin/django_admin_init.exp
 
