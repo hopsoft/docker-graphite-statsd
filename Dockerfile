@@ -21,14 +21,18 @@ RUN apt-get -y --force-yes install vim\
  python-cairo\
  python-rrdtool\
  pkg-config\
- nodejs
+ nodejs\
+ libsasl2-dev\
+ libldap2-dev\
+ libssl-dev
 
 # python dependencies
 RUN pip install django==1.5.12\
  python-memcached==1.53\
  django-tagging==0.3.1\
  twisted==11.1.0\
- txAMQP==0.6.2
+ txAMQP==0.6.2\
+ python-ldap
 
 # install graphite
 RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
