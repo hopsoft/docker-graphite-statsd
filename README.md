@@ -177,6 +177,29 @@ Also, you can specify more than one memcached server, using commas:
 -e "MEMCACHE_HOST=127.0.0.1:11211,10.0.0.1:11211"
 ```
 
+## How to restart the docker container on reboot
+
+(Tested on CentOS 6.6. You will need sudo or root permission)
+
+1. Verify that you have upstart installed (every one has it but its worth double checking). If not "sudo yum install upstart"
+2. Create a file called /etc/init/docker-graphite.conf with the following content
+
+    ```
+    description "Docker Graphite container"
+    author "Me"
+    start on startup and started docker
+    stop on shutdown
+    respawn
+    script
+      /usr/bin/docker stop graphite
+      /usr/bin/docker start -a graphite
+    end script
+    ```
+3. Verify that the container gets started on reboot (by sending some test data and visualizing the data from graphite web UI). 
+
+The step of `/usr/bin/docker stop graphite` is a bit of hack to clean up dead carbon pid files as the shutdown process (on reboot) does not clean up the carbon pid file. 
+
+
 ## Additional Reading
 
 * [Introduction to Docker](http://docs.docker.io/#introduction)
