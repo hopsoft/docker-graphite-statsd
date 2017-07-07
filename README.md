@@ -9,11 +9,6 @@
 Graphite & Statsd can be complex to setup.
 This image will have you running & collecting stats in just a few minutes.
 
-## Todo
-
-- [ ] Proxy Graphite's Django admin behind Nginx
-
-
 ## Quick Start
 
 ```sh
@@ -77,7 +72,7 @@ Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
 Let's fake some stats with a random counter to prove things are working.
 
 ```sh
-while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u localhost 8125; done
+while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u 127.0.0.1 8125; done
 ```
 
 ### Visualize the Data
@@ -159,6 +154,30 @@ docker run -d\
 
 **Note**: The container will initialize properly if you mount empty volumes at
           `/opt/graphite`, `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd`
+
+## Memcached config
+
+If you have a Memcached server running, and want to Graphite use it, you can do it using environment variables, like this:
+
+```
+docker run -d\
+ --name graphite\
+ --restart=always\
+ -p 80:80\
+ -p 2003-2004:2003-2004\
+ -p 2023-2024:2023-2024\
+ -p 8125:8125/udp\
+ -p 8126:8126\
+ -e "MEMCACHE_HOST=127.0.0.1:11211"\  # Memcached host. Separate by comma more than one servers.
+ -e "CACHE_DURATION=60"\              # in seconds
+ hopsoft/graphite-statsd
+```
+
+Also, you can specify more than one memcached server, using commas:
+
+```
+-e "MEMCACHE_HOST=127.0.0.1:11211,10.0.0.1:11211"
+```
 
 ## Additional Reading
 
