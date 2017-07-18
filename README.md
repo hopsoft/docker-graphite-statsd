@@ -190,5 +190,5 @@ Also, you can specify more than one memcached server, using commas:
 
 Build the image yourself.
 
-1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
-1. `docker build -t hopsoft/graphite-statsd .`
+1. `git clone https://github.com/graphite-project/docker-graphite-statsd.git`
+1. `docker build -t graphiteapp/graphite-statsd .`
