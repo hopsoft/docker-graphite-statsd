@@ -1,6 +1,6 @@
-[![Docker Pulls](https://img.shields.io/docker/pulls/hopsoft/graphite-statsd.svg?style=flat)](https://hub.docker.com/r/hopsoft/graphite-statsd/)
+WIP!!! Do not use yet!!!
 
-[![Sponsor](https://app.codesponsor.io/embed/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/docker-graphite-statsd.svg)](https://app.codesponsor.io/link/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/docker-graphite-statsd)
+This repo was based on [@hopsoft's](https://github.com/hopsoft/) [docker-graphite-statsd](https://github.com/hopsoft/docker-graphite-statsd) docker image and was used as base for "official" Docker image with his permission. Also, it contains parts of famous [@obfuscurity's](https://github.com/obfuscurity/) [synthesize](https://github.com/obfuscurity/synthesize) Graphite installer. Thanks a lot, Natan and Jason!
 
 # Docker Image for Graphite & Statsd
 
