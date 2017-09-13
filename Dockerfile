@@ -3,7 +3,7 @@ MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
 RUN apt-get -y update \
   && apt-get -y upgrade \
-  && apt-get -y --force-yes install vim \
+  && apt-get -y install vim \
   nginx \
   python-dev \
   python-flup \
@@ -23,36 +23,43 @@ RUN apt-get -y update \
   && rm -rf /var/lib/apt/lists/*
 
 # fix python dependencies (LTS Django and newer memcached/txAMQP)
-RUN pip install django==1.8.18 \
+RUN pip install --upgrade pip && \
+  pip install django==1.8.18 \
   python-memcached==1.53 \
-  txAMQP==0.6.2 \
-  && pip install --upgrade pip
+  txAMQP==0.6.2
+
+ARG version=1.0.2
+ARG whisper_version=${version}
+ARG carbon_version=${version}
+ARG graphite_version=${version}
+
+ARG statsd_version=v0.7.2
 
 # install whisper
-RUN git clone -b 1.0.2 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
+RUN git clone -b ${whisper_version} --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
 WORKDIR /usr/local/src/whisper
 RUN python ./setup.py install
 
 # install carbon
-RUN git clone -b 1.0.2 --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
+RUN git clone -b ${carbon_version} --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
 RUN pip install -r requirements.txt \
   && python ./setup.py install
 
 # install graphite
-RUN git clone -b 1.0.2 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
+RUN git clone -b ${graphite_version} --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN pip install -r requirements.txt \
   && python ./setup.py install
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
+# ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # install statsd
-RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
+RUN git clone -b ${statsd_version} https://github.com/etsy/statsd.git /opt/statsd
 ADD conf/opt/statsd/config.js /opt/statsd/config.js
 
 # config nginx
@@ -63,8 +70,7 @@ ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/g
 # init django admin
 ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
 ADD conf/usr/local/bin/manage.sh /usr/local/bin/manage.sh
-RUN chmod +x /usr/local/bin/manage.sh \
-  && /usr/local/bin/django_admin_init.exp
+RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
 
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx

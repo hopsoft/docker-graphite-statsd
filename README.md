@@ -192,3 +192,13 @@ Build the image yourself.
 
 1. `git clone https://github.com/graphite-project/docker-graphite-statsd.git`
 1. `docker build -t graphiteapp/graphite-statsd .`
+
+Alternate versions can be specified via `--build-arg`:
+
+* `version` will set the version/branch used for graphite-web, carbon & whisper
+* `graphite_version`, `carbon_version` & `whisper_version` set the version/branch used for individual components
+* `statsd_version` sets the version/branch used for statsd (note statsd version is prefixed with v)
+
+To build an image from latest graphite master, run:
+
+`docker build -t graphiteapp/graphite-statsd . --build-arg version=master`
