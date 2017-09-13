@@ -1,6 +1,6 @@
-[![Docker Pulls](https://img.shields.io/docker/pulls/hopsoft/graphite-statsd.svg?style=flat)](https://hub.docker.com/r/hopsoft/graphite-statsd/)
+This repo was based on [@hopsoft's](https://github.com/hopsoft/) [docker-graphite-statsd](https://github.com/hopsoft/docker-graphite-statsd) docker image and was used as base for "official" Graphite docker image with his permission. Also, it contains parts of famous [@obfuscurity's](https://github.com/obfuscurity/) [synthesize](https://github.com/obfuscurity/synthesize) Graphite installer. Thanks a lot, Nathan and Jason!
 
-[![Sponsor](https://app.codesponsor.io/embed/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/docker-graphite-statsd.svg)](https://app.codesponsor.io/link/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/docker-graphite-statsd)
+Any suggestions / patches etc. are welcome!
 
 # Docker Image for Graphite & Statsd
 
@@ -20,7 +20,7 @@ docker run -d\
  -p 2023-2024:2023-2024\
  -p 8125:8125/udp\
  -p 8126:8126\
- hopsoft/graphite-statsd
+ graphiteapp/graphite-statsd
 ```
 
 This starts a Docker container named: **graphite**
@@ -149,7 +149,7 @@ docker run -d\
  -v /path/to/graphite/configs:/opt/graphite/conf\
  -v /path/to/graphite/data:/opt/graphite/storage\
  -v /path/to/statsd:/opt/statsd\
- hopsoft/graphite-statsd
+ graphiteapp/graphite-statsd
 ```
 
 **Note**: The container will initialize properly if you mount empty volumes at
@@ -170,7 +170,7 @@ docker run -d\
  -p 8126:8126\
  -e "MEMCACHE_HOST=127.0.0.1:11211"\  # Memcached host. Separate by comma more than one servers.
  -e "CACHE_DURATION=60"\              # in seconds
- hopsoft/graphite-statsd
+ graphiteapp/graphite-statsd
 ```
 
 Also, you can specify more than one memcached server, using commas:
@@ -190,5 +190,15 @@ Also, you can specify more than one memcached server, using commas:
 
 Build the image yourself.
 
-1. `git clone https://github.com/hopsoft/docker-graphite-statsd.git`
-1. `docker build -t hopsoft/graphite-statsd .`
+1. `git clone https://github.com/graphite-project/docker-graphite-statsd.git`
+1. `docker build -t graphiteapp/graphite-statsd .`
+
+Alternate versions can be specified via `--build-arg`:
+
+* `version` will set the version/branch used for graphite-web, carbon & whisper
+* `graphite_version`, `carbon_version` & `whisper_version` set the version/branch used for individual components
+* `statsd_version` sets the version/branch used for statsd (note statsd version is prefixed with v)
+
+To build an image from latest graphite master, run:
+
+`docker build -t graphiteapp/graphite-statsd . --build-arg version=master`
