@@ -1,4 +1,5 @@
 .vagrant
+.idea
 
 # Vim
 [._]*.s[a-w][a-z]

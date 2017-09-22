@@ -22,6 +22,16 @@ RUN apt-get -y update \
   nodejs \
   && rm -rf /var/lib/apt/lists/*
 
+# choose a timezone at build-time
+# use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
+ARG CONTAINER_TIMEZONE
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
+    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata; \
+    fi
+
 # fix python dependencies (LTS Django and newer memcached/txAMQP)
 RUN pip install --upgrade pip && \
   pip install django==1.8.18 \
