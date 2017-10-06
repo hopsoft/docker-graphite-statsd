@@ -46,6 +46,7 @@ Host | Container | Service
 8125 |      8125 | [statsd](https://github.com/etsy/statsd/blob/master/docs/server.md)
 8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
 
+By default, statsd listens on the UDP port 8125. If you want it to listen on the TCP port 8125 instead, you can set the environment variable `STATSD_INTERFACE` to `tcp` when running the container.
 
 ### Mounted Volumes
 
