@@ -46,7 +46,7 @@ WORKDIR /usr/local/src/carbon
 RUN python ./setup.py install
 
 # install statsd
-RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
+RUN git clone -b v0.8.0 https://github.com/etsy/statsd.git /opt/statsd
 
 # config graphite
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
@@ -55,7 +55,7 @@ ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graph
 RUN python /opt/graphite/webapp/graphite/manage.py collectstatic --noinput
 
 # config statsd
-ADD conf/opt/statsd/config.js /opt/statsd/config.js
+ADD conf/opt/statsd/config_*.js /opt/statsd/
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
@@ -86,8 +86,10 @@ RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
-EXPOSE 80 2003-2004 2023-2024 8125/udp 8126
+EXPOSE 80 2003-2004 2023-2024 8125 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 WORKDIR /
 ENV HOME /root
+ENV STATSD_INTERFACE udp
+
 CMD ["/sbin/my_init"]
