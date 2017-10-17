@@ -1,58 +1,77 @@
-FROM phusion/baseimage:0.9.18
-MAINTAINER Nathan Hopkins <natehop@gmail.com>
+FROM phusion/baseimage:0.9.22
+MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
-#RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
-RUN apt-get -y update\
- && apt-get -y upgrade
+RUN apt-get -y update \
+  && apt-get -y upgrade \
+  && apt-get -y install vim \
+  nginx \
+  python-dev \
+  python-flup \
+  python-pip \
+  python-ldap \
+  expect \
+  git \
+  memcached \
+  sqlite3 \
+  libffi-dev \
+  libcairo2 \
+  libcairo2-dev \
+  python-cairo \
+  python-rrdtool \
+  pkg-config \
+  nodejs \
+  && rm -rf /var/lib/apt/lists/*
 
-# dependencies
-RUN apt-get -y --force-yes install vim\
- nginx\
- python-dev\
- python-flup\
- python-pip\
- python-ldap\
- expect\
- git\
- memcached\
- sqlite3\
- libcairo2\
- libcairo2-dev\
- python-cairo\
- python-rrdtool\
- pkg-config\
- nodejs
+# choose a timezone at build-time
+# use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
+ARG CONTAINER_TIMEZONE
+ENV DEBIAN_FRONTEND noninteractive
 
-# python dependencies
-RUN pip install django==1.5.12\
- python-memcached==1.53\
- django-tagging==0.3.1\
- twisted==11.1.0\
- txAMQP==0.6.2
+RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
+    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata; \
+    fi
 
-# install graphite
-RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
-WORKDIR /usr/local/src/graphite-web
-RUN python ./setup.py install
+# fix python dependencies (LTS Django and newer memcached/txAMQP)
+RUN pip install --upgrade pip && \
+  pip install django==1.8.18 \
+  python-memcached==1.53 \
+  txAMQP==0.6.2
+
+ARG version=1.0.2
+ARG whisper_version=${version}
+ARG carbon_version=${version}
+ARG graphite_version=${version}
+
+ARG statsd_version=v0.7.2
 
 # install whisper
-RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
+RUN git clone -b ${whisper_version} --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
 WORKDIR /usr/local/src/whisper
 RUN python ./setup.py install
 
 # install carbon
-RUN git clone -b 0.9.15 --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
+RUN git clone -b ${carbon_version} --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
-RUN python ./setup.py install
+RUN pip install -r requirements.txt \
+  && python ./setup.py install
+
+# install graphite
+RUN git clone -b ${graphite_version} --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
+WORKDIR /usr/local/src/graphite-web
+RUN pip install -r requirements.txt \
+  && python ./setup.py install
 
 # install statsd
-RUN git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
+RUN git clone -b ${statsd_version} https://github.com/etsy/statsd.git /opt/statsd
 
 # config graphite
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
-RUN python /opt/graphite/webapp/graphite/manage.py collectstatic --noinput
+# ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
+WORKDIR /opt/graphite/webapp
+RUN mkdir -p /var/log/graphite/ \
+  && PYTHONPATH=/opt/graphite/webapp django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
 ADD conf/opt/statsd/config.js /opt/statsd/config.js
@@ -64,7 +83,8 @@ ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/g
 
 # init django admin
 ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
-RUN /usr/local/bin/django_admin_init.exp
+ADD conf/usr/local/bin/manage.sh /usr/local/bin/manage.sh
+RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
 
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
