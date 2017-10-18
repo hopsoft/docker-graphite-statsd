@@ -61,6 +61,11 @@ RUN git clone -b ${graphite_version} --depth 1 https://github.com/graphite-proje
 WORKDIR /usr/local/src/graphite-web
 RUN pip install -r requirements.txt \
   && python ./setup.py install
+
+# install statsd
+RUN git clone -b ${statsd_version} https://github.com/etsy/statsd.git /opt/statsd
+
+# config graphite
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 # ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
@@ -68,8 +73,7 @@ WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp django-admin.py collectstatic --noinput --settings=graphite.settings
 
-# install statsd
-RUN git clone -b ${statsd_version} https://github.com/etsy/statsd.git /opt/statsd
+# config statsd
 ADD conf/opt/statsd/config.js /opt/statsd/config.js
 
 # config nginx
