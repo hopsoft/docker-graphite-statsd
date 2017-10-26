@@ -43,27 +43,33 @@ ARG whisper_version=${version}
 ARG carbon_version=${version}
 ARG graphite_version=${version}
 
+ARG whisper_repo=https://github.com/graphite-project/whisper.git
+ARG carbon_repo=https://github.com/graphite-project/carbon.git
+ARG graphite_repo=https://github.com/graphite-project/graphite-web.git
+
 ARG statsd_version=v0.8.0
 
+ARG statsd_repo=https://github.com/etsy/statsd.git
+
 # install whisper
-RUN git clone -b ${whisper_version} --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
+RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper
 WORKDIR /usr/local/src/whisper
 RUN python ./setup.py install
 
 # install carbon
-RUN git clone -b ${carbon_version} --depth 1 https://github.com/graphite-project/carbon.git /usr/local/src/carbon
+RUN git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
 RUN pip install -r requirements.txt \
   && python ./setup.py install
 
 # install graphite
-RUN git clone -b ${graphite_version} --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
+RUN git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
 RUN pip install -r requirements.txt \
   && python ./setup.py install
 
 # install statsd
-RUN git clone -b ${statsd_version} https://github.com/etsy/statsd.git /opt/statsd
+RUN git clone -b ${statsd_version} ${statsd_repo} /opt/statsd
 
 # config graphite
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/

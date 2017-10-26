@@ -200,6 +200,12 @@ Alternate versions can be specified via `--build-arg`:
 * `graphite_version`, `carbon_version` & `whisper_version` set the version/branch used for individual components
 * `statsd_version` sets the version/branch used for statsd (note statsd version is prefixed with v)
 
-To build an image from latest graphite master, run:
+Alternate repositories can also be specified with the build args `graphite_repo`, `carbon_repo`, `whisper_repo` & `statsd_repo`.
+
+To build an image from latest graphite, whisper & carbon master, run:
 
 `docker build -t graphiteapp/graphite-statsd . --build-arg version=master`
+
+To build an image using a fork of graphite-web, run:
+
+`docker build -t forked/graphite-statsd . --build-arg version=master --build-arg graphite_repo=https://github.com/forked/graphite-web.git`
