@@ -43,7 +43,7 @@ ARG whisper_version=${version}
 ARG carbon_version=${version}
 ARG graphite_version=${version}
 
-ARG statsd_version=v0.7.2
+ARG statsd_version=v0.8.0
 
 # install whisper
 RUN git clone -b ${whisper_version} --depth 1 https://github.com/graphite-project/whisper.git /usr/local/src/whisper
@@ -74,7 +74,7 @@ RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
-ADD conf/opt/statsd/config.js /opt/statsd/config.js
+ADD conf/opt/statsd/config_*.js /opt/statsd/
 
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
@@ -106,8 +106,10 @@ RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # defaults
-EXPOSE 80 2003-2004 2023-2024 8125/udp 8126
+EXPOSE 80 2003-2004 2023-2024 8125 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 WORKDIR /
 ENV HOME /root
+ENV STATSD_INTERFACE udp
+
 CMD ["/sbin/my_init"]
