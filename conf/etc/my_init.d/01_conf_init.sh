@@ -30,7 +30,7 @@ fi
 #  - /opt/statsd
 statsd_dir_contents=$(find /opt/statsd -mindepth 1 -print -quit)
 if [[ -z $statsd_dir_contents ]]; then
-  git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
+  git clone -b v0.8.0 https://github.com/etsy/statsd.git /opt/statsd
   cp $conf_dir/opt/statsd/config_udp.js /opt/statsd/config.js
 fi
 
