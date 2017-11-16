@@ -154,7 +154,7 @@ docker run -d\
 ```
 
 **Note**: The container will initialize properly if you mount empty volumes at
-          `/opt/graphite`, `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd`
+          `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd`.
 
 ## Memcached config
 
