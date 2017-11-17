@@ -179,6 +179,13 @@ Also, you can specify more than one memcached server, using commas:
 ```
 -e "MEMCACHE_HOST=127.0.0.1:11211,10.0.0.1:11211"
 ```
+## Running through docker-compose
+The following command will start the graphite statsd container through docker-compose
+```
+docker-compose up
+```
+
+
 
 ## Additional Reading
 
