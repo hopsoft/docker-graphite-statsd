@@ -38,7 +38,7 @@ RUN pip install --upgrade pip && \
   python-memcached==1.53 \
   txAMQP==0.6.2
 
-ARG version=1.1.0-pre3
+ARG version=1.1.0-pre4
 ARG whisper_version=${version}
 ARG carbon_version=${version}
 ARG graphite_version=${version}
