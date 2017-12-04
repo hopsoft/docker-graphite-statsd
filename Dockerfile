@@ -32,13 +32,11 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     dpkg-reconfigure -f noninteractive tzdata; \
     fi
 
-# fix python dependencies (LTS Django and newer memcached/txAMQP)
+# fix python dependencies (LTS Django)
 RUN pip install --upgrade pip && \
-  pip install django==1.8.18 \
-  python-memcached==1.53 \
-  txAMQP==0.6.2
+  pip install django==1.8.18
 
-ARG version=1.1.0-pre4
+ARG version=1.1.0-pre5
 ARG whisper_version=${version}
 ARG carbon_version=${version}
 ARG graphite_version=${version}
