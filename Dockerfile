@@ -36,7 +36,7 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
 RUN pip install --upgrade pip && \
   pip install django==1.8.18
 
-ARG version=1.1.0-pre5
+ARG version=1.1.0-rc
 ARG whisper_version=${version}
 ARG carbon_version=${version}
 ARG graphite_version=${version}
