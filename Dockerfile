@@ -111,7 +111,7 @@ RUN apt-get clean\
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8125 8125/udp 8126
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 WORKDIR /
 ENV HOME /root
 ENV STATSD_INTERFACE udp
