@@ -54,6 +54,7 @@ Host              | Container                  | Notes
 ----------------- | -------------------------- | -------------------------------
 DOCKER ASSIGNED   | /opt/graphite/conf         | graphite config
 DOCKER ASSIGNED   | /opt/graphite/storage      | graphite stats storage
+DOCKER ASSIGNED   | /opt/graphite/webapp/graphite/functions/custom      | graphite custom functions dir
 DOCKER ASSIGNED   | /etc/nginx                 | nginx config
 DOCKER ASSIGNED   | /opt/statsd                | statsd config
 DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config
