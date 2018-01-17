@@ -25,7 +25,11 @@ docker run -d\
 
 This starts a Docker container named: **graphite**
 
+Please also note that you can freely remap container port to any host port in case of corresponding port is already occupied on host. It's also not mandatory to map all ports, map only required ports - please see table below.
+
 That's it, you're done ... almost.
+
+
 
 ### Includes the following components
 
@@ -48,6 +52,8 @@ Host | Container | Service
 8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
 
 By default, statsd listens on the UDP port 8125. If you want it to listen on the TCP port 8125 instead, you can set the environment variable `STATSD_INTERFACE` to `tcp` when running the container.
+
+Please also note that you can freely remap container port to any host port in case of corresponding port is already occupied on host.
 
 ### Mounted Volumes
 
