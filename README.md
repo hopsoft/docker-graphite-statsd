@@ -1,6 +1,6 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/hopsoft/graphite-statsd.svg?style=flat)](https://hub.docker.com/r/hopsoft/graphite-statsd/)
 
-[![Sponsor](https://app.codesponsor.io/embed/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/docker-graphite-statsd.svg)](https://app.codesponsor.io/link/QMSjMHrtPhvfmCnk5Hbikhhr/hopsoft/docker-graphite-statsd)
+> __NOTICE:__ Check out the official Graphite & Statsd Docker image at https://github.com/graphite-project/docker-graphite-statsd
 
 # Docker Image for Graphite & Statsd
 
