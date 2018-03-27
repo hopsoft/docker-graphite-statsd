@@ -7,5 +7,4 @@
   delaycompress
   notifempty
   copytruncate
-  su root syslog
 }
