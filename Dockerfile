@@ -61,6 +61,7 @@ ADD conf/opt/statsd/config_*.js /opt/statsd/
 RUN rm /etc/nginx/sites-enabled/default
 ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
+ADD conf/etc/nginx/fastcgi_params /etc/nginx/sites-enabled/graphite-statsd.conf
 
 # init django admin
 ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
