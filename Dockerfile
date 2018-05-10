@@ -33,7 +33,7 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     fi
 
 # fix python dependencies (LTS Django)
-RUN pip install --upgrade pip && \
+RUN python -m pip install --upgrade pip && \
   pip install django==1.11.12
 
 ARG version=1.1.3
