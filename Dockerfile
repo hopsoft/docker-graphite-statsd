@@ -3,10 +3,8 @@ MAINTAINER Nathan Hopkins <natehop@gmail.com>
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN apt-get -y update\
- && apt-get -y upgrade
-
-# dependencies
-RUN apt-get -y --force-yes install vim\
+ && apt-get -y upgrade\
+ && apt-get -y --force-yes install vim\
  nginx\
  python-dev\
  python-flup\
@@ -21,7 +19,8 @@ RUN apt-get -y --force-yes install vim\
  python-cairo\
  python-rrdtool\
  pkg-config\
- nodejs
+ nodejs\
+ && apt-get clean
 
 # python dependencies
 RUN pip install django==1.5.12\
