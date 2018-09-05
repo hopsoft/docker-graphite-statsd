@@ -20,7 +20,7 @@ if [[ -z $graphite_log_dir_contents ]]; then
 fi
 if [[ -z $graphite_dir_contents ]]; then
   # git clone -b 1.0.2 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
-  cd /usr/local/src/graphite-web && python ./setup.py install
+  cd /usr/local/src/graphite-web && python3 ./setup.py install
 fi
 if [[ -z $graphite_conf_dir_contents ]]; then
   cp -R $conf_dir/opt/graphite/conf/*.conf /opt/graphite/conf/
