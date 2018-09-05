@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:0.10.2
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
 RUN apt-get -y update \
@@ -34,9 +34,9 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
 
 # fix python dependencies (LTS Django)
 RUN python -m pip install --upgrade pip && \
-  pip install django==1.11.12
+  pip install django==1.11.15
 
-ARG version=1.1.3
+ARG version=1.1.4
 ARG whisper_version=${version}
 ARG carbon_version=${version}
 ARG graphite_version=${version}
