@@ -36,6 +36,10 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
 RUN python -m pip install --upgrade pip && \
   pip install django==1.11.15
 
+# install useful 3rd paty modules
+RUN pip install fadvise && \
+  pip install msgpack-python
+
 ARG version=1.1.4
 ARG whisper_version=${version}
 ARG carbon_version=${version}
