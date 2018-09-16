@@ -1,3 +1,4 @@
 #!/bin/bash
 
+sv start nginx || exit 1
 export PYTHONPATH=/opt/graphite/webapp && exec /usr/local/bin/gunicorn wsgi --workers=4 --bind=0.0.0.0:8080 --log-file=/var/log/gunicorn.log --preload --pythonpath=/opt/graphite/webapp/graphite

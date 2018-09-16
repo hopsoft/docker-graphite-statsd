@@ -10,16 +10,14 @@ conf_dir=/etc/graphite-statsd/conf
 graphite_dir_contents=$(find /opt/graphite -mindepth 1 -print -quit)
 graphite_conf_dir_contents=$(find /opt/graphite/conf -mindepth 1 -print -quit)
 graphite_webapp_dir_contents=$(find /opt/graphite/webapp/graphite -mindepth 1 -print -quit)
-graphite_storage_dir_contents=$(find /opt/graphite/storage -mindepth 1 -print -quit)
+graphite_storage_dir_contents=$(find /opt/graphite/storage -mindepth 1 -print -quit | grep -v lost+found)
 graphite_log_dir_contents=$(find /var/log/graphite -mindepth 1 -print -quit)
 graphite_custom_dir_contents=$(find /opt/graphite/webapp/graphite/functions/custom -mindepth 1 -print -quit)
 if [[ -z $graphite_log_dir_contents ]]; then
   mkdir -p /var/log/graphite
-  chown graphite:graphite /var/log/graphite
   touch /var/log/syslog
 fi
 if [[ -z $graphite_dir_contents ]]; then
-  # git clone -b 1.0.2 --depth 1 https://github.com/graphite-project/graphite-web.git /usr/local/src/graphite-web
   cd /usr/local/src/graphite-web && python ./setup.py install
 fi
 if [[ -z $graphite_conf_dir_contents ]]; then
@@ -29,6 +27,7 @@ if [[ -z $graphite_webapp_dir_contents ]]; then
   cp $conf_dir/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 fi
 if [[ -z $graphite_storage_dir_contents ]]; then
+  mkdir -p /opt/graphite/storage/whisper
   /usr/local/bin/django_admin_init.exp
 fi
 if [[ -z $graphite_custom_dir_contents ]]; then
