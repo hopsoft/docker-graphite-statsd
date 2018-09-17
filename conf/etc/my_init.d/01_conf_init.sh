@@ -10,7 +10,7 @@ conf_dir=/etc/graphite-statsd/conf
 graphite_dir_contents=$(find /opt/graphite -mindepth 1 -print -quit)
 graphite_conf_dir_contents=$(find /opt/graphite/conf -mindepth 1 -print -quit)
 graphite_webapp_dir_contents=$(find /opt/graphite/webapp/graphite -mindepth 1 -print -quit)
-graphite_storage_dir_contents=$(find /opt/graphite/storage -mindepth 1 -print -quit | grep -v lost+found)
+graphite_storage_dir_contents=$(find /opt/graphite/storage -mindepth 1 -not -path /opt/graphite/storage/lost+found -print -quit | grep -v lost+found)
 graphite_log_dir_contents=$(find /var/log/graphite -mindepth 1 -print -quit)
 graphite_custom_dir_contents=$(find /opt/graphite/webapp/graphite/functions/custom -mindepth 1 -print -quit)
 if [[ -z $graphite_log_dir_contents ]]; then
