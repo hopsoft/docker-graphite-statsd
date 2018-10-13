@@ -1,14 +1,13 @@
-FROM phusion/baseimage:0.10.2
+FROM phusion/baseimage:0.11
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
 RUN apt-get -y update \
   && apt-get -y upgrade \
-  && apt-get -y install vim \
+  && apt-get -y install wget \
   nginx \
-  python-dev \
-  python-flup \
-  python-pip \
-  python-ldap \
+  python3-dev \
+  python3-pip \
+  python3-ldap \
   expect \
   git \
   memcached \
@@ -16,10 +15,9 @@ RUN apt-get -y update \
   libffi-dev \
   libcairo2 \
   libcairo2-dev \
-  python-cairo \
-  python-rrdtool \
+  python3-cairo \
+  python3-rrdtool \
   pkg-config \
-  nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 # choose a timezone at build-time
@@ -33,8 +31,11 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     fi
 
 # fix python dependencies (LTS Django)
-RUN python -m pip install --upgrade pip && \
-  pip install django==1.11.15
+RUN python3 -m pip install --upgrade pip && \
+  pip3 install django==1.11.15 && \
+  pip3 install fadvise && \
+  pip3 install msgpack-python && \
+  pip3 install gunicorn
 
 # install useful 3rd paty modules
 RUN pip install fadvise && \
@@ -56,19 +57,23 @@ ARG statsd_repo=https://github.com/etsy/statsd.git
 # install whisper
 RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper
 WORKDIR /usr/local/src/whisper
-RUN python ./setup.py install
+RUN python3 ./setup.py install
 
 # install carbon
 RUN git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
-RUN pip install -r requirements.txt \
-  && python ./setup.py install
+RUN pip3 install -r requirements.txt \
+  && python3 ./setup.py install
 
 # install graphite
 RUN git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
-RUN pip install -r requirements.txt \
-  && python ./setup.py install
+RUN pip3 install -r requirements.txt \
+  && python3 ./setup.py install
+
+# installing nodejs 6
+RUN cd /opt && wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
+  tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs
 
 # install statsd
 RUN git clone -b ${statsd_version} ${statsd_repo} /opt/statsd
@@ -76,7 +81,6 @@ RUN git clone -b ${statsd_version} ${statsd_repo} /opt/statsd
 # config graphite
 ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-# ADD conf/opt/graphite/webapp/graphite/app_settings.py /opt/graphite/webapp/graphite/app_settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp django-admin.py collectstatic --noinput --settings=graphite.settings

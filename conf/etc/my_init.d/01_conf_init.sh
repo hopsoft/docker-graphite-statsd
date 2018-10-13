@@ -18,7 +18,7 @@ if [[ -z $graphite_log_dir_contents ]]; then
   touch /var/log/syslog
 fi
 if [[ -z $graphite_dir_contents ]]; then
-  cd /usr/local/src/graphite-web && python ./setup.py install
+  cd /usr/local/src/graphite-web && python3 ./setup.py install
 fi
 if [[ -z $graphite_conf_dir_contents ]]; then
   cp -R $conf_dir/opt/graphite/conf/*.conf /opt/graphite/conf/
