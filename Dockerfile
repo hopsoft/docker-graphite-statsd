@@ -3,7 +3,7 @@ MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
 RUN apt-get -y update \
   && apt-get -y upgrade \
-  && apt-get -y install vim \
+  && apt-get -y install wget \
   nginx \
   python3-dev \
   python3-pip \
@@ -18,7 +18,6 @@ RUN apt-get -y update \
   python3-cairo \
   python3-rrdtool \
   pkg-config \
-  nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 # choose a timezone at build-time
@@ -67,6 +66,10 @@ RUN git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/g
 WORKDIR /usr/local/src/graphite-web
 RUN pip3 install -r requirements.txt \
   && python3 ./setup.py install
+
+# installing nodejs 6
+RUN cd /opt && wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
+  tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs
 
 # install statsd
 RUN git clone -b ${statsd_version} ${statsd_repo} /opt/statsd
