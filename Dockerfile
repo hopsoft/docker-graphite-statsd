@@ -31,15 +31,15 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     fi
 
 # fix python dependencies (LTS Django)
-RUN python3 -m pip install --upgrade pip && \
+RUN python3 -m pip install --upgrade virtualenv virtualenv-tools && \
+  virtualenv /opt/graphite && \
+  python3 -m pip install --upgrade pip && \
   pip3 install django==1.11.15 && \
   pip3 install fadvise && \
   pip3 install msgpack-python && \
-  pip3 install gunicorn
-
-# install useful 3rd paty modules
-RUN pip install fadvise && \
-  pip install msgpack-python
+  pip3 install gunicorn && \
+  pip3 install fadvise && \
+  pip3 install msgpack-python
 
 ARG version=1.1.4
 ARG whisper_version=${version}
@@ -57,22 +57,23 @@ ARG statsd_repo=https://github.com/etsy/statsd.git
 # install whisper
 RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper
 WORKDIR /usr/local/src/whisper
-RUN python3 ./setup.py install
+RUN . /opt/graphite/bin/activate && python3 ./setup.py install
 
 # install carbon
 RUN git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon
 WORKDIR /usr/local/src/carbon
-RUN pip3 install -r requirements.txt \
+RUN . /opt/graphite/bin/activate && pip3 install -r requirements.txt \
   && python3 ./setup.py install
 
 # install graphite
 RUN git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web
 WORKDIR /usr/local/src/graphite-web
-RUN pip3 install -r requirements.txt \
+RUN . /opt/graphite/bin/activate && pip3 install -r requirements.txt \
   && python3 ./setup.py install
 
 # installing nodejs 6
-RUN cd /opt && wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
+WORKDIR /opt
+RUN wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
   tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs
 
 # install statsd
@@ -83,7 +84,7 @@ ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
-  && PYTHONPATH=/opt/graphite/webapp django-admin.py collectstatic --noinput --settings=graphite.settings
+  && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
 ADD conf/opt/statsd/config_*.js /opt/statsd/
