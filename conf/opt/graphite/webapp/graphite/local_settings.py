@@ -16,7 +16,7 @@ import os
 # In Django 1.5+ set this to the list of hosts your graphite instances is
 # accessible as. See:
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS
-ALLOWED_HOSTS = [ host.strip() for host in os.environ.get('GRAPHITE_ALLOWED_HOSTS', "*").split(",") ]
+ALLOWED_HOSTS = [host.strip() for host in os.environ.get('GRAPHITE_ALLOWED_HOSTS', "*").split(",")]
 
 # Set your local timezone (Django's default is America/Chicago)
 # If your graphs appear to be offset by a couple hours then this probably
@@ -44,7 +44,7 @@ LOG_FILE_CACHE = os.environ.get("GRAPHITE_LOG_FILE_CACHE", 'cache.log')
 LOG_FILE_RENDERING = os.environ.get("GRAPHITE_LOG_FILE_RENDERING", 'rendering.log')
 
 # Enable full debug page display on exceptions (Internal Server Error pages)
-DEBUG = os.environ.get("GRAPHITE_DEBUG", "false").lower() in ['1','true','yes']
+DEBUG = os.environ.get("GRAPHITE_DEBUG", "false").lower() in ['1', 'true', 'yes']
 
 # If using RRD files and rrdcached, set to the address or socket of the daemon
 #FLUSHRRDCACHED = 'unix:/var/run/rrdcached.sock'
@@ -278,7 +278,7 @@ CLUSTER_SERVERS = [x for x in [host.strip() for host in os.environ.get('GRAPHITE
 # Be careful when increasing the number of threads, in particular if your start
 # multiple graphite-web processes (with uwsgi or similar) as this will increase
 # memory consumption (and number of connections to memcached).
-USE_WORKER_POOL = os.environ.get("GRAPHITE_USE_WORKER_POOL", "true").lower() in ['1','true','yes']
+USE_WORKER_POOL = os.environ.get("GRAPHITE_USE_WORKER_POOL", "true").lower() in ['1', 'true', 'yes']
 
 # The number of worker threads that should be created per backend server.
 # It makes sense to have more than one thread per backend server if
