@@ -33,13 +33,15 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
 # fix python dependencies (LTS Django)
 RUN python3 -m pip install --upgrade virtualenv virtualenv-tools && \
   virtualenv /opt/graphite && \
+  . /opt/graphite/bin/activate && \
   python3 -m pip install --upgrade pip && \
   pip3 install django==1.11.15 && \
   pip3 install fadvise && \
   pip3 install msgpack-python && \
   pip3 install gunicorn && \
   pip3 install fadvise && \
-  pip3 install msgpack-python
+  pip3 install msgpack-python && \
+  pip3 install django-statsd-mozilla
 
 ARG version=1.1.4
 ARG whisper_version=${version}
