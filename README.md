@@ -112,7 +112,6 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_WSGI_REQUEST_LINE: (0) The maximum size of HTTP request line in bytes.
 
 ### Graphite-web 
-* GRAPHITE_SECRET_KEY: (UNSAFE_DEFAULT)  Set this to a long, random unique string to use as a secret key for this install
 * GRAPHITE_ALLOWED_HOSTS: (*) In Django 1.5+ set this to the list of hosts your graphite instances is accessible as. See: [https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS)
 * GRAPHITE_TIME_ZONE: (Etc/UTC) Set your local timezone
 * GRAPHITE_LOG_ROTATION: (true) rotate logs
@@ -128,7 +127,7 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_LOG_FILE_CACHE: (cache.log), set to "-" for stdout/stderr
 * GRAPHITE_LOG_FILE_RENDERING: (rendering.log), set to "-" for stdout/stderr
 * GRAPHITE_DEBUG: (false) Enable full debug page display on exceptions (Internal Server Error pages)
-* GRAPHITE_DEFAULT_CACHE_DURATION: (0) Duration to cache metric data and graphs
+* GRAPHITE_DEFAULT_CACHE_DURATION: (60) Duration to cache metric data and graphs
 * GRAPHITE_CARBONLINK_HOSTS: ('127.0.0.1:7002') List of carbonlink hosts
 * GRAPHITE_CARBONLINK_TIMEOUT: (1.0) Carbonlink request timeout
 * GRAPHITE_CARBONLINK_HASHING_TYPE: ('carbon_ch') Type of metric hashing function.

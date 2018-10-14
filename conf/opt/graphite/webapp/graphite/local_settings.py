@@ -11,7 +11,7 @@ import os
 # install. This key is used for salting of hashes used in auth tokens,
 # CRSF middleware, cookie storage, etc. This should be set identically among
 # instances if used behind a load balancer.
-SECRET_KEY = os.environ.get('GRAPHITE_SECRET_KEY', "UNSAFE_DEFAULT")
+#SECRET_KEY = 'UNSAFE_DEFAULT'
 
 # In Django 1.5+ set this to the list of hosts your graphite instances is
 # accessible as. See:
@@ -65,7 +65,7 @@ DEBUG = os.environ.get("GRAPHITE_DEBUG", "false").lower() in ['1','true','yes']
 # to the cache duration for the results. This allows for larger queries to be
 # cached for longer periods of times. All times are in seconds. If the policy is
 # empty or undefined, all results will be cached for DEFAULT_CACHE_DURATION.
-DEFAULT_CACHE_DURATION = int(os.environ.get('GRAPHITE_DEFAULT_CACHE_DURATION', '0'))
+DEFAULT_CACHE_DURATION = int(os.environ.get('GRAPHITE_DEFAULT_CACHE_DURATION', '60'))
 #DEFAULT_CACHE_POLICY = [(0, 60), # default is 60 seconds
 #                        (7200, 120), # >= 2 hour queries are cached 2 minutes
 #                        (21600, 180)] # >= 6 hour queries are cached 3 minutes
@@ -423,6 +423,17 @@ FUNCTION_PLUGINS = []
 #####################################
 # Additional Django Settings #
 #####################################
+
+LOG_DIR = '/var/log/graphite'
+_SECRET_KEY = '$(date +%s | sha256sum | base64 | head -c 64)'
+SECRET_KEY = os.environ.get('GRAPHITE_SECRET_KEY', _SECRET_KEY)
+
+if (os.getenv("MEMCACHE_HOST") is not None):
+    MEMCACHE_HOSTS = os.getenv("MEMCACHE_HOST").split(",")
+
+if (os.getenv("DEFAULT_CACHE_DURATION") is not None):
+    DEFAULT_CACHE_DURATION = int(os.getenv("CACHE_DURATION"))
+
 STATSD_HOST = os.environ.get('GRAPHITE_STATSD_HOST', '127.0.0.1')
 if STATSD_HOST != '':
     from graphite.app_settings import *
