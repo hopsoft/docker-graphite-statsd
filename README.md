@@ -102,6 +102,49 @@ Update the default Django admin user account. _The default is insecure._
 First login at: [http://localhost/account/login](http://localhost/account/login)
 Then update the root user's profile at: [http://localhost/admin/auth/user/1/](http://localhost/admin/auth/user/1/)
 
+## Tunables
+Additional environment variables can be set to adjust performance.
+
+* GRAPHITE_WSGI_PROCESSES: (4) the number of WSGI daemon processes that should be started
+* GRAPHITE_WSGI_THREADS: (2) the number of threads to be created to handle requests in each daemon process
+* GRAPHITE_WSGI_REQUEST_TIMEOUT: (65) maximum number of seconds that a request is allowed to run before the daemon process is restarted
+* GRAPHITE_WSGI_MAX_REQUESTS: (1000) limit on the number of requests a daemon process should process before it is shutdown and restarted.
+* GRAPHITE_WSGI_REQUEST_LINE: (0) The maximum size of HTTP request line in bytes.
+
+### Graphite-web 
+* GRAPHITE_SECRET_KEY: (UNSAFE_DEFAULT)  Set this to a long, random unique string to use as a secret key for this install
+* GRAPHITE_ALLOWED_HOSTS: (*) In Django 1.5+ set this to the list of hosts your graphite instances is accessible as. See: [https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS)
+* GRAPHITE_TIME_ZONE: (Etc/UTC) Set your local timezone
+* GRAPHITE_LOG_ROTATION: (true) rotate logs
+* GRAPHITE_LOG_ROTATION_COUNT: (1) number of logs to keep
+* GRAPHITE_LOG_RENDERING_PERFORMANCE: (true) log performance information
+* GRAPHITE_LOG_CACHE_PERFORMANCE: (true) log cache performance information
+* GRAPHITE_LOG_FILE_INFO: (info.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_EXCEPTION: (exception.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_CACHE: (cache.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_RENDERING: (rendering.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_INFO: (info.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_EXCEPTION: (exception.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_CACHE: (cache.log), set to "-" for stdout/stderr
+* GRAPHITE_LOG_FILE_RENDERING: (rendering.log), set to "-" for stdout/stderr
+* GRAPHITE_DEBUG: (false) Enable full debug page display on exceptions (Internal Server Error pages)
+* GRAPHITE_DEFAULT_CACHE_DURATION: (0) Duration to cache metric data and graphs
+* GRAPHITE_CARBONLINK_HOSTS: ('127.0.0.1:7002') List of carbonlink hosts
+* GRAPHITE_CARBONLINK_TIMEOUT: (1.0) Carbonlink request timeout
+* GRAPHITE_CARBONLINK_HASHING_TYPE: ('carbon_ch') Type of metric hashing function.
+* GRAPHITE_REPLICATION_FACTOR: (1) # The replication factor to use with consistent hashing. This should usually match the value configured in Carbon.
+* GRAPHITE_CLUSTER_SERVERS: ('') This should list of remote servers in the cluster. These servers must each have local access to metric data. Note that the first server to return a match for a query will be used. See [docs](https://graphite.readthedocs.io/en/latest/config-local-settings.html#cluster-configuration) for details.
+* GRAPHITE_USE_WORKER_POOL: (true) Creates a pool of worker threads to which tasks can be dispatched. This makes sense if there are multiple CLUSTER_SERVERS and/or STORAGE_FINDERS because then the communication with them can be parallelized.
+* GRAPHITE_POOL_WORKERS_PER_BACKEND: (8) The number of worker threads that should be created per backend server
+* GRAPHITE_POOL_WORKERS: (1) A baseline number of workers that should always be created
+* GRAPHITE_REMOTE_FIND_TIMEOUT: (30) Timeout for metric find requests
+* GRAPHITE_REMOTE_FETCH_TIMEOUT: (60) Timeout to fetch series data
+* GRAPHITE_REMOTE_RETRY_DELAY: (0) Time before retrying a failed remote webapp.
+* GRAPHITE_REMOTE_PREFETCH_DATA: (false) # set to True to fetch all metrics using a single http request per remote server instead of one http request per target, per remote server. # Especially useful when generating graphs with more than 4-5 targets or if there's significant latency between this server and the backends.
+* GRAPHITE_MAX_FETCH_RETRIES: (2) Number of retries for a specific remote data fetch
+* GRAPHITE_FIND_CACHE_DURATION: (0) Time to cache remote metric find results
+* GRAPHITE_STATSD_HOST: ("127.0.0.1") If set, django_statsd.middleware.GraphiteRequestTimingMiddleware and django_statsd.middleware.GraphiteMiddleware will be enabled.
+
 ## Change the Configuration
 
 Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
