@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.11
+FROM phusion/baseimage:0.11 as build
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
 RUN apt-get -y update \
@@ -8,27 +8,14 @@ RUN apt-get -y update \
   python3-dev \
   python3-pip \
   python3-ldap \
-  expect \
   git \
-  memcached \
   sqlite3 \
   libffi-dev \
-  libcairo2 \
   libcairo2-dev \
   python3-cairo \
   python3-rrdtool \
   pkg-config \
   && rm -rf /var/lib/apt/lists/*
-
-# choose a timezone at build-time
-# use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
-ARG CONTAINER_TIMEZONE
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
-    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata; \
-    fi
 
 # fix python dependencies (LTS Django)
 RUN python3 -m pip install --upgrade virtualenv virtualenv-tools && \
@@ -91,18 +78,46 @@ RUN mkdir -p /var/log/graphite/ \
 # config statsd
 ADD conf/opt/statsd/config_*.js /opt/statsd/
 
+FROM phusion/baseimage:0.11 as production
+MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
+
+# choose a timezone at build-time
+# use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
+ARG CONTAINER_TIMEZONE
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
+    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata; \
+    fi
+
+RUN apt-get update --fix-missing \
+    && apt-get -y upgrade \
+    && apt-get install --yes --no-install-recommends \
+    nginx \
+    python-flup \
+    python-pip \
+    python-ldap \
+    expect \
+    memcached \
+    sqlite3 \
+    libcairo2 \
+    python-cairo \
+    python-rrdtool && \
+    apt-get clean && \
+    apt-get autoremove --yes  && \
+    rm -rf /var/lib/apt/lists/*
+
+# copy /opt from build image
+COPY --from=build /opt /opt
+
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
 ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
 
-# init django admin
-ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
-ADD conf/usr/local/bin/manage.sh /usr/local/bin/manage.sh
-RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
-
 # logging support
-RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx
+RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx /var/log/graphite/
 ADD conf/etc/logrotate.d/graphite-statsd /etc/logrotate.d/graphite-statsd
 
 # daemons
@@ -116,9 +131,10 @@ ADD conf/etc/service/nginx/run /etc/service/nginx/run
 ADD conf /etc/graphite-statsd/conf
 ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 
-# cleanup
-RUN apt-get clean\
- && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# init django admin
+ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
+ADD conf/usr/local/bin/manage.sh /usr/local/bin/manage.sh
+RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126

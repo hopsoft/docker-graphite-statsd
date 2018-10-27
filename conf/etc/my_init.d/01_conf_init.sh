@@ -2,12 +2,10 @@
 
 conf_dir=/etc/graphite-statsd/conf
 
-# auto setup graphite with default configs if /opt/graphite is missing
+# auto setup graphite with default configs if /opt/graphite/conf is missing
 # needed for the use case when a docker host volume is mounted at an of the following:
-#  - /opt/graphite
 #  - /opt/graphite/conf
-#  - /opt/graphite/webapp/graphite
-graphite_dir_contents=$(find /opt/graphite -mindepth 1 -print -quit)
+#  - /opt/graphite/storage
 graphite_conf_dir_contents=$(find /opt/graphite/conf -mindepth 1 -print -quit)
 graphite_webapp_dir_contents=$(find /opt/graphite/webapp/graphite -mindepth 1 -print -quit)
 graphite_storage_dir_contents=$(find /opt/graphite/storage -mindepth 1 -not -path /opt/graphite/storage/lost+found -print -quit | grep -v lost+found)
@@ -16,9 +14,6 @@ graphite_custom_dir_contents=$(find /opt/graphite/webapp/graphite/functions/cust
 if [[ -z $graphite_log_dir_contents ]]; then
   mkdir -p /var/log/graphite
   touch /var/log/syslog
-fi
-if [[ -z $graphite_dir_contents ]]; then
-  cd /usr/local/src/graphite-web && python3 ./setup.py install
 fi
 if [[ -z $graphite_conf_dir_contents ]]; then
   cp -R $conf_dir/opt/graphite/conf/*.conf /opt/graphite/conf/
@@ -38,7 +33,11 @@ fi
 #  - /opt/statsd
 statsd_dir_contents=$(find /opt/statsd -mindepth 1 -print -quit)
 if [[ -z $statsd_dir_contents ]]; then
-  git clone -b v0.8.0 https://github.com/etsy/statsd.git /opt/statsd
+  apt-get install git && \
+  cd /opt && \
+  wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
+  tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs && \
+  git clone -b v0.8.0 https://github.com/etsy/statsd.git /opt/statsd && \
   cp $conf_dir/opt/statsd/config_*.js /opt/statsd/
 fi
 
