@@ -8,12 +8,9 @@ RUN apt-get -y update \
   python3-dev \
   python3-pip \
   python3-ldap \
-  expect \
   git \
-  memcached \
   sqlite3 \
   libffi-dev \
-  libcairo2 \
   libcairo2-dev \
   python3-cairo \
   python3-rrdtool \
@@ -106,8 +103,7 @@ RUN apt-get update --fix-missing \
     sqlite3 \
     libcairo2 \
     python-cairo \
-    python-rrdtool \
-    nodejs && \
+    python-rrdtool && \
     apt-get clean && \
     apt-get autoremove --yes  && \
     rm -rf /var/lib/apt/lists/*
