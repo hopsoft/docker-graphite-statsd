@@ -23,10 +23,10 @@ RUN python3 -m pip install --upgrade virtualenv virtualenv-tools && \
   . /opt/graphite/bin/activate && \
   python3 -m pip install --upgrade pip && \
   pip3 install django==1.11.15 && \
-  pip3 install fadvise && \
   pip3 install msgpack-python && \
   pip3 install gunicorn && \
   pip3 install fadvise && \
+  pip3 install redis && \
   pip3 install msgpack-python && \
   pip3 install django-statsd-mozilla
 
@@ -95,16 +95,16 @@ RUN apt-get update --fix-missing \
     && apt-get -y upgrade \
     && apt-get install --yes --no-install-recommends \
     git \
+    redis \
     nginx \
-    python-flup \
-    python-pip \
-    python-ldap \
+    python3-pip \
+    python3-ldap \
     expect \
     memcached \
     sqlite3 \
     libcairo2 \
-    python-cairo \
-    python-rrdtool && \
+    python3-cairo \
+    python3-rrdtool && \
     apt-get clean && \
     apt-get autoremove --yes  && \
     rm -rf /var/lib/apt/lists/*
@@ -117,6 +117,9 @@ RUN rm /etc/nginx/sites-enabled/default
 ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
 
+# config redis
+ADD conf/etc/redis/redis.conf /etc/redis/redis.conf
+
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx /var/log/graphite/
 ADD conf/etc/logrotate.d/graphite-statsd /etc/logrotate.d/graphite-statsd
@@ -127,6 +130,8 @@ ADD conf/etc/service/carbon-aggregator/run /etc/service/carbon-aggregator/run
 ADD conf/etc/service/graphite/run /etc/service/graphite/run
 ADD conf/etc/service/statsd/run /etc/service/statsd/run
 ADD conf/etc/service/nginx/run /etc/service/nginx/run
+ADD conf/etc/service/redis/run /etc/service/redis/run
+RUN chmod 0755 /etc/service/*/run
 
 # default conf setup
 ADD conf /etc/graphite-statsd/conf
@@ -139,7 +144,7 @@ RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
 WORKDIR /
 ENV HOME /root
 ENV STATSD_INTERFACE udp
