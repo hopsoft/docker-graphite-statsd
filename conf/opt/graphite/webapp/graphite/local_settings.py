@@ -392,8 +392,13 @@ REPLICATION_FACTOR = int(os.environ.get('GRAPHITE_REPLICATION_FACTOR', '1'))
 # TagDB Settings #
 #####################################
 # Tag Database
-#TAGDB = 'graphite.tags.localdatabase.LocalDatabaseTagDB'
-TAGDB = os.environ.get('GRAPHITE_TAGDB', '')
+
+# set TAGDB to Redis if REDIS_TAGDB env var is set
+_REDIS_TAGDB = os.environ.get('REDIS_TAGDB', 'false').lower() in ['1', 'true', 'yes']
+
+# default TAGDB is local database. Set to '' to disable
+TAGDB = 'graphite.tags.redis.RedisTagDB' if _REDIS_TAGDB else \
+    os.environ.get('GRAPHITE_TAGDB', 'graphite.tags.localdatabase.LocalDatabaseTagDB')
 
 # Time to cache seriesByTag results
 TAGDB_CACHE_DURATION = int(os.environ.get('GRAPHITE_TAGDB_CACHE_DURATION') or 60)
@@ -402,9 +407,9 @@ TAGDB_CACHE_DURATION = int(os.environ.get('GRAPHITE_TAGDB_CACHE_DURATION') or 60
 TAGDB_AUTOCOMPLETE_LIMIT = int(os.environ.get('GRAPHITE_TAGDB_AUTOCOMPLETE_LIMIT') or 100)
 
 # Settings for Redis TagDB
-#TAGDB_REDIS_HOST = 'localhost'
-#TAGDB_REDIS_PORT = 6379
-#TAGDB_REDIS_DB = 0
+TAGDB_REDIS_HOST = os.environ.get('GRAPHITE_TAGDB_REDIS_HOST', 'localhost')
+TAGDB_REDIS_PORT = int(os.environ.get('GRAPHITE_TAGDB_REDIS_PORT') or 6379)
+TAGDB_REDIS_DB = int(os.environ.get('GRAPHITE_TAGDB_REDIS_DB') or 0)
 
 # Settings for HTTP TagDB
 TAGDB_HTTP_URL = os.environ.get('GRAPHITE_TAGDB_HTTP_URL', '')

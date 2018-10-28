@@ -66,6 +66,7 @@ DOCKER ASSIGNED   | /etc/nginx                 | nginx config
 DOCKER ASSIGNED   | /opt/statsd                | statsd config
 DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config
 DOCKER ASSIGNED   | /var/log                   | log files
+DOCKER ASSIGNED   | /var/lib/redis             | Redis TagDB data (optional)
 
 ### Base Image
 
@@ -143,6 +144,21 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_MAX_FETCH_RETRIES: (2) Number of retries for a specific remote data fetch
 * GRAPHITE_FIND_CACHE_DURATION: (0) Time to cache remote metric find results
 * GRAPHITE_STATSD_HOST: ("127.0.0.1") If set, django_statsd.middleware.GraphiteRequestTimingMiddleware and django_statsd.middleware.GraphiteMiddleware will be enabled.
+
+## TagDB
+Graphite stores tag information in a separate tag database (TagDB). Please check [tags documentation](https://graphite.readthedocs.io/en/latest/tags.html) for details.
+
+* GRAPHITE_TAGDB: ('graphite.tags.localdatabase.LocalDatabaseTagDB') TagDB is a pluggable store, by default it uses the local SQLite database.
+* REDIS_TAGDB: (false) if set to true will use local Redis instance to store tags. 
+* GRAPHITE_TAGDB_CACHE_DURATION: (60) Time to cache seriesByTag results.
+* GRAPHITE_TAGDB_AUTOCOMPLETE_LIMIT: (100) Autocomplete default result limit.
+* GRAPHITE_TAGDB_REDIS_HOST: ('localhost') Redis TagDB host
+* GRAPHITE_TAGDB_REDIS_PORT: (6379) Redis TagDB port
+* GRAPHITE_TAGDB_REDIS_DB: (0) Redis TagDB database number
+* GRAPHITE_TAGDB_HTTP_URL: ('') URL for HTTP TagDB
+* GRAPHITE_TAGDB_HTTP_USER: ('') Username for HTTP TagDB
+* GRAPHITE_TAGDB_HTTP_PASSWORD: ('') Password for HTTP TagDB
+* GRAPHITE_TAGDB_HTTP_AUTOCOMPLETE: (false) Does the remote TagDB support autocomplete?
 
 ## Change the Configuration
 
