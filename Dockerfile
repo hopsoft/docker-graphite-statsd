@@ -94,6 +94,7 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
 RUN apt-get update --fix-missing \
     && apt-get -y upgrade \
     && apt-get install --yes --no-install-recommends \
+    git \
     nginx \
     python-flup \
     python-pip \

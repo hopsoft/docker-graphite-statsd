@@ -33,10 +33,6 @@ fi
 #  - /opt/statsd
 statsd_dir_contents=$(find /opt/statsd -mindepth 1 -print -quit)
 if [[ -z $statsd_dir_contents ]]; then
-  apt-get install git && \
-  cd /opt && \
-  wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
-  tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs && \
   git clone -b v0.8.0 https://github.com/etsy/statsd.git /opt/statsd && \
   cp $conf_dir/opt/statsd/config_*.js /opt/statsd/
 fi
