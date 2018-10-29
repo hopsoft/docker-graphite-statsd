@@ -11,6 +11,7 @@ RUN apt-get -y update \
   git \
   sqlite3 \
   libffi-dev \
+  librrd-dev \
   libcairo2-dev \
   python3-cairo \
   python3-rrdtool \
@@ -27,6 +28,7 @@ RUN python3 -m pip install --upgrade virtualenv virtualenv-tools && \
   pip3 install gunicorn && \
   pip3 install fadvise && \
   pip3 install redis && \
+  pip3 install rrdtool && \
   pip3 install msgpack-python && \
   pip3 install django-statsd-mozilla
 
@@ -103,8 +105,7 @@ RUN apt-get update --fix-missing \
     memcached \
     sqlite3 \
     libcairo2 \
-    python3-cairo \
-    python3-rrdtool && \
+    librrd-dev && \
     apt-get clean && \
     apt-get autoremove --yes  && \
     rm -rf /var/lib/apt/lists/*
