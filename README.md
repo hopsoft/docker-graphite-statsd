@@ -73,7 +73,7 @@ DOCKER ASSIGNED   | /var/lib/redis             | Redis TagDB data (optional)
 Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
 
 * All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/).
-* Includes additional services such as logrotate.
+* Includes additional services such as logrotate, nginx, optional Redis for TagDB and optional collectd instance.
 
 ## Start Using Graphite & Statsd
 
@@ -159,6 +159,9 @@ Graphite stores tag information in a separate tag database (TagDB). Please check
 * GRAPHITE_TAGDB_HTTP_USER: ('') Username for HTTP TagDB
 * GRAPHITE_TAGDB_HTTP_PASSWORD: ('') Password for HTTP TagDB
 * GRAPHITE_TAGDB_HTTP_AUTOCOMPLETE: (false) Does the remote TagDB support autocomplete?
+
+## Collectd
+Use `COLLECTD=1` environment variable to enable local collectd instance
 
 ## Change the Configuration
 
