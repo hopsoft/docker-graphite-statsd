@@ -62,6 +62,11 @@ WORKDIR /usr/local/src/graphite-web
 RUN . /opt/graphite/bin/activate && pip3 install -r requirements.txt \
   && python3 ./setup.py install
 
+# fixing RRD support (see https://github.com/graphite-project/docker-graphite-statsd/issues/63)
+RUN sed -i \
+'s/return os.path.realpath(fs_path)/return os.path.realpath(fs_path).decode("utf-8")/' \
+/opt/graphite/webapp/graphite/readers/rrd.py
+
 # installing nodejs 6
 WORKDIR /opt
 RUN wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
@@ -98,6 +103,7 @@ RUN apt-get update --fix-missing \
     && apt-get install --yes --no-install-recommends \
     git \
     redis \
+    collectd \
     nginx \
     python3-pip \
     python3-ldap \
@@ -121,6 +127,9 @@ ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/g
 # config redis
 ADD conf/etc/redis/redis.conf /etc/redis/redis.conf
 
+# config collectd
+ADD conf/etc/collectd/collectd.conf /etc/collectd/collectd.conf
+
 # logging support
 RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx /var/log/graphite/
 ADD conf/etc/logrotate.d/graphite-statsd /etc/logrotate.d/graphite-statsd
@@ -132,6 +141,7 @@ ADD conf/etc/service/graphite/run /etc/service/graphite/run
 ADD conf/etc/service/statsd/run /etc/service/statsd/run
 ADD conf/etc/service/nginx/run /etc/service/nginx/run
 ADD conf/etc/service/redis/run /etc/service/redis/run
+ADD conf/etc/service/collectd/run /etc/service/collectd/run
 RUN chmod 0755 /etc/service/*/run
 
 # default conf setup
