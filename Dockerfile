@@ -97,7 +97,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get -y upgrade \
  && apt-get install --yes --no-install-recommends \
       collectd \
-      expect \
       libcairo2 \
       librrd8 \
       memcached \
@@ -120,7 +119,6 @@ COPY conf /etc/graphite-statsd/conf/
 # copy /opt from build image
 COPY --from=build /opt /opt
 
-RUN /usr/local/bin/django_admin_init.exp
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126

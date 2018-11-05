@@ -26,7 +26,21 @@ fi
 
 if folder_empty /opt/graphite/storage; then
   mkdir -p /opt/graphite/storage/whisper
-  /usr/local/bin/django_admin_init.exp
+
+  export PYTHONPATH=/opt/graphite/webapp
+  export DJANGO_SETTINGS_MODULE=graphite.settings
+
+  /opt/graphite/bin/django-admin.py makemigrations
+  /opt/graphite/bin/django-admin.py migrate auth
+  /opt/graphite/bin/django-admin.py migrate --run-syncdb
+  /opt/graphite/bin/django-admin.py createsuperuser
+    --noinput \
+    --email root.graphite@mailinator.com \
+    --username root << ENDINPUT
+root
+root
+ENDINPUT
+
 fi
 
 if folder_empty /opt/graphite/webapp/graphite/functions/custom; then
