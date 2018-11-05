@@ -118,13 +118,17 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       sqlite3 \
  && apt-get clean \
  && apt-get autoremove --yes \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf \
+      /var/lib/apt/lists/* \
+      /etc/nginx/sites-enabled/default \
+ && mkdir -p \
+      /var/log/carbon \
+      /var/log/graphite
 
 # copy /opt from build image
 COPY --from=build /opt /opt
 
 # config nginx
-RUN rm /etc/nginx/sites-enabled/default
 ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
 
@@ -135,7 +139,6 @@ ADD conf/etc/redis/redis.conf /etc/redis/redis.conf
 ADD conf/etc/collectd/collectd.conf /etc/collectd/collectd.conf
 
 # logging support
-RUN mkdir -p /var/log/carbon /var/log/graphite /var/log/nginx /var/log/graphite/
 ADD conf/etc/logrotate.d/graphite-statsd /etc/logrotate.d/graphite-statsd
 
 # daemons
