@@ -11,6 +11,7 @@ RUN true \
       librrd \
       memcached \
       nginx \
+      nodejs \
       py3-pyldap \
       redis \
       runit \
@@ -77,21 +78,18 @@ RUN . /opt/graphite/bin/activate \
  && pip3 install -r requirements.txt \
  && python3 ./setup.py install
 
+# install statsd (as we have to use this ugly way)
+ARG statsd_version=8d5363cb109cc6363661a1d5813e0b96787c4411
+ARG statsd_repo=https://github.com/etsy/statsd.git
+RUN git init /opt/statsd \
+ && git -C /opt/statsd remote add origin "${statsd_repo}" \
+ && git -C /opt/statsd fetch origin "${statsd_version}" \
+ && git -C /opt/statsd checkout "${statsd_version}"
+
 # fixing RRD support (see https://github.com/graphite-project/docker-graphite-statsd/issues/63)
 RUN sed -i \
 's/return os.path.realpath(fs_path)/return os.path.realpath(fs_path).decode("utf-8")/' \
 /opt/graphite/webapp/graphite/readers/rrd.py
-
-# installing nodejs 6
-ARG NODEJS_VERSION=6.14.4
-RUN wget -q -O - https://nodejs.org/download/release/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.gz \
-  | tar xz -C /opt \
- && mv /opt/node-v${NODEJS_VERSION}-linux-x64 /opt/nodejs
-
-# install statsd
-ARG statsd_version=v0.8.0
-ARG statsd_repo=https://github.com/etsy/statsd.git
-RUN git clone -b ${statsd_version} --depth 1 ${statsd_repo} /opt/statsd
 
 # config graphite
 COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
