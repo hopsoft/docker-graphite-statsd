@@ -125,33 +125,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
       /var/log/carbon \
       /var/log/graphite
 
+COPY conf /
+COPY conf /etc/graphite-statsd/conf/
+
 # copy /opt from build image
 COPY --from=build /opt /opt
 
-# config nginx
-ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
-
-# config redis
-ADD conf/etc/redis/redis.conf /etc/redis/redis.conf
-
-# config collectd
-ADD conf/etc/collectd/collectd.conf /etc/collectd/collectd.conf
-
-# logging support
-ADD conf/etc/logrotate.d/graphite-statsd /etc/logrotate.d/graphite-statsd
-
-# daemons
-ADD conf/etc/service/ /etc/service/
-
-# default conf setup
-ADD conf /etc/graphite-statsd/conf
-ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
-
-# init django admin
-ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
-ADD conf/usr/local/bin/manage.sh /usr/local/bin/manage.sh
-RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
+RUN /usr/local/bin/django_admin_init.exp
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126
