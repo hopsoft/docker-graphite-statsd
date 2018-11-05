@@ -1,14 +1,34 @@
-FROM alpine:3.8 as build
+FROM alpine:3.8 as base
+LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
+
+RUN true \
+ && apk add --update \
+      cairo \
+      collectd \
+      collectd-disk \
+      collectd-nginx \
+      findutils \
+      librrd \
+      memcached \
+      nginx \
+      py3-pyldap \
+      redis \
+      runit \
+      sqlite \
+ && rm -rf \
+      /etc/nginx/conf.d/default.conf \
+ && mkdir -p \
+      /var/log/carbon \
+      /var/log/graphite
+
+FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
  && apk add --update \
       alpine-sdk \
-      cairo \
       git \
       libffi-dev \
-      librrd \
-      nginx \
       pkgconfig \
       py3-cairo \
       py3-pip \
@@ -17,7 +37,6 @@ RUN true \
       py-rrd \
       python3-dev \
       rrdtool-dev \
-      sqlite \
       wget \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
@@ -84,30 +103,10 @@ RUN mkdir -p /var/log/graphite/ \
 # config statsd
 COPY conf/opt/statsd/config_*.js /opt/statsd/
 
-FROM alpine:3.8 as production
+FROM base as production
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ENV STATSD_INTERFACE udp
-
-RUN true \
- && apk add --update \
-      cairo \
-      collectd \
-      collectd-disk \
-      collectd-nginx \
-      findutils \
-      librrd \
-      memcached \
-      nginx \
-      py3-pyldap \
-      redis \
-      runit \
-      sqlite \
- && rm -rf \
-      /etc/nginx/conf.d/default.conf \
- && mkdir -p \
-      /var/log/carbon \
-      /var/log/graphite
 
 COPY conf /
 COPY conf /etc/graphite-statsd/conf/
