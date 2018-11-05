@@ -1,30 +1,26 @@
-FROM phusion/baseimage:0.11 as build
+FROM alpine:3.8 as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
-RUN export DEBIAN_FRONTEND=noninteractive \
- && apt-get -y update \
- && apt-get -y upgrade \
- && apt-get -y install \
+RUN true \
+ && apk add --update \
+      alpine-sdk \
+      cairo \
       git \
-      libcairo2-dev \
       libffi-dev \
-      librrd-dev \
+      librrd \
       nginx \
-      pkg-config \
-      python3-cairo \
+      pkgconfig \
+      py3-cairo \
+      py3-pip \
+      py3-pyldap \
+      py3-virtualenv \
+      py-rrd \
       python3-dev \
-      python3-ldap \
-      python3-pip \
-      python3-rrdtool \
-      sqlite3 \
+      rrdtool-dev \
+      sqlite \
       wget \
- && rm -rf /var/lib/apt/lists/*
-
-# fix python dependencies (LTS Django)
-RUN python3 -m pip install --upgrade virtualenv virtualenv-tools \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
- && python3 -m pip install --upgrade pip \
  && pip3 install \
       django==1.11.15 \
       django-statsd-mozilla \
@@ -87,28 +83,26 @@ RUN mkdir -p /var/log/graphite/ \
 # config statsd
 COPY conf/opt/statsd/config_*.js /opt/statsd/
 
-FROM phusion/baseimage:0.11 as production
+FROM alpine:3.8 as production
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ENV STATSD_INTERFACE udp
 
-RUN export DEBIAN_FRONTEND=noninteractive \
- && apt-get update --fix-missing \
- && apt-get -y upgrade \
- && apt-get install --yes --no-install-recommends \
+RUN true \
+ && apk add --update \
+      cairo \
       collectd \
-      libcairo2 \
-      librrd8 \
+      collectd-disk \
+      collectd-nginx \
+      findutils \
+      librrd \
       memcached \
       nginx \
-      python3-ldap \
+      py3-pyldap \
       redis \
-      sqlite3 \
- && apt-get clean \
- && apt-get autoremove --yes \
+      sqlite \
  && rm -rf \
-      /var/lib/apt/lists/* \
-      /etc/nginx/sites-enabled/default \
+      /etc/nginx/conf.d/default.conf \
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite
