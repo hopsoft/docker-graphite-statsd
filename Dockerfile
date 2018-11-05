@@ -2,35 +2,37 @@ FROM phusion/baseimage:0.11 as build
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
 RUN apt-get -y update \
-  && apt-get -y upgrade \
-  && apt-get -y install wget \
-  nginx \
-  python3-dev \
-  python3-pip \
-  python3-ldap \
-  git \
-  sqlite3 \
-  libffi-dev \
-  librrd-dev \
-  libcairo2-dev \
-  python3-cairo \
-  python3-rrdtool \
-  pkg-config \
-  && rm -rf /var/lib/apt/lists/*
+ && apt-get -y upgrade \
+ && apt-get -y install \
+      git \
+      libcairo2-dev \
+      libffi-dev \
+      librrd-dev \
+      nginx \
+      pkg-config \
+      python3-cairo \
+      python3-dev \
+      python3-ldap \
+      python3-pip \
+      python3-rrdtool \
+      sqlite3 \
+      wget \
+ && rm -rf /var/lib/apt/lists/*
 
 # fix python dependencies (LTS Django)
-RUN python3 -m pip install --upgrade virtualenv virtualenv-tools && \
-  virtualenv /opt/graphite && \
-  . /opt/graphite/bin/activate && \
-  python3 -m pip install --upgrade pip && \
-  pip3 install django==1.11.15 && \
-  pip3 install msgpack-python && \
-  pip3 install gunicorn && \
-  pip3 install fadvise && \
-  pip3 install redis && \
-  pip3 install rrdtool && \
-  pip3 install msgpack-python && \
-  pip3 install django-statsd-mozilla
+RUN python3 -m pip install --upgrade virtualenv virtualenv-tools \
+ && virtualenv /opt/graphite \
+ && . /opt/graphite/bin/activate \
+ && python3 -m pip install --upgrade pip \
+ && pip3 install \
+      django==1.11.15 \
+      django-statsd-mozilla \
+      fadvise \
+      gunicorn \
+      msgpack-python \
+      msgpack-python \
+      redis \
+      rrdtool
 
 ARG version=1.1.4
 ARG whisper_version=${version}
@@ -99,22 +101,22 @@ RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     fi
 
 RUN apt-get update --fix-missing \
-    && apt-get -y upgrade \
-    && apt-get install --yes --no-install-recommends \
-    git \
-    redis \
-    collectd \
-    nginx \
-    python3-pip \
-    python3-ldap \
-    expect \
-    memcached \
-    sqlite3 \
-    libcairo2 \
-    librrd-dev && \
-    apt-get clean && \
-    apt-get autoremove --yes  && \
-    rm -rf /var/lib/apt/lists/*
+ && apt-get -y upgrade \
+ && apt-get install --yes --no-install-recommends \
+      collectd \
+      expect \
+      git \
+      libcairo2 \
+      librrd-dev \
+      memcached \
+      nginx \
+      python3-ldap \
+      python3-pip \
+      redis \
+      sqlite3 \
+ && apt-get clean \
+ && apt-get autoremove --yes \
+ && rm -rf /var/lib/apt/lists/*
 
 # copy /opt from build image
 COPY --from=build /opt /opt
