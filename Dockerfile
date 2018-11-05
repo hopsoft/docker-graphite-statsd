@@ -92,15 +92,6 @@ LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ENV STATSD_INTERFACE udp
 
-# choose a timezone at build-time
-# use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
-ARG CONTAINER_TIMEZONE
-
-RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
-    then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata; \
-    fi
-
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get update --fix-missing \
  && apt-get -y upgrade \
