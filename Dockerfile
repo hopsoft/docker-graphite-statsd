@@ -31,7 +31,6 @@ RUN python3 -m pip install --upgrade virtualenv virtualenv-tools \
       fadvise \
       gunicorn \
       msgpack-python \
-      msgpack-python \
       redis \
       rrdtool
 
