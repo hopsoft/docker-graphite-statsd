@@ -1,7 +1,8 @@
 FROM phusion/baseimage:0.11 as build
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
-RUN apt-get -y update \
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get -y update \
  && apt-get -y upgrade \
  && apt-get -y install \
       git \
@@ -93,14 +94,14 @@ MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 # choose a timezone at build-time
 # use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
 ARG CONTAINER_TIMEZONE
-ENV DEBIAN_FRONTEND noninteractive
 
 RUN if [ ! -z "${CONTAINER_TIMEZONE}" ]; \
     then ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata; \
     fi
 
-RUN apt-get update --fix-missing \
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get update --fix-missing \
  && apt-get -y upgrade \
  && apt-get install --yes --no-install-recommends \
       collectd \
