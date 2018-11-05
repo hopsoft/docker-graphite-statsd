@@ -90,6 +90,8 @@ ADD conf/opt/statsd/config_*.js /opt/statsd/
 FROM phusion/baseimage:0.11 as production
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
 
+ENV STATSD_INTERFACE udp
+
 # choose a timezone at build-time
 # use `--build-arg CONTAINER_TIMEZONE=Europe/Brussels` in `docker build`
 ARG CONTAINER_TIMEZONE
@@ -152,7 +154,5 @@ RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
 WORKDIR /
-ENV HOME /root
-ENV STATSD_INTERFACE udp
 
 CMD ["/sbin/my_init"]
