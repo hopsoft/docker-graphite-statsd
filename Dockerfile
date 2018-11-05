@@ -107,13 +107,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get install --yes --no-install-recommends \
       collectd \
       expect \
-      git \
       libcairo2 \
-      librrd-dev \
+      librrd8 \
       memcached \
       nginx \
       python3-ldap \
-      python3-pip \
       redis \
       sqlite3 \
  && apt-get clean \
