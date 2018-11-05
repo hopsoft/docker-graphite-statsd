@@ -35,34 +35,32 @@ RUN python3 -m pip install --upgrade virtualenv virtualenv-tools \
       rrdtool
 
 ARG version=1.1.4
-ARG whisper_version=${version}
-ARG carbon_version=${version}
-ARG graphite_version=${version}
-
-ARG whisper_repo=https://github.com/graphite-project/whisper.git
-ARG carbon_repo=https://github.com/graphite-project/carbon.git
-ARG graphite_repo=https://github.com/graphite-project/graphite-web.git
-
-ARG statsd_version=v0.8.0
-
-ARG statsd_repo=https://github.com/etsy/statsd.git
 
 # install whisper
-RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper
-WORKDIR /usr/local/src/whisper
-RUN . /opt/graphite/bin/activate && python3 ./setup.py install
+ARG whisper_version=${version}
+ARG whisper_repo=https://github.com/graphite-project/whisper.git
+RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper \
+ && cd /usr/local/src/whisper \
+ && . /opt/graphite/bin/activate \
+ && python3 ./setup.py install
 
 # install carbon
-RUN git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon
-WORKDIR /usr/local/src/carbon
-RUN . /opt/graphite/bin/activate && pip3 install -r requirements.txt \
-  && python3 ./setup.py install
+ARG carbon_version=${version}
+ARG carbon_repo=https://github.com/graphite-project/carbon.git
+RUN . /opt/graphite/bin/activate \
+ && git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon \
+ && cd /usr/local/src/carbon \
+ && pip3 install -r requirements.txt \
+ && python3 ./setup.py install
 
 # install graphite
-RUN git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web
-WORKDIR /usr/local/src/graphite-web
-RUN . /opt/graphite/bin/activate && pip3 install -r requirements.txt \
-  && python3 ./setup.py install
+ARG graphite_version=${version}
+ARG graphite_repo=https://github.com/graphite-project/graphite-web.git
+RUN . /opt/graphite/bin/activate \
+ && git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web \
+ && cd /usr/local/src/graphite-web \
+ && pip3 install -r requirements.txt \
+ && python3 ./setup.py install
 
 # fixing RRD support (see https://github.com/graphite-project/docker-graphite-statsd/issues/63)
 RUN sed -i \
@@ -75,7 +73,9 @@ RUN wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.
   tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs
 
 # install statsd
-RUN git clone -b ${statsd_version} ${statsd_repo} /opt/statsd
+ARG statsd_version=v0.8.0
+ARG statsd_repo=https://github.com/etsy/statsd.git
+RUN git clone -b ${statsd_version} --depth 1 ${statsd_repo} /opt/statsd
 
 # config graphite
 COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
