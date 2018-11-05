@@ -153,6 +153,5 @@ RUN chmod +x /usr/local/bin/manage.sh && /usr/local/bin/django_admin_init.exp
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
-WORKDIR /
 
 CMD ["/sbin/my_init"]
