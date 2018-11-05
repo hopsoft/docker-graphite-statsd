@@ -1,5 +1,5 @@
 FROM phusion/baseimage:0.11 as build
-MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
+LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get -y update \
@@ -88,7 +88,7 @@ RUN mkdir -p /var/log/graphite/ \
 COPY conf/opt/statsd/config_*.js /opt/statsd/
 
 FROM phusion/baseimage:0.11 as production
-MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
+LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ENV STATSD_INTERFACE udp
 
