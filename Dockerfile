@@ -78,14 +78,14 @@ RUN wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.
 RUN git clone -b ${statsd_version} ${statsd_repo} /opt/statsd
 
 # config graphite
-ADD conf/opt/graphite/conf/*.conf /opt/graphite/conf/
-ADD conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
+COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
-ADD conf/opt/statsd/config_*.js /opt/statsd/
+COPY conf/opt/statsd/config_*.js /opt/statsd/
 
 FROM phusion/baseimage:0.11 as production
 MAINTAINER Denys Zhdanov <denis.zhdanov@gmail.com>
