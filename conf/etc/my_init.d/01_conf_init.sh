@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 conf_dir=/etc/graphite-statsd/conf
 

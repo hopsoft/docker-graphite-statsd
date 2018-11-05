@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Django 1.11
 PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py makemigrations --settings=graphite.settings
 PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py migrate auth --settings=graphite.settings

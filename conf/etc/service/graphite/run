@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 sv start nginx || exit 1
-source /opt/graphite/bin/activate
+. /opt/graphite/bin/activate
 export GRAPHITE_WSGI_PROCESSES=${GRAPHITE_WSGI_PROCESSES:-4}
 export GRAPHITE_WSGI_THREADS=${GRAPHITE_WSGI_THREADS:-2}
 export GRAPHITE_WSGI_REQUEST_TIMEOUT=${GRAPHITE_WSGI_REQUEST_TIMEOUT:-65}

@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
 rm -f /opt/graphite/storage/carbon-cache-a.pid
-source /opt/graphite/bin/activate
+. /opt/graphite/bin/activate
 exec python3 /opt/graphite/bin/carbon-cache.py start --debug 2>&1 >> /var/log/carbon.log

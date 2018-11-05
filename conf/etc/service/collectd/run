@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
-[[ -n ${COLLECTD} ]] || exit 1
+[ -n "${COLLECTD}" ] || exit 1
 exec /usr/sbin/collectd -f -C /etc/collectd/collectd.conf
