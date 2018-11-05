@@ -64,9 +64,10 @@ RUN sed -i \
 /opt/graphite/webapp/graphite/readers/rrd.py
 
 # installing nodejs 6
-WORKDIR /opt
-RUN wget https://nodejs.org/download/release/v6.14.4/node-v6.14.4-linux-x64.tar.gz && \
-  tar -xvpzf node-v6.14.4-linux-x64.tar.gz && rm node-v6.14.4-linux-x64.tar.gz && mv node-v6.14.4-linux-x64 nodejs
+ARG NODEJS_VERSION=6.14.4
+RUN wget -q -O - https://nodejs.org/download/release/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.gz \
+  | tar xz -C /opt \
+ && mv /opt/node-v${NODEJS_VERSION}-linux-x64 /opt/nodejs
 
 # install statsd
 ARG statsd_version=v0.8.0
