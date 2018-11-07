@@ -2,7 +2,7 @@ FROM alpine:3.8 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
- && apk add --update \
+ && apk add --no-cache \
       cairo \
       collectd \
       collectd-disk \
