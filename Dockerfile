@@ -91,6 +91,9 @@ RUN sed -i \
 's/return os.path.realpath(fs_path)/return os.path.realpath(fs_path).decode("utf-8")/' \
 /opt/graphite/webapp/graphite/readers/rrd.py
 
+COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
+COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
+
 # config graphite
 COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
@@ -107,7 +110,6 @@ LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 ENV STATSD_INTERFACE udp
 
 COPY conf /
-COPY conf /etc/graphite-statsd/conf/
 
 # copy /opt from build image
 COPY --from=build /opt /opt

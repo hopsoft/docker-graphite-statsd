@@ -1,7 +1,5 @@
 #!/bin/sh
 
-conf_dir=/etc/graphite-statsd/conf
-
 # auto setup graphite with default configs if /opt/graphite/conf is missing
 # needed for the use case when a docker host volume is mounted at an of the following:
 #  - /opt/graphite/conf
@@ -17,11 +15,11 @@ if folder_empty /var/log/graphite; then
 fi
 
 if folder_empty /opt/graphite/conf; then
-  cp -R $conf_dir/opt/graphite/conf/*.conf /opt/graphite/conf/
+  cp /opt/defaultconf/graphite/conf/*.conf /opt/graphite/conf/
 fi
 
 if folder_empty /opt/graphite/webapp/graphite; then
-  cp $conf_dir/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+  cp /opt/defaultconf/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 fi
 
 if folder_empty /opt/graphite/storage; then
