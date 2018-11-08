@@ -102,7 +102,7 @@ RUN mkdir -p /var/log/graphite/ \
   && PYTHONPATH=/opt/graphite/webapp /opt/graphite/bin/django-admin.py collectstatic --noinput --settings=graphite.settings
 
 # config statsd
-COPY conf/opt/statsd/config_*.js /opt/statsd/
+COPY conf/opt/statsd/config/ /opt/defaultconf/statsd/config/
 
 FROM base as production
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
@@ -117,6 +117,6 @@ COPY --from=build /opt /opt
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8080 8125 8125/udp 8126
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/opt/graphite/webapp/graphite/functions/custom", "/etc/nginx", "/opt/statsd/config", "/etc/logrotate.d", "/var/log", "/var/lib/redis"]
 
 ENTRYPOINT ["/entrypoint"]

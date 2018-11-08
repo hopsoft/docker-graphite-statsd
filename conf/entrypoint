@@ -14,6 +14,10 @@ if folder_empty /var/log/graphite; then
   touch /var/log/syslog
 fi
 
+if folder_empty /opt/statsd/config/; then
+	cp /opt/defaultconf/statsd/config/*.js /opt/statsd/config/
+fi
+
 if folder_empty /opt/graphite/conf; then
   cp /opt/defaultconf/graphite/conf/*.conf /opt/graphite/conf/
 fi

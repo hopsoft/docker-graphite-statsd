@@ -49,7 +49,7 @@ Host | Container | Service
 2024 |      2024 | [carbon aggregator - pickle](http://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-aggregator-py)
 8080 |      8080 | Graphite internal gunicorn port (without Nginx proxying).
 8125 |      8125 | [statsd](https://github.com/etsy/statsd/blob/master/docs/server.md)
-8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
+8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
 
 By default, statsd listens on the UDP port 8125. If you want it to listen on the TCP port 8125 instead, you can set the environment variable `STATSD_INTERFACE` to `tcp` when running the container.
 
@@ -63,7 +63,7 @@ DOCKER ASSIGNED   | /opt/graphite/conf         | graphite config
 DOCKER ASSIGNED   | /opt/graphite/storage      | graphite stats storage
 DOCKER ASSIGNED   | /opt/graphite/webapp/graphite/functions/custom      | graphite custom functions dir
 DOCKER ASSIGNED   | /etc/nginx                 | nginx config
-DOCKER ASSIGNED   | /opt/statsd                | statsd config
+DOCKER ASSIGNED   | /opt/statsd/config         | statsd config
 DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config
 DOCKER ASSIGNED   | /var/log                   | log files
 DOCKER ASSIGNED   | /var/lib/redis             | Redis TagDB data (optional)
@@ -179,7 +179,7 @@ be sure to delete the old whisper files under `/opt/graphite/storage/whisper/`.
 ---
 
 **Important:** Ensure your Statsd flush interval is at least as long as the highest-resolution retention.
-For example, if `/opt/statsd/config.js` looks like this.
+For example, if `/opt/statsd/config/udp.js` looks like this.
 
 ```
 flushInterval: 10000
@@ -218,12 +218,12 @@ docker run -d\
  --restart=always\
  -v /path/to/graphite/configs:/opt/graphite/conf\
  -v /path/to/graphite/data:/opt/graphite/storage\
- -v /path/to/statsd:/opt/statsd\
+ -v /path/to/statsd_config:/opt/statsd/config\
  graphiteapp/graphite-statsd
 ```
 
 **Note**: The container will initialize properly if you mount empty volumes at
-          `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd`.
+          `/opt/graphite/conf`, `/opt/graphite/storage`, or `/opt/statsd/config`.
 
 ## Memcached config
 

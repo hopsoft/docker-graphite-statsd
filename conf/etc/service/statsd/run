@@ -1,3 +1,3 @@
 #!/bin/sh
 
-exec node /opt/statsd/stats.js /opt/statsd/config_$STATSD_INTERFACE.js >> /var/log/statsd.log 2>&1
+exec node /opt/statsd/stats.js /opt/statsd/config/$STATSD_INTERFACE.js >> /var/log/statsd.log 2>&1
