@@ -10,8 +10,8 @@ function folder_empty() {
 }
 
 if folder_empty /var/log/graphite; then
-  mkdir -p /var/log/graphite
-  touch /var/log/syslog
+	mkdir -p /var/log/graphite
+	touch /var/log/syslog
 fi
 
 if folder_empty /opt/statsd/config/; then
@@ -19,34 +19,33 @@ if folder_empty /opt/statsd/config/; then
 fi
 
 if folder_empty /opt/graphite/conf; then
-  cp /opt/defaultconf/graphite/conf/*.conf /opt/graphite/conf/
+	cp /opt/defaultconf/graphite/conf/*.conf /opt/graphite/conf/
 fi
 
 if folder_empty /opt/graphite/webapp/graphite; then
-  cp /opt/defaultconf/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
+	cp /opt/defaultconf/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 fi
 
 if folder_empty /opt/graphite/storage; then
-  mkdir -p /opt/graphite/storage/whisper
+	mkdir -p /opt/graphite/storage/whisper
 
-  export PYTHONPATH=/opt/graphite/webapp
-  export DJANGO_SETTINGS_MODULE=graphite.settings
-
-  /opt/graphite/bin/django-admin.py makemigrations
-  /opt/graphite/bin/django-admin.py migrate auth
-  /opt/graphite/bin/django-admin.py migrate --run-syncdb
-  /opt/graphite/bin/django-admin.py createsuperuser
-    --noinput \
-    --email root.graphite@mailinator.com \
-    --username root << ENDINPUT
-root
-root
-ENDINPUT
-
+	export PYTHONPATH=/opt/graphite/webapp
+	export DJANGO_SETTINGS_MODULE=graphite.settings
+	
+	/opt/graphite/bin/django-admin.py makemigrations
+	/opt/graphite/bin/django-admin.py migrate auth
+	/opt/graphite/bin/django-admin.py migrate --run-syncdb
+	/opt/graphite/bin/django-admin.py createsuperuser
+		--noinput \
+		--email root.graphite@mailinator.com \
+		--username root <<- ENDINPUT
+		root
+		root
+		ENDINPUT
 fi
 
 if folder_empty /opt/graphite/webapp/graphite/functions/custom; then
-  touch /opt/graphite/webapp/graphite/functions/custom/__init__.py
+	touch /opt/graphite/webapp/graphite/functions/custom/__init__.py
 fi
 
 runsvdir -P /etc/service
