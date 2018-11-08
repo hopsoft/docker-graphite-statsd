@@ -1,4 +1,4 @@
 #!/bin/sh
 
-[ -n "${REDIS_TAGDB}" ] || exit 1
+[ -n "${REDIS_TAGDB}" ] || exit 0
 exec /usr/bin/redis-server /etc/redis/redis.conf
