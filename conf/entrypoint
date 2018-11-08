@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /opt/graphite/bin/activate
+
 # auto setup graphite with default configs if /opt/graphite/conf is missing
 # needed for the use case when a docker host volume is mounted at an of the following:
 #  - /opt/graphite/conf
