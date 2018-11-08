@@ -7,7 +7,8 @@ export GRAPHITE_WSGI_THREADS=${GRAPHITE_WSGI_THREADS:-2}
 export GRAPHITE_WSGI_REQUEST_TIMEOUT=${GRAPHITE_WSGI_REQUEST_TIMEOUT:-65}
 export GRAPHITE_WSGI_REQUEST_LINE=${GRAPHITE_WSGI_REQUEST_LINE:-0}
 export GRAPHITE_WSGI_MAX_REQUESTS=${GRAPHITE_WSGI_MAX_REQUESTS:-1000}
-export PYTHONPATH=/opt/graphite/webapp && \
+export PYTHONPATH=/opt/graphite/webapp
+
 exec /opt/graphite/bin/gunicorn wsgi --preload --pythonpath=/opt/graphite/webapp/graphite \
     --workers=${GRAPHITE_WSGI_PROCESSES} \
     --threads=${GRAPHITE_WSGI_THREADS} \
