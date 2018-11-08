@@ -2,57 +2,8 @@
 
 . /opt/graphite/bin/activate
 
-# auto setup graphite with default configs if /opt/graphite/conf is missing
-# needed for the use case when a docker host volume is mounted at an of the following:
-#  - /opt/graphite/conf
-#  - /opt/graphite/storage
-
-function folder_empty() {
-	[ -z "$(find "${1}" -mindepth 1 -not -name "lost+found" -print -quit)" ]
-}
-
-if folder_empty /var/log/graphite; then
-	mkdir -p /var/log/graphite
-	touch /var/log/syslog
-fi
-
-if folder_empty /opt/statsd/config/; then
-	cp /opt/defaultconf/statsd/config/*.js /opt/statsd/config/
-fi
-
-if folder_empty /opt/graphite/conf; then
-	cp /opt/defaultconf/graphite/conf/*.conf /opt/graphite/conf/
-fi
-
-if folder_empty /opt/graphite/webapp/graphite; then
-	cp /opt/defaultconf/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
-fi
-
-[ -d /etc/collectd/collectd.conf.d ] || mkdir -p /etc/collectd/collectd.conf.d
-if folder_empty /etc/collectd/collectd.conf.d; then
-	touch /etc/collectd/collectd.conf.d/do_not_spill_warning_about_folder_is_empty.conf
-fi
-
-if folder_empty /opt/graphite/storage; then
-	mkdir -p /opt/graphite/storage/whisper
-
-	export PYTHONPATH=/opt/graphite/webapp
-	export DJANGO_SETTINGS_MODULE=graphite.settings
-	
-	/opt/graphite/bin/django-admin.py makemigrations
-	/opt/graphite/bin/django-admin.py migrate auth
-	/opt/graphite/bin/django-admin.py migrate --run-syncdb
-	/opt/graphite/bin/django-admin.py createsuperuser
-		--noinput \
-		--email root.graphite@mailinator.com \
-		--username root <<- ENDINPUT
-		root
-		root
-		ENDINPUT
-fi
-
-if folder_empty /opt/graphite/webapp/graphite/functions/custom; then
-	touch /opt/graphite/webapp/graphite/functions/custom/__init__.py
-fi
+# Ensure /usr/local/bin is in PATH. On some
+# weird platforms,this might not be the case
+PATH="${PATH}:/usr/local/bin"
 
 runsvdir -P /etc/service

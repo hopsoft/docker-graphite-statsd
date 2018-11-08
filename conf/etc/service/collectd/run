@@ -1,4 +1,10 @@
 #!/bin/sh
 
 [ -n "${COLLECTD}" ] || exit 0
+
+[ -d /etc/collectd/collectd.conf.d ] || mkdir -p /etc/collectd/collectd.conf.d
+if folder_empty /etc/collectd/collectd.conf.d; then
+	touch /etc/collectd/collectd.conf.d/do_not_spill_warning_about_folder_is_empty.conf
+fi
+
 exec /usr/sbin/collectd -f -C /etc/collectd/collectd.conf
