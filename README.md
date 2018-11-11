@@ -70,7 +70,7 @@ DOCKER ASSIGNED   | /var/lib/redis             | Redis TagDB data (optional)
 
 ### Base Image
 
-Built using [Phusion's base image](https://github.com/phusion/baseimage-docker).
+Version before (and including) 1.1.4-9 were built using [Phusion's base image](https://github.com/phusion/baseimage-docker). Current version is based on [Alpine Linux](https://alpinelinux.org/) because of image size (please see [PR#66](https://github.com/graphite-project/docker-graphite-statsd/pull/66) for details).
 
 * All Graphite related processes are run as daemons & monitored with [runit](http://smarden.org/runit/).
 * Includes additional services such as logrotate, nginx, optional Redis for TagDB and optional collectd instance.
