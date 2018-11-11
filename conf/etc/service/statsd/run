@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-exec /opt/nodejs/bin/node /opt/statsd/stats.js /opt/statsd/config_$STATSD_INTERFACE.js >> /var/log/statsd.log 2>&1
+if folder_empty /opt/statsd/config/; then
+	cp /opt/defaultconf/statsd/config/*.js /opt/statsd/config/
+fi
 
+exec node /opt/statsd/stats.js /opt/statsd/config/$STATSD_INTERFACE.js 2>&1 | tee -a /var/log/statsd.log
