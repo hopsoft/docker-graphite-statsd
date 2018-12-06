@@ -2,7 +2,10 @@ version: "2"
 
 services:
   statsd:
-   image: graphiteapp/graphite-statsd
+   build:
+    context: .
+   volumes:
+    - ./conf/opt/graphite/conf:/opt/graphite/conf
    ports:
     - "80:80"
     - "2003-2004:2003-2004"
