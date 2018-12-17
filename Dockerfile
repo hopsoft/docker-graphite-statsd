@@ -12,6 +12,7 @@ RUN true \
       memcached \
       nginx \
       nodejs \
+      npm \
       py3-pyldap \
       redis \
       runit \
@@ -84,7 +85,9 @@ ARG statsd_repo=https://github.com/etsy/statsd.git
 RUN git init /opt/statsd \
  && git -C /opt/statsd remote add origin "${statsd_repo}" \
  && git -C /opt/statsd fetch origin "${statsd_version}" \
- && git -C /opt/statsd checkout "${statsd_version}"
+ && git -C /opt/statsd checkout "${statsd_version}" \
+ && cd /opt/statsd \
+ && npm install
 
 # fixing RRD support (see https://github.com/graphite-project/docker-graphite-statsd/issues/63)
 RUN sed -i \
