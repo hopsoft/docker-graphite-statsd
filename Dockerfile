@@ -89,11 +89,6 @@ RUN git init /opt/statsd \
  && cd /opt/statsd \
  && npm install
 
-# fixing RRD support (see https://github.com/graphite-project/docker-graphite-statsd/issues/63)
-RUN sed -i \
-'s/return os.path.realpath(fs_path)/return os.path.realpath(fs_path).decode("utf-8")/' \
-/opt/graphite/webapp/graphite/readers/rrd.py
-
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
 
