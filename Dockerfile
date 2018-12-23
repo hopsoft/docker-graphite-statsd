@@ -51,7 +51,7 @@ RUN true \
       redis \
       rrdtool
 
-ARG version=1.1.4
+ARG version=1.1.5
 
 # install whisper
 ARG whisper_version=${version}
