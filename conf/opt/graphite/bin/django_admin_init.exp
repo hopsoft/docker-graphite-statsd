@@ -1,0 +1,22 @@
+#!/usr/bin/env expect
+
+set timeout -1
+spawn /opt/graphite/bin/django-admin.py createsuperuser
+
+expect "Username (leave blank to use 'root'):" {
+  send "root\r"
+}
+
+expect "Email address:" {
+  send "root.graphite@mailinator.com\r"
+}
+
+expect "Password:" {
+  send "root\r"
+}
+
+expect "Password *:" {
+  send "root\r"
+}
+
+expect "Superuser created successfully"

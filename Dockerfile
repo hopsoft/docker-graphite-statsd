@@ -17,6 +17,7 @@ RUN true \
       redis \
       runit \
       sqlite \
+      expect \
  && rm -rf \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
