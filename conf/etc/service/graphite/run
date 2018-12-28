@@ -24,13 +24,7 @@ if [ ! -e "/opt/graphite/storage/graphite.db" ]; then
 	/opt/graphite/bin/django-admin.py makemigrations
 	/opt/graphite/bin/django-admin.py migrate auth
 	/opt/graphite/bin/django-admin.py migrate --run-syncdb
-	/opt/graphite/bin/django-admin.py createsuperuser \
-		--noinput \
-		--email root.graphite@mailinator.com \
-		--username root <<- ENDINPUT
-		root
-		root
-		ENDINPUT
+	/opt/graphite/bin/django_admin_init.exp
 fi
 
 if folder_empty /opt/graphite/webapp/graphite/functions/custom; then
