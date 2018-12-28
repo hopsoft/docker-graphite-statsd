@@ -144,6 +144,7 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_MAX_FETCH_RETRIES: (2) Number of retries for a specific remote data fetch
 * GRAPHITE_FIND_CACHE_DURATION: (0) Time to cache remote metric find results
 * GRAPHITE_STATSD_HOST: ("127.0.0.1") If set, django_statsd.middleware.GraphiteRequestTimingMiddleware and django_statsd.middleware.GraphiteMiddleware will be enabled.
+* GRAPHITE_URL_ROOT: ('') Sets a url prefix if deploying graphite-web to a non-root location.
 
 ## TagDB
 Graphite stores tag information in a separate tag database (TagDB). Please check [tags documentation](https://graphite.readthedocs.io/en/latest/tags.html) for details.

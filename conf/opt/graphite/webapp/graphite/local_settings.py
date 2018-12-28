@@ -81,7 +81,7 @@ DEFAULT_CACHE_DURATION = int(os.environ.get('GRAPHITE_DEFAULT_CACHE_DURATION', '
 DEFAULT_XFILES_FACTOR = 0
 
 # Set URL_PREFIX when deploying graphite-web to a non-root location
-#URL_PREFIX = '/graphite'
+URL_PREFIX = str(os.environ.get('GRAPHITE_URL_ROOT', ''))
 
 # Graphite uses Django Tagging to support tags in Events. By default each
 # tag is limited to 50 characters in length.
