@@ -261,6 +261,8 @@ The following command will start the graphite statsd container through docker-co
 docker-compose up
 ```
 
+## Running through Kubernetes
+You can use this 3-rd party repo with Graphite Helm chart - https://github.com/kiwigrid/helm-charts/tree/master/charts/graphite
 
 
 ## Additional Reading
