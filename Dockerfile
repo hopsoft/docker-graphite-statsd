@@ -1,12 +1,11 @@
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.9.19
 MAINTAINER Nathan Hopkins <natehop@gmail.com>
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
-RUN apt-get -y update\
- && apt-get -y upgrade
-
-# dependencies
-RUN apt-get -y --force-yes install vim\
+RUN curl https://packages.grafana.com/gpg.key | apt-key add -\
+ && apt-get -y update\
+ && apt-get -y upgrade\
+ && apt-get -y --force-yes install vim\
  nginx\
  python-dev\
  python-flup\
@@ -21,7 +20,9 @@ RUN apt-get -y --force-yes install vim\
  python-cairo\
  python-rrdtool\
  pkg-config\
- nodejs
+ nodejs\
+ grafana\
+ && apt-get clean
 
 # python dependencies
 RUN pip install django==1.5.12\
@@ -57,10 +58,14 @@ RUN python /opt/graphite/webapp/graphite/manage.py collectstatic --noinput
 # config statsd
 ADD conf/opt/statsd/config_*.js /opt/statsd/
 
+# config grafana
+ADD conf/etc/grafana/grafana.ini /etc/grafana/grafana.ini
+
 # config nginx
 RUN rm /etc/nginx/sites-enabled/default
 ADD conf/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 ADD conf/etc/nginx/sites-enabled/graphite-statsd.conf /etc/nginx/sites-enabled/graphite-statsd.conf
+ADD conf/etc/nginx/sites-enabled/grafana.conf /etc/nginx/sites-enabled/grafana.conf
 
 # init django admin
 ADD conf/usr/local/bin/django_admin_init.exp /usr/local/bin/django_admin_init.exp
@@ -75,6 +80,7 @@ ADD conf/etc/service/carbon/run /etc/service/carbon/run
 ADD conf/etc/service/carbon-aggregator/run /etc/service/carbon-aggregator/run
 ADD conf/etc/service/graphite/run /etc/service/graphite/run
 ADD conf/etc/service/statsd/run /etc/service/statsd/run
+ADD conf/etc/service/grafana/run /etc/service/grafana/run
 ADD conf/etc/service/nginx/run /etc/service/nginx/run
 
 # default conf setup
@@ -87,7 +93,7 @@ RUN apt-get clean\
 
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8125 8125/udp 8126
-VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
+VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/grafana", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
 WORKDIR /
 ENV HOME /root
 ENV STATSD_INTERFACE udp

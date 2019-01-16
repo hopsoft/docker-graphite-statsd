@@ -1,3 +1,29 @@
+<!-- Tocer[start]: Auto-generated, don't remove. -->
+
+## Table of Contents
+
+- [Docker Image for Graphite & Statsd](#docker-image-for-graphite--statsd)
+  - [Get Graphite & Statsd running instantly](#get-graphite--statsd-running-instantly)
+  - [Quick Start](#quick-start)
+    - [Includes the following components](#includes-the-following-components)
+    - [Mapped Ports](#mapped-ports)
+    - [Mounted Volumes](#mounted-volumes)
+    - [Base Image](#base-image)
+  - [Start Using Graphite & Statsd](#start-using-graphite--statsd)
+    - [Send Some Stats](#send-some-stats)
+    - [Visualize the Data](#visualize-the-data)
+  - [Secure the Django Admin](#secure-the-django-admin)
+  - [Change the Configuration](#change-the-configuration)
+  - [Statsd Admin Management Interface](#statsd-admin-management-interface)
+  - [Secure Grafana](#secure-grafana)
+  - [Connect Grafana to Graphite](#connect-grafana-to-graphite)
+  - [A Note on Volumes](#a-note-on-volumes)
+  - [Memcached config](#memcached-config)
+  - [Additional Reading](#additional-reading)
+  - [Contributors](#contributors)
+
+<!-- Tocer[finish]: Auto-generated, don't remove. -->
+
 [![Docker Pulls](https://img.shields.io/docker/pulls/hopsoft/graphite-statsd.svg?style=flat)](https://hub.docker.com/r/hopsoft/graphite-statsd/)
 
 > __NOTICE:__ Check out the official Graphite & Statsd Docker image at https://github.com/graphite-project/docker-graphite-statsd
@@ -16,6 +42,7 @@ docker run -d\
  --name graphite\
  --restart=always\
  -p 80:80\
+ -p 81:81\
  -p 2003-2004:2003-2004\
  -p 2023-2024:2023-2024\
  -p 8125:8125/udp\
@@ -33,12 +60,14 @@ That's it, you're done ... almost.
 * [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
 * [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end
 * [Statsd](https://github.com/etsy/statsd/wiki) - UDP based back-end proxy
+* [Grafana](https://grafana.com) - front-end dashboard (more refined than Graphite)
 
 ### Mapped Ports
 
 Host | Container | Service
 ---- | --------- | -------------------------------------------------------------------------------------------------------------------
-  80 |        80 | [nginx](https://www.nginx.com/resources/admin-guide/)
+  80 |        80 | [nginx - grafana](https://www.nginx.com/resources/admin-guide/)
+  81 |        81 | [nginx - graphite](https://www.nginx.com/resources/admin-guide/)
 2003 |      2003 | [carbon receiver - plaintext](http://graphite.readthedocs.io/en/latest/feeding-carbon.html#the-plaintext-protocol)
 2004 |      2004 | [carbon receiver - pickle](http://graphite.readthedocs.io/en/latest/feeding-carbon.html#the-pickle-protocol)
 2023 |      2023 | [carbon aggregator - plaintext](http://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-aggregator-py)
@@ -54,6 +83,7 @@ Host              | Container                  | Notes
 ----------------- | -------------------------- | -------------------------------
 DOCKER ASSIGNED   | /opt/graphite/conf         | graphite config
 DOCKER ASSIGNED   | /opt/graphite/storage      | graphite stats storage
+DOCKER ASSIGNED   | /etc/grafana               | grafana config
 DOCKER ASSIGNED   | /etc/nginx                 | nginx config
 DOCKER ASSIGNED   | /opt/statsd                | statsd config
 DOCKER ASSIGNED   | /etc/logrotate.d           | logrotate config
@@ -80,8 +110,8 @@ while true; do echo -n "example:$((RANDOM % 100))|c" | nc -w 1 -u 127.0.0.1 8125
 
 Open Graphite in a browser.
 
-* http://localhost/dashboard
-* http://localhost/render?from=-10mins&until=now&target=stats.example
+* http://localhost:81/dashboard
+* http://localhost:81/render?from=-10mins&until=now&target=stats.example
 
 ## Secure the Django Admin
 
@@ -91,8 +121,8 @@ Update the default Django admin user account. _The default is insecure._
   * password: root
   * email: root.graphite@mailinator.com
 
-First login at: [http://localhost/account/login](http://localhost/account/login)
-Then update the root user's profile at: [http://localhost/admin/auth/user/1/](http://localhost/admin/auth/user/1/)
+First login at: http://localhost:81/account/login
+Then update the root user's profile at: http://localhost:81/admin/auth/user/1/
 
 ## Change the Configuration
 
@@ -137,6 +167,22 @@ echo counters | nc localhost 8126
 
 [More info & additional commands.](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
 
+## Secure Grafana
+
+Update the default Grafana admin account. _The default is insecure._
+
+  * username: admin
+  * password: admin
+  * email: admin@localhost
+
+First login at: http://localhost
+Then update the admin user's profile at: http://localhost/admin/users/edit/1
+
+## Connect Grafana to Graphite
+
+Visit http://localhost/datasources/new
+Then configure the Graphite data source with the URL http://localhost:81
+
 ## A Note on Volumes
 
 You may find it useful to mount explicit volumes so configs & data can be managed from a known location on the host.
@@ -158,7 +204,7 @@ docker run -d\
 
 ## Memcached config
 
-If you have a Memcached server running, and want to Graphite use it, you can do it using environment variables, like this:
+If you want Graphite to use an existing Memcached server, set the following environment variables:
 
 ```
 docker run -d\
@@ -169,15 +215,9 @@ docker run -d\
  -p 2023-2024:2023-2024\
  -p 8125:8125/udp\
  -p 8126:8126\
- -e "MEMCACHE_HOST=127.0.0.1:11211"\  # Memcached host. Separate by comma more than one servers.
+ -e "MEMCACHE_HOST=127.0.0.1:11211"\  # Memcached host(s) comma delimited
  -e "CACHE_DURATION=60"\              # in seconds
  hopsoft/graphite-statsd
-```
-
-Also, you can specify more than one memcached server, using commas:
-
-```
--e "MEMCACHE_HOST=127.0.0.1:11211,10.0.0.1:11211"
 ```
 
 ## Additional Reading

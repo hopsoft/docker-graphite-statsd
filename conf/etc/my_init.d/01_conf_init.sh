@@ -3,7 +3,7 @@
 conf_dir=/etc/graphite-statsd/conf
 
 # auto setup graphite with default configs if /opt/graphite is missing
-# needed for the use case when a docker host volume is mounted at an of the following:
+# needed for the use case when a docker host volume is mounted at any of the following:
 #  - /opt/graphite
 #  - /opt/graphite/conf
 #  - /opt/graphite/webapp/graphite
@@ -26,11 +26,10 @@ if [[ -z $graphite_webapp_dir_contents ]]; then
 fi
 
 # auto setup statsd with default config if /opt/statsd is missing
-# needed for the use case when a docker host volume is mounted at an of the following:
+# needed for the use case when a docker host volume is mounted at any of the following:
 #  - /opt/statsd
 statsd_dir_contents=$(find /opt/statsd -mindepth 1 -print -quit)
 if [[ -z $statsd_dir_contents ]]; then
   git clone -b v0.7.2 https://github.com/etsy/statsd.git /opt/statsd
   cp $conf_dir/opt/statsd/config.js /opt/statsd/config.js
 fi
-
