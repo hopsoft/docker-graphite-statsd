@@ -112,7 +112,7 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_WSGI_MAX_REQUESTS: (1000) limit on the number of requests a daemon process should process before it is shutdown and restarted.
 * GRAPHITE_WSGI_REQUEST_LINE: (0) The maximum size of HTTP request line in bytes.
 
-### Graphite-web 
+### Graphite-web
 * GRAPHITE_ALLOWED_HOSTS: (*) In Django 1.5+ set this to the list of hosts your graphite instances is accessible as. See: [https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS)
 * GRAPHITE_TIME_ZONE: (Etc/UTC) Set your local timezone
 * GRAPHITE_LOG_ROTATION: (true) rotate logs
@@ -150,7 +150,7 @@ Additional environment variables can be set to adjust performance.
 Graphite stores tag information in a separate tag database (TagDB). Please check [tags documentation](https://graphite.readthedocs.io/en/latest/tags.html) for details.
 
 * GRAPHITE_TAGDB: ('graphite.tags.localdatabase.LocalDatabaseTagDB') TagDB is a pluggable store, by default it uses the local SQLite database.
-* REDIS_TAGDB: (false) if set to true will use local Redis instance to store tags. 
+* REDIS_TAGDB: (false) if set to true will use local Redis instance to store tags.
 * GRAPHITE_TAGDB_CACHE_DURATION: (60) Time to cache seriesByTag results.
 * GRAPHITE_TAGDB_AUTOCOMPLETE_LIMIT: (100) Autocomplete default result limit.
 * GRAPHITE_TAGDB_REDIS_HOST: ('localhost') Redis TagDB host
@@ -166,6 +166,9 @@ Use `COLLECTD=1` environment variable to enable local collectd instance
 
 ## Carbon-relay
 Use `RELAY=1` environment variable to enable carbon relay instance. Use `[relay]` section of carbon.conf to configure it.
+
+## Logrotate
+By default logs are rotated daily, using built-in `/etc/periodic/daily/logrotate` script. Please note, that according to Docker [logging best practices](https://success.docker.com/article/logging-best-practices) "Ideally, applications log to stdout/stderr, and Docker sends those logs to the configured logging destination.". You can use `-` as log file name for such behaviour.
 
 ## Change the Configuration
 

@@ -9,6 +9,7 @@ RUN true \
       collectd-nginx \
       findutils \
       librrd \
+      logrotate \
       memcached \
       nginx \
       nodejs \
