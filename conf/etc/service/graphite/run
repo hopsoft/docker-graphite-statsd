@@ -6,7 +6,7 @@ if folder_empty /var/log/graphite; then
 fi
 
 if folder_empty /opt/graphite/conf; then
-	cp /opt/defaultconf/graphite/conf/*.conf /opt/graphite/conf/
+	cp /opt/defaultconf/graphite/*.conf /opt/graphite/conf/
 fi
 
 if folder_empty /opt/graphite/webapp/graphite; then
