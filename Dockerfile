@@ -19,6 +19,7 @@ RUN true \
       runit \
       sqlite \
       expect \
+      dcron \
  && rm -rf \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
