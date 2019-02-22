@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -f /opt/graphite/storage/carbon-aggregator-a.pid
-exec python3 /opt/graphite/bin/carbon-aggregator.py start --debug 2>&1 | tee -a  /var/log/carbon-aggregator.log
+exec python3 /opt/graphite/bin/carbon-aggregator.py start --debug 2>&1

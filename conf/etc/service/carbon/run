@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -f /opt/graphite/storage/carbon-cache-a.pid
-exec python3 /opt/graphite/bin/carbon-cache.py start --debug 2>&1 | tee -a /var/log/carbon.log
+exec python3 /opt/graphite/bin/carbon-cache.py start --debug 2>&1
