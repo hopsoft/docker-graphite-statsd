@@ -85,11 +85,10 @@ RUN . /opt/graphite/bin/activate \
 # install statsd (as we have to use this ugly way)
 ARG statsd_version=8d5363cb109cc6363661a1d5813e0b96787c4411
 ARG statsd_repo=https://github.com/etsy/statsd.git
-RUN git init /opt/statsd \
- && git -C /opt/statsd remote add origin "${statsd_repo}" \
- && git -C /opt/statsd fetch origin "${statsd_version}" \
- && git -C /opt/statsd checkout "${statsd_version}" \
+WORKDIR /opt
+RUN git clone "${statsd_repo}" \
  && cd /opt/statsd \
+ && git checkout "${statsd_version}" \
  && npm install
 
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
