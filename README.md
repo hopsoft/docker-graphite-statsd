@@ -170,6 +170,13 @@ Use `RELAY=1` environment variable to enable carbon relay instance. Use `[relay]
 ## Logrotate
 By default logs are rotated daily, using built-in `/etc/periodic/daily/logrotate` script. Please note, that according to Docker [logging best practices](https://success.docker.com/article/logging-best-practices) "Ideally, applications log to stdout/stderr, and Docker sends those logs to the configured logging destination.". You can use `-` as log file name for such behaviour.
 
+## Runit
+Each service started and controlled by runit will be gracefully shutdown when stopping the container : wait up to 7 seconds for the service to become down, then it will be killed. The runit environment variable `$SVWAIT` overrides this default timeout. Additionnally, a global timeout can be also specified with the docker-run option `--stop-timeout`.
+Each service started by default can be disabled by setting an environment variable named as : `$<service name>_DISABLED`. For instance : `CARBON_AGGREGATOR_DISABLED=1`, `STATSD_DISABLED=1`...
+
+## Startup custom scripts
+At startup, entrypoint will run all scripts found in the directory /etc/run_once. It can be mounted with a docker-run option like this : `--mount type=bind,source=/path/to/run_once,destination=/etc/run_once`.
+
 ## Change the Configuration
 
 Read up on Graphite's [post-install tasks](https://graphite.readthedocs.org/en/latest/install.html#post-install-tasks).
