@@ -24,7 +24,7 @@ ALLOWED_HOSTS = [host.strip() for host in os.environ.get('GRAPHITE_ALLOWED_HOSTS
 TIME_ZONE = os.environ.get('GRAPHITE_TIME_ZONE', 'Etc/UTC')
 
 # Set the default short date format. See strftime(3) for supported sequences.
-#DATE_FORMAT = '%m/%d'
+DATE_FORMAT = os.environ.get('GRAPHITE_DATE_FORMAT', '%m/%d')
 
 # Override this to provide documentation specific to your Graphite deployment
 #DOCUMENTATION_URL = "http://graphite.readthedocs.io/"
