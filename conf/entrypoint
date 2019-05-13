@@ -38,6 +38,9 @@ for _srv in $(ls -1 /etc/service); do
     [ -n "$X" ] && touch /etc/service/$_srv/down
 done
 
+# remove stale pids
+find /opt/graphite/storage -name '*.pid' -delete
+
 exec runsvdir -P /etc/service &
 
 RUNSVDIR=$!
