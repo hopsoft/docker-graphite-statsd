@@ -1,4 +1,4 @@
-FROM alpine:3.8 as base
+FROM alpine:3.9 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
@@ -20,6 +20,11 @@ RUN true \
       sqlite \
       expect \
       dcron \
+      py-mysqldb \
+      mysql-dev \
+      mysql-client \
+      postgresql-dev \
+      postgresql-client \
  && rm -rf \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
@@ -40,6 +45,8 @@ RUN true \
       py3-pyldap \
       py3-virtualenv \
       py-rrd \
+      py-mysqldb \
+      openldap-dev \
       python3-dev \
       rrdtool-dev \
       wget \
@@ -52,7 +59,10 @@ RUN true \
       gunicorn \
       msgpack-python \
       redis \
-      rrdtool
+      rrdtool \
+      python-ldap \
+      mysqlclient \
+      psycopg2
 
 ARG version=1.1.5
 
