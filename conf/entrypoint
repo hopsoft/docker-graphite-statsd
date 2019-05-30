@@ -39,7 +39,7 @@ for _srv in $(ls -1 /etc/service); do
 done
 
 # remove stale pids
-find /opt/graphite/storage -name '*.pid' -delete
+find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 
 exec runsvdir -P /etc/service &
 
