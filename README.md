@@ -165,6 +165,11 @@ Graphite stores tag information in a separate tag database (TagDB). Please check
 ## Collectd
 Use `COLLECTD=1` environment variable to enable local collectd instance
 
+## Carbon-cache
+If custom environment `GRAPHITE_CARBONLINK_HOSTS` variable is setup `carbon-cache` instances as daemons/services are [managed](./conf/etc/run_once/carbon-cache) based on the that, otherwise default instance (`127.0.0.1:7002`) is used.
+
+**Note**: if default port `7002` is used among the hosts, need to setup `CARBON_DISABLED=1` in the environment.
+
 ## Carbon-relay
 Use `RELAY=1` environment variable to enable carbon relay instance. Use `[relay]` section of carbon.conf to configure it.
 
