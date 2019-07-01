@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ -z "$GRAPHITE_CARBONLINK_HOSTS" ]; then
+    exit 0
+fi
+
+IFS=","
+for i in $GRAPHITE_CARBONLINK_HOSTS; do
+    INSTANCE_ID=$(echo $i | tr -d '[:space:]' | awk -F ':' '{print $3}')
+
+    [ -z $INSTANCE_ID ] && continue
+    S=/etc/service/carbon-$INSTANCE_ID
+    [ -d $S ] && continue
+    mkdir -p $S/log
+    sed "s/start/--instance=$INSTANCE_ID start/" /etc/service/carbon/run > $S/run
+    sed "s/carbon.log/carbon-$INSTANCE_ID.log/" /etc/service/carbon/log/run > $S/log/run
+    chmod +x $S/run $S/log/run
+done
