@@ -124,10 +124,6 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_LOG_FILE_EXCEPTION: (exception.log), set to "-" for stdout/stderr
 * GRAPHITE_LOG_FILE_CACHE: (cache.log), set to "-" for stdout/stderr
 * GRAPHITE_LOG_FILE_RENDERING: (rendering.log), set to "-" for stdout/stderr
-* GRAPHITE_LOG_FILE_INFO: (info.log), set to "-" for stdout/stderr
-* GRAPHITE_LOG_FILE_EXCEPTION: (exception.log), set to "-" for stdout/stderr
-* GRAPHITE_LOG_FILE_CACHE: (cache.log), set to "-" for stdout/stderr
-* GRAPHITE_LOG_FILE_RENDERING: (rendering.log), set to "-" for stdout/stderr
 * GRAPHITE_DEBUG: (false) Enable full debug page display on exceptions (Internal Server Error pages)
 * GRAPHITE_DEFAULT_CACHE_DURATION: (60) Duration to cache metric data and graphs
 * GRAPHITE_CARBONLINK_HOSTS: ('127.0.0.1:7002') List of carbonlink hosts
@@ -172,6 +168,10 @@ If custom environment `GRAPHITE_CARBONLINK_HOSTS` variable is setup `carbon-cach
 
 ## Carbon-relay
 Use `RELAY=1` environment variable to enable carbon relay instance. Use `[relay]` section of carbon.conf to configure it.
+
+**Note**: in order to use `carbon-relay` daemon correctly, it must accept & distribute incoming traffic within DESTINATIONS
+          endpoints which by default isn't (`carbon-cache` is). As one of solutions is to adjust `graphitePort` value to
+          carbon-relay LINE_RECEIVER_PORT in [`statsd`](https://github.com/statsd/statsd/blob/master/exampleConfig.js) config.
 
 ## Logrotate
 By default logs are rotated daily, using built-in `/etc/periodic/daily/logrotate` script. Please note, that according to Docker [logging best practices](https://success.docker.com/article/logging-best-practices) "Ideally, applications log to stdout/stderr, and Docker sends those logs to the configured logging destination.". You can use `-` as log file name for such behaviour.
