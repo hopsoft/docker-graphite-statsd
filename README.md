@@ -59,7 +59,7 @@ That's it, you're done ... almost.
 * [Nginx](http://nginx.org/) - reverse proxies the graphite dashboard
 * [Graphite](http://graphite.readthedocs.org/en/latest/) - front-end dashboard
 * [Carbon](http://graphite.readthedocs.org/en/latest/carbon-daemons.html) - back-end
-* [Statsd](https://github.com/etsy/statsd/wiki) - UDP based back-end proxy
+* [Statsd](https://github.com/statsd/statsd/wiki) - UDP based back-end proxy
 * [Grafana](https://grafana.com) - front-end dashboard (more refined than Graphite)
 
 ### Mapped Ports
@@ -72,8 +72,8 @@ Host | Container | Service
 2004 |      2004 | [carbon receiver - pickle](http://graphite.readthedocs.io/en/latest/feeding-carbon.html#the-pickle-protocol)
 2023 |      2023 | [carbon aggregator - plaintext](http://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-aggregator-py)
 2024 |      2024 | [carbon aggregator - pickle](http://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-aggregator-py)
-8125 |      8125 | [statsd](https://github.com/etsy/statsd/blob/master/docs/server.md)
-8126 |      8126 | [statsd admin](https://github.com/etsy/statsd/blob/v0.7.2/docs/admin_interface.md)
+8125 |      8125 | [statsd](https://github.com/statsd/statsd/blob/master/docs/server.md)
+8126 |      8126 | [statsd admin](https://github.com/statsd/statsd/blob/master/docs/admin_interface.md)
 
 By default, statsd listens on the UDP port 8125. If you want it to listen on the TCP port 8125 instead, you can set the environment variable `STATSD_INTERFACE` to `tcp` when running the container.
 
@@ -165,7 +165,7 @@ A management interface (default on port 8126) allows you to manage statsd & retr
 echo counters | nc localhost 8126
 ```
 
-[More info & additional commands.](https://github.com/etsy/statsd/blob/master/docs/admin_interface.md)
+[More info & additional commands.](https://github.com/statsd/statsd/blob/master/docs/admin_interface.md)
 
 ## Secure Grafana
 
@@ -223,9 +223,9 @@ docker run -d\
 ## Additional Reading
 
 * [Introduction to Docker](http://docs.docker.io/#introduction)
-* [Official Statsd Documentation](https://github.com/etsy/statsd/)
+* [Official Statsd Documentation](https://github.com/statsd/statsd/)
 * [Practical Guide to StatsD/Graphite Monitoring](http://matt.aimonetti.net/posts/2013/06/26/practical-guide-to-graphite-monitoring/)
-* [Configuring Graphite for StatsD](https://github.com/etsy/statsd/blob/master/docs/graphite.md)
+* [Configuring Graphite for StatsD](https://github.com/statsd/statsd/blob/master/docs/graphite.md)
 
 ## Contributors
 
