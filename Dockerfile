@@ -1,4 +1,4 @@
-FROM alpine:3.10.2 as base
+FROM alpine:3.10.3 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
@@ -53,7 +53,7 @@ RUN true \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
-      django==1.11.24 \
+      django==1.11.25 \
       django-statsd-mozilla \
       fadvise \
       gunicorn \
@@ -93,12 +93,12 @@ RUN . /opt/graphite/bin/activate \
  && python3 ./setup.py install
 
 # install statsd (as we have to use this ugly way)
-ARG statsd_version=8d5363cb109cc6363661a1d5813e0b96787c4411
-ARG statsd_repo=https://github.com/etsy/statsd.git
+ARG statsd_version=0.8.5
+ARG statsd_repo=https://github.com/statsd/statsd.git
 WORKDIR /opt
 RUN git clone "${statsd_repo}" \
  && cd /opt/statsd \
- && git checkout "${statsd_version}" \
+ && git checkout tags/v"${statsd_version}" \
  && npm install
 
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
@@ -123,7 +123,6 @@ COPY conf /
 
 # copy /opt from build image
 COPY --from=build /opt /opt
-
 
 # defaults
 EXPOSE 80 2003-2004 2013-2014 2023-2024 8080 8125 8125/udp 8126
