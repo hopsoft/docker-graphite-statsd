@@ -11,6 +11,8 @@ shutdown() {
     sv force-stop $_srv
   done
 
+  echo "shutting down runsvdir"
+
   # shutdown runsvdir command
   kill -HUP $RUNSVDIR
   wait $RUNSVDIR
@@ -18,6 +20,7 @@ shutdown() {
   # give processes time to stop
   sleep 0.5
 
+  echo "killing rest processes"
   # kill any other processes still running in the container
   for _pid  in $(ps -eo pid | grep -v PID  | tr -d ' ' | grep -v '^1$' | head -n -6); do
     timeout -t 5 /bin/sh -c "kill $_pid && wait $_pid || kill -9 $_pid"
