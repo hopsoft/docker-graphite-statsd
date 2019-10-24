@@ -64,7 +64,7 @@ RUN true \
       mysqlclient \
       psycopg2
 
-ARG version=1.1.5
+ARG version=1.1.6
 
 # install whisper
 ARG whisper_version=${version}
