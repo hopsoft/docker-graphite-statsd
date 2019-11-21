@@ -56,7 +56,7 @@ RUN true \
       django==1.11.25 \
       django-statsd-mozilla \
       fadvise \
-      gunicorn \
+      gunicorn==19.9.0 \
       msgpack-python \
       redis \
       rrdtool \
