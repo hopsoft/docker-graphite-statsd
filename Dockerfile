@@ -1,4 +1,4 @@
-FROM alpine:3.10.3 as base
+FROM alpine:3.11.3 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
@@ -20,7 +20,7 @@ RUN true \
       sqlite \
       expect \
       dcron \
-      py-mysqldb \
+      py3-mysqlclient \
       mysql-dev \
       mysql-client \
       postgresql-dev \
@@ -42,10 +42,7 @@ RUN true \
       pkgconfig \
       py3-cairo \
       py3-pip \
-      py3-pyldap \
       py3-virtualenv \
-      py-rrd \
-      py-mysqldb \
       openldap-dev \
       python3-dev \
       rrdtool-dev \
@@ -53,16 +50,17 @@ RUN true \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
-      django==1.11.25 \
+      django==2.2.9 \
       django-statsd-mozilla \
       fadvise \
-      gunicorn==19.9.0 \
+      gunicorn==20.0.4 \
       msgpack-python \
       redis \
       rrdtool \
       python-ldap \
       mysqlclient \
-      psycopg2
+      psycopg2 \
+      scalene
 
 ARG version=1.1.6
 
