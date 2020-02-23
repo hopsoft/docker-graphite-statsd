@@ -60,9 +60,9 @@ RUN true \
       python-ldap \
       mysqlclient \
       psycopg2 \
-      scalene
+      django-cockroachdb==2.2.*
 
-ARG version=1.1.6
+ARG version=1.1.7
 
 # install whisper
 ARG whisper_version=${version}
