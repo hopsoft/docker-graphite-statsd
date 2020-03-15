@@ -47,10 +47,12 @@ RUN true \
       python3-dev \
       rrdtool-dev \
       wget \
+ && pip3 uninstall virtualenv \
+ && pip3 install virtualenv==16.7.10 \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
-      django==2.2.9 \
+      django==2.2.11 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
