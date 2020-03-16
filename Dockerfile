@@ -42,13 +42,11 @@ RUN true \
       pkgconfig \
       py3-cairo \
       py3-pip \
-      py3-virtualenv \
+      py3-virtualenv==16.7.8-r0 \
       openldap-dev \
       python3-dev \
       rrdtool-dev \
       wget \
- && pip3 uninstall virtualenv \
- && pip3 install virtualenv==16.7.10 \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
