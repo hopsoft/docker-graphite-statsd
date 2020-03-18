@@ -1,9 +1,3 @@
-<p align="center">
-  <a href="https://codefund.io/properties/456/visit-sponsor">
-    <img src="https://codefund.io/properties/456/sponsor" />
-  </a>
-</p>
-
 <!-- Tocer[start]: Auto-generated, don't remove. -->
 
 ## Table of Contents
