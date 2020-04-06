@@ -1,4 +1,4 @@
-FROM alpine:3.11.3 as base
+FROM alpine:3.11.5 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
@@ -50,7 +50,7 @@ RUN true \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
-      django==2.2.11 \
+      django==2.2.12 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
