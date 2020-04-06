@@ -44,8 +44,8 @@ done
 # remove stale pids
 find /opt/graphite/storage -maxdepth 1 -name '*.pid' -delete
 
-# chown logrotate fle (#111)
-chown 0644 /etc/logrotate.d/*
+# chmod logrotate fle (#111)
+chmod 0644 /etc/logrotate.d/*
 
 exec runsvdir -P /etc/service &
 RUNSVDIR=$!
