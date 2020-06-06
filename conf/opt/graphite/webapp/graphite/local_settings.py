@@ -365,6 +365,7 @@ CARBONLINK_HOSTS = [host.strip() for host in os.environ.get('GRAPHITE_CARBONLINK
 CARBONLINK_TIMEOUT = float(os.environ.get('GRAPHITE_CARBONLINK_TIMEOUT', '1'))
 #CARBONLINK_RETRY_DELAY = 15 # Seconds to blacklist a failed remote server
 #
+CARBONLINK_PICKLE_PROTOCOL = int(os.environ.get('CARBONLINK_PICKLE_PROTOCOL', '2'))
 
 # Type of metric hashing function.
 # The default `carbon_ch` is Graphite's traditional consistent-hashing implementation.

@@ -47,6 +47,7 @@ RUN true \
       python3-dev \
       rrdtool-dev \
       wget \
+      go==1.13.10-r0 \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
@@ -62,7 +63,7 @@ RUN true \
       psycopg2 \
       django-cockroachdb==2.2.*
 
-ARG version=1.1.7
+ARG version=master
 
 # install whisper
 ARG whisper_version=${version}
@@ -89,6 +90,17 @@ RUN . /opt/graphite/bin/activate \
  && cd /usr/local/src/graphite-web \
  && pip3 install -r requirements.txt \
  && python3 ./setup.py install
+
+# build go-carbon
+ARG gocarbon_version=0.14.0
+ARG gocarbon_repo=https://github.com/lomik/go-carbon.git
+WORKDIR /root
+RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
+ && cd /usr/local/src/go-carbon \
+ && git checkout tags/v"${gocarbon_version}" \
+ && make \
+ && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
+ && cp -fv go-carbon /opt/graphite/bin/go-carbon
 
 # install statsd (as we have to use this ugly way)
 ARG statsd_version=0.8.6
@@ -119,7 +131,7 @@ ENV STATSD_INTERFACE udp
 
 COPY conf /
 
-# copy /opt from build image
+# copy from build image
 COPY --from=build /opt /opt
 
 # defaults

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[[ -n "${GOCARBON}" ]] || exit 1
+
+exec /opt/graphite/bin/go-carbon -config="/opt/graphite/conf/go-carbon.conf" -daemon=false 2>&1
