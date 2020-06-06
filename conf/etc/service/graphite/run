@@ -17,14 +17,16 @@ if folder_empty /opt/graphite/storage; then
 	mkdir -p /opt/graphite/storage/whisper
 fi
 
+export PYTHONPATH=/opt/graphite/webapp
+export DJANGO_SETTINGS_MODULE=graphite.settings
+/opt/graphite/bin/django-admin.py makemigrations
+/opt/graphite/bin/django-admin.py migrate auth
+/opt/graphite/bin/django-admin.py migrate --run-syncdb
 if [ ! -e "/opt/graphite/storage/graphite.db" ]; then
-	export PYTHONPATH=/opt/graphite/webapp
-	export DJANGO_SETTINGS_MODULE=graphite.settings
-
-	/opt/graphite/bin/django-admin.py makemigrations
-	/opt/graphite/bin/django-admin.py migrate auth
-	/opt/graphite/bin/django-admin.py migrate --run-syncdb
-	/opt/graphite/bin/django_admin_init.exp
+    # if graphite use sqlite database - create superuser
+    if grep ENGINE /opt/graphite/webapp/graphite/local_settings.py | grep -q django.db.backends.sqlite3; then
+	    /opt/graphite/bin/django_admin_init.exp
+	fi
 fi
 
 if folder_empty /opt/graphite/webapp/graphite/functions/custom; then
