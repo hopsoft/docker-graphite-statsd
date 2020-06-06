@@ -1,4 +1,4 @@
-FROM alpine:3.11.5 as base
+FROM alpine:3.11.6 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
