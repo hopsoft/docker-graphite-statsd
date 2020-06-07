@@ -281,6 +281,19 @@ docker-compose up
 ## Running through Kubernetes
 You can use this 3-rd party repo with Graphite Helm chart - https://github.com/kiwigrid/helm-charts/tree/master/charts/graphite
 
+## About `root` process 
+
+This image uses `runit` as init system, to run multiple processes in single container. It's not against Docker guidelines but bit against Docker philosophy. Also, `runit` require root privileges to run, so, it's not possible to stop using root privileges, without completely rewrite this image. This is possible, of course, but it's better to use separate images per component then, and having separate repository for this new project. 
+
+## Experimental Features
+### go-carbon 
+
+Use `GOCARBON=1` environment variable to enable [go-carbon](https://github.com/lomik/go-carbon) instance instead of normal Carbon. Please note that it will disable carbon-aggregator too. Use `GRAPHITE_CLUSTER_SERVERS="127.0.0.1:8000"` if you want also use [carbonserver](https://github.com/grobian/carbonserver) feature.
+
+### brubeck
+
+Use `BRUBECK=1` environment variable to enable [brubeck]() instance of normal Statsd. Please note that brubeck has different config format and not fully compatible with original statsd.
+
 
 ## Additional Reading
 
