@@ -1,5 +1,7 @@
 #!/bin/sh
 
+[[ -n "${BRUBECK}" ]] && exit 1
+
 if folder_empty /opt/statsd/config/; then
 	cp /opt/defaultconf/statsd/config/*.js /opt/statsd/config/
 fi

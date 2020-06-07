@@ -25,6 +25,8 @@ RUN true \
       mysql-client \
       postgresql-dev \
       postgresql-client \
+      librdkafka \
+      jansson \
  && rm -rf \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
@@ -48,10 +50,12 @@ RUN true \
       rrdtool-dev \
       wget \
       go==1.13.10-r0 \
+      jansson-dev \
+      librdkafka-dev \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
-      django==2.2.12 \
+      django==2.2.13 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
@@ -63,7 +67,7 @@ RUN true \
       psycopg2 \
       django-cockroachdb==2.2.*
 
-ARG version=master
+ARG version=1.1.7
 
 # install whisper
 ARG whisper_version=${version}
@@ -91,18 +95,19 @@ RUN . /opt/graphite/bin/activate \
  && pip3 install -r requirements.txt \
  && python3 ./setup.py install
 
-# build go-carbon
+# build go-carbon w/pickle patch
+# https://github.com/lomik/go-carbon/pull/340
 ARG gocarbon_version=0.14.0
 ARG gocarbon_repo=https://github.com/lomik/go-carbon.git
-WORKDIR /root
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
  && git checkout tags/v"${gocarbon_version}" \
+ && curl https://patch-diff.githubusercontent.com/raw/lomik/go-carbon/pull/340.patch | git apply \
  && make \
  && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon
 
-# install statsd (as we have to use this ugly way)
+# install statsd
 ARG statsd_version=0.8.6
 ARG statsd_repo=https://github.com/statsd/statsd.git
 WORKDIR /opt
@@ -111,11 +116,19 @@ RUN git clone "${statsd_repo}" \
  && git checkout tags/v"${statsd_version}" \
  && npm install
 
+# install brubeck (experimental)
+ARG brubeck_repo=https://github.com/lukepalmer/brubeck.git
+ENV BRUBECK_NO_HTTP=1
+RUN git clone "${brubeck_repo}" /usr/local/src/brubeck \
+ && cd /usr/local/src/brubeck && ./script/bootstrap \
+ && chmod +x brubeck && mkdir -p /opt/graphite/bin/ \
+ && cp -fv brubeck /opt/graphite/bin/brubeck
+
 COPY conf/opt/graphite/conf/                             /opt/defaultconf/graphite/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/defaultconf/graphite/local_settings.py
 
 # config graphite
-COPY conf/opt/graphite/conf/*.conf /opt/graphite/conf/
+COPY conf/opt/graphite/conf/* /opt/graphite/conf/
 COPY conf/opt/graphite/webapp/graphite/local_settings.py /opt/graphite/webapp/graphite/local_settings.py
 WORKDIR /opt/graphite/webapp
 RUN mkdir -p /var/log/graphite/ \
