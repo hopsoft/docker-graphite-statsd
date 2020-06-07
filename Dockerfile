@@ -99,6 +99,7 @@ RUN . /opt/graphite/bin/activate \
 # https://github.com/lomik/go-carbon/pull/340
 ARG gocarbon_version=0.14.0
 ARG gocarbon_repo=https://github.com/lomik/go-carbon.git
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
  && git checkout tags/v"${gocarbon_version}" \
