@@ -1,3 +1,6 @@
+[![Docker Pulls](https://img.shields.io/docker/pulls/graphiteapp/graphite-statsd.svg?style=flat)](https://hub.docker.com/r/graphiteapp/graphite-statsd/) [![Docker Size](https://img.shields.io/docker/image-size/graphiteapp/graphite-statsd.svg?style=flat&?sort=date)](https://hub.docker.com/r/graphiteapp/graphite-statsd/)
+
+
 This is official Graphite docker image repo.
 
 This repo produces two different repos on Docker Hub - https://hub.docker.com/r/graphiteapp/graphite-statsd (stable repo, with manual releases) and https://hub.docker.com/r/graphiteapp/docker-graphite-statsd (development repo, with automatic builds, unstable, use with caution!)
