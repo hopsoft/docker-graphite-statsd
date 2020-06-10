@@ -38,13 +38,22 @@ export GRAPHITE_WSGI_THREADS=${GRAPHITE_WSGI_THREADS:-1}
 export GRAPHITE_WSGI_REQUEST_TIMEOUT=${GRAPHITE_WSGI_REQUEST_TIMEOUT:-65}
 export GRAPHITE_WSGI_REQUEST_LINE=${GRAPHITE_WSGI_REQUEST_LINE:-0}
 export GRAPHITE_WSGI_MAX_REQUESTS=${GRAPHITE_WSGI_MAX_REQUESTS:-1000}
+export GRAPHITE_WSGI_WORKER_CLASS=${GRAPHITE_WSGI_WORKER_CLASS:-"sync"}
+export GRAPHITE_WSGI_WORKER_CONNECTIONS=${GRAPHITE_WSGI_WORKER_CONNECTIONS:-1000}
 export PYTHONPATH=/opt/graphite/webapp
+
+if [ "${GRAPHITE_WSGI_WORKER_CLASS}" == "gevent" ]; then
+    export GUNICORN_EXTRA_PARAMS="--worker-connections=${GRAPHITE_WSGI_WORKER_CONNECTIONS} "
+else
+    export GUNICORN_EXTRA_PARAMS="--preload --threads=${GRAPHITE_WSGI_THREADS} "
+fi
 
 sv start nginx || exit 1
 
-exec /opt/graphite/bin/gunicorn wsgi --preload --pythonpath=/opt/graphite/webapp/graphite \
+exec /opt/graphite/bin/gunicorn wsgi --pythonpath=/opt/graphite/webapp/graphite \
+    ${GUNICORN_EXTRA_PARAMS} \
+    --worker-class=${GRAPHITE_WSGI_WORKER_CLASS} \
     --workers=${GRAPHITE_WSGI_PROCESSES} \
-    --threads=${GRAPHITE_WSGI_THREADS} \
     --limit-request-line=${GRAPHITE_WSGI_REQUEST_LINE} \
     --max-requests=${GRAPHITE_WSGI_MAX_REQUESTS} \
     --timeout=${GRAPHITE_WSGI_REQUEST_TIMEOUT} \

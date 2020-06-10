@@ -1,3 +1,6 @@
+[![Docker Pulls](https://img.shields.io/docker/pulls/graphiteapp/graphite-statsd.svg?style=flat)](https://hub.docker.com/r/graphiteapp/graphite-statsd/) [![Docker Size](https://img.shields.io/docker/image-size/graphiteapp/graphite-statsd.svg?style=flat&?sort=date)](https://hub.docker.com/r/graphiteapp/graphite-statsd/)
+
+
 This is official Graphite docker image repo.
 
 This repo produces two different repos on Docker Hub - https://hub.docker.com/r/graphiteapp/graphite-statsd (stable repo, with manual releases) and https://hub.docker.com/r/graphiteapp/docker-graphite-statsd (development repo, with automatic builds, unstable, use with caution!)
@@ -115,6 +118,8 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_WSGI_REQUEST_TIMEOUT: (65) maximum number of seconds that a request is allowed to run before the daemon process is restarted
 * GRAPHITE_WSGI_MAX_REQUESTS: (1000) limit on the number of requests a daemon process should process before it is shutdown and restarted.
 * GRAPHITE_WSGI_REQUEST_LINE: (0) The maximum size of HTTP request line in bytes.
+* GRAPHITE_WSGI_WORKER_CLASS ("sync"): The type of workers to use. The default class (sync) should handle most “normal” types of workloads. See [gunucorn docs](https://docs.gunicorn.org/en/stable/settings.html#worker-class).
+* GRAPHITE_WSGI_WORKER_CONNECTIONS (1000): The maximum number of simultaneous clients (for Eventlet and Gevent worker types only). See [gunicorn docs](https://docs.gunicorn.org/en/stable/settings.html#worker-connections).
 
 ### Graphite-web
 * GRAPHITE_ALLOWED_HOSTS: (*) In Django 1.5+ set this to the list of hosts your graphite instances is accessible as. See: [https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS)
