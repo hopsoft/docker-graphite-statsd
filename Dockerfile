@@ -97,7 +97,16 @@ RUN . /opt/graphite/bin/activate \
  && pip3 install -r requirements.txt \
  && python3 ./setup.py install
 
-# build go-carbon w/pickle patch
+# install statsd
+ARG statsd_version=0.8.6
+ARG statsd_repo=https://github.com/statsd/statsd.git
+WORKDIR /opt
+RUN git clone "${statsd_repo}" \
+ && cd /opt/statsd \
+ && git checkout tags/v"${statsd_version}" \
+ && npm install
+
+# build go-carbon w/pickle patch (experimental)
 # https://github.com/lomik/go-carbon/pull/340
 ARG gocarbon_version=0.14.0
 ARG gocarbon_repo=https://github.com/lomik/go-carbon.git
@@ -109,15 +118,6 @@ RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && make \
  && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon
-
-# install statsd
-ARG statsd_version=0.8.6
-ARG statsd_repo=https://github.com/statsd/statsd.git
-WORKDIR /opt
-RUN git clone "${statsd_repo}" \
- && cd /opt/statsd \
- && git checkout tags/v"${statsd_version}" \
- && npm install
 
 # install brubeck (experimental)
 ARG brubeck_repo=https://github.com/lukepalmer/brubeck.git
