@@ -1,4 +1,4 @@
-FROM alpine:3.11.6 as base
+FROM alpine:3.12.0 as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
@@ -44,14 +44,14 @@ RUN true \
       pkgconfig \
       py3-cairo \
       py3-pip \
-      py3-virtualenv==16.7.8-r0 \
       openldap-dev \
       python3-dev \
       rrdtool-dev \
       wget \
-      go==1.13.10-r0 \
+      go==1.13.11-r0 \
       jansson-dev \
       librdkafka-dev \
+ && pip3 install virtualenv==16.7.10 \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip3 install \
