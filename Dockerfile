@@ -1,11 +1,18 @@
-FROM phusion/baseimage:0.9.19
+FROM phusion/baseimage:bionic-1.0.0
 MAINTAINER Nathan Hopkins <natehop@gmail.com>
+
+CMD ["/sbin/my_init"]
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN curl https://packages.grafana.com/gpg.key | apt-key add -\
  && apt-get -y update\
- && apt-get -y upgrade\
- && apt-get -y --force-yes install vim\
+ && apt-get --assume-yes --verbose-versions --allow-change-held-packages -o Dpkg::Options::="--force-confdef" upgrade\
+ && apt-get install -y apt-transport-https\
+ && apt-get install -y software-properties-common wget\
+ && add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"\
+ && apt-get -y update\
+ && apt-get -y install vim\
+ expect\
  nginx\
  python-dev\
  python-flup\
@@ -97,5 +104,3 @@ VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/grafana", "/etc/ngi
 WORKDIR /
 ENV HOME /root
 ENV STATSD_INTERFACE udp
-
-CMD ["/sbin/my_init"]
