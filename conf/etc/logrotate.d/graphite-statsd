@@ -1,8 +1,8 @@
 /var/log/*.log /var/log/*/*.log {
-  weekly
+  daily
   size 50M
   missingok
-  rotate 10
+  rotate 14
   compress
   delaycompress
   notifempty

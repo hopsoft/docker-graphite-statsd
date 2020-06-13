@@ -1,0 +1,24 @@
+{
+  "sharding" : false,
+  "server_name" : "brubeck",
+  "dumpfile" : "/tmp/brubeck.dump",
+  "capacity" : 15,
+  "backends" : [
+    {
+      "type" : "carbon",
+      "address" : "localhost",
+      "port" : 2003,
+      "frequency" : 10
+    }
+  ],
+  "samplers" : [
+    {
+      "type" : "statsd",
+      "address" : "0.0.0.0",
+      "port" : 8125,
+      "workers" : 4,
+      "multisock" : true,
+      "multimsg" : 8
+    }
+  ]
+}

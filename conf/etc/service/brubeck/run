@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[[ -n "${BRUBECK}" ]] || exit 1
+
+exec /opt/graphite/bin/brubeck --config=/opt/graphite/conf/brubeck.json 2>&1
