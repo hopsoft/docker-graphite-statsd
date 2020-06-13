@@ -1,6 +1,3 @@
 #!/bin/sh
 
-# disable if go-carbon enabled
-[[ -n "${GOCARBON}" ]] && exit 1
-
 exec python3 /opt/graphite/bin/carbon-aggregator.py start --debug 2>&1

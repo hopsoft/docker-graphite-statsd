@@ -293,7 +293,7 @@ This image uses `runit` as init system, to run multiple processes in single cont
 ## Experimental Features
 ### go-carbon 
 
-Use `GOCARBON=1` environment variable to enable [go-carbon](https://github.com/lomik/go-carbon) instance instead of normal Carbon. Please note that it will disable carbon-aggregator too. Use `GRAPHITE_CLUSTER_SERVERS="127.0.0.1:8000"` if you want also use [carbonserver](https://github.com/grobian/carbonserver) feature.
+Use `GOCARBON=1` environment variable to enable [go-carbon](https://github.com/lomik/go-carbon) instance instead of normal Carbon. Use `GRAPHITE_CLUSTER_SERVERS="127.0.0.1:8000"` if you want also use [carbonserver](https://github.com/grobian/carbonserver) feature.
 
 ### brubeck
 
