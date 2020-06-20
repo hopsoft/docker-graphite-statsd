@@ -2,4 +2,8 @@
 
 [[ -n "${BRUBECK}" ]] || exit 1
 
+if [ ! -f /opt/graphite/conf/brubeck.json ]; then
+	cp /opt/defaultconf/graphite/brubeck.json /opt/graphite/conf/brubeck.json
+fi
+
 exec /opt/graphite/bin/brubeck --config=/opt/graphite/conf/brubeck.json 2>&1

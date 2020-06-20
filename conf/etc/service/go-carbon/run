@@ -2,4 +2,8 @@
 
 [[ -n "${GOCARBON}" ]] || exit 1
 
+if [ ! -f /opt/graphite/conf/go-carbon.conf ]; then
+	cp /opt/defaultconf/graphite/go-carbon.conf /opt/graphite/conf/go-carbon.conf
+fi
+
 exec /opt/graphite/bin/go-carbon -config="/opt/graphite/conf/go-carbon.conf" -daemon=false 2>&1
