@@ -155,8 +155,9 @@ Additional environment variables can be set to adjust performance.
 ## TagDB
 Graphite stores tag information in a separate tag database (TagDB). Please check [tags documentation](https://graphite.readthedocs.io/en/latest/tags.html) for details.
 
+* CARBON_DISABLE_TAGS: (false) if set to 1 or true will disable TagDB on carbon-cache.
 * GRAPHITE_TAGDB: ('graphite.tags.localdatabase.LocalDatabaseTagDB') TagDB is a pluggable store, by default it uses the local SQLite database.
-* REDIS_TAGDB: (false) if set to true will use local Redis instance to store tags.
+* REDIS_TAGDB: (false) if set to 1 or true will use local Redis instance to store tags.
 * GRAPHITE_TAGDB_CACHE_DURATION: (60) Time to cache seriesByTag results.
 * GRAPHITE_TAGDB_AUTOCOMPLETE_LIMIT: (100) Autocomplete default result limit.
 * GRAPHITE_TAGDB_REDIS_HOST: ('localhost') Redis TagDB host
