@@ -120,9 +120,11 @@ RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon
 
 # install brubeck (experimental)
+ARG brubeck_version=7e0fbc33ce44e162470de7778b887a75a5ee70bd
 ARG brubeck_repo=https://github.com/lukepalmer/brubeck.git
 ENV BRUBECK_NO_HTTP=1
 RUN git clone "${brubeck_repo}" /usr/local/src/brubeck \
+ && git checkout "${brubeck_version}" \
  && cd /usr/local/src/brubeck && ./script/bootstrap \
  && chmod +x brubeck && mkdir -p /opt/graphite/bin/ \
  && cp -fv brubeck /opt/graphite/bin/brubeck
