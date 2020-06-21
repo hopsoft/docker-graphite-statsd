@@ -2,6 +2,8 @@
 
 [[ -n "${BRUBECK}" ]] || exit 1
 
+[[ -f "./down" ]] && exit 1
+
 if [ ! -f /opt/graphite/conf/brubeck.json ]; then
 	cp /opt/defaultconf/graphite/brubeck.json /opt/graphite/conf/brubeck.json
 fi

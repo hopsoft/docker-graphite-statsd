@@ -1,5 +1,8 @@
 #!/bin/sh
 
 [ -n "${REDIS_TAGDB}" ] || exit 0
+
+[[ -f "./down" ]] && exit 1
+
 mkdir -p /var/log/redis/
 exec /usr/bin/redis-server /etc/redis/redis.conf

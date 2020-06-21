@@ -1,5 +1,7 @@
 #!/bin/sh
 
+[[ -f "./down" ]] && exit 1
+
 if folder_empty /var/log/graphite; then
 	mkdir -p /var/log/graphite
 	touch /var/log/syslog
@@ -48,7 +50,8 @@ else
     export GUNICORN_EXTRA_PARAMS="--preload --threads=${GRAPHITE_WSGI_THREADS} "
 fi
 
-sv start nginx || exit 1
+# start nginx if not disabled
+[[ -f "/etc/service/nginx/down" ]] || sv start nginx || exit 1
 
 exec /opt/graphite/bin/gunicorn wsgi --pythonpath=/opt/graphite/webapp/graphite \
     ${GUNICORN_EXTRA_PARAMS} \

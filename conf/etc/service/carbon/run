@@ -3,6 +3,8 @@
 # disable if go-carbon enabled
 [[ -n "${GOCARBON}" ]] && exit 1
 
+[[ -f "./down" ]] && exit 1
+
 if [ -n "${CARBON_DISABLE_TAGS}" ]; then
     # trying to disable tags in carbon.conf file
     sed -i 's/ENABLE_TAGS = True/ENABLE_TAGS = False/g' /opt/graphite/conf/carbon.conf

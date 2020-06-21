@@ -2,4 +2,6 @@
 
 [[ -n "${RELAY}" ]] || exit 1
 
+[[ -f "./down" ]] && exit 1
+
 exec python3 /opt/graphite/bin/carbon-relay.py start --debug 2>&1
