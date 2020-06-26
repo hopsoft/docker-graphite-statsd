@@ -24,7 +24,7 @@ export DJANGO_SETTINGS_MODULE=graphite.settings
 /opt/graphite/bin/django-admin.py makemigrations
 /opt/graphite/bin/django-admin.py migrate auth
 /opt/graphite/bin/django-admin.py migrate --run-syncdb
-if [ ! -e "/opt/graphite/storage/graphite.db" ]; then
+if [ -e "/opt/graphite/storage/graphite.db" ]; then
     # if graphite use sqlite database - create superuser
     if grep ENGINE /opt/graphite/webapp/graphite/local_settings.py | grep -q django.db.backends.sqlite3; then
 	    /opt/graphite/bin/django_admin_init.exp
