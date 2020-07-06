@@ -3,8 +3,9 @@ MAINTAINER Nathan Hopkins <natehop@gmail.com>
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN curl https://packages.grafana.com/gpg.key | apt-key add -\
+ && add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"\
  && apt-get -y update\
- && apt-get -y upgrade\
+ && apt-get --assume-yes -o Dpkg::Options::="--force-confold" upgrade\
  && apt-get -y --force-yes install vim\
  nginx\
  python-dev\
