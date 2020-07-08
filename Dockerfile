@@ -61,7 +61,7 @@ RUN true \
       gunicorn==20.0.4 \
       eventlet>=0.24.1 \
       gevent>=1.4 \
-      msgpack-python \
+      msgpack-python==0.6.2 \
       redis \
       rrdtool \
       python-ldap \
