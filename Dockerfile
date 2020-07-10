@@ -43,7 +43,6 @@ RUN true \
       libffi-dev \
       pkgconfig \
       py3-cairo \
-      py3-pip \
       openldap-dev \
       python3-dev \
       rrdtool-dev \
@@ -51,10 +50,12 @@ RUN true \
       go==1.13.11-r0 \
       jansson-dev \
       librdkafka-dev \
- && pip3 install virtualenv==16.7.10 \
+ && curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
+ && python3 /tmp/get-pip.py && rm /tmp/get-pip.py \
+ && pip install virtualenv==16.7.10 \
  && virtualenv /opt/graphite \
  && . /opt/graphite/bin/activate \
- && pip3 install \
+ && pip install \
       django==2.2.13 \
       django-statsd-mozilla \
       fadvise \
