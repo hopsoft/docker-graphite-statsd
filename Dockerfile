@@ -61,7 +61,7 @@ RUN true \
       gunicorn==20.0.4 \
       eventlet>=0.24.1 \
       gevent>=1.4 \
-      msgpack-python==0.6.2 \
+      msgpack==0.6.2 \
       redis \
       rrdtool \
       python-ldap \
@@ -107,14 +107,14 @@ RUN git clone "${statsd_repo}" \
  && npm install
 
 # build go-carbon w/pickle patch (experimental)
-# https://github.com/lomik/go-carbon/pull/340
+# https://github.com/go-graphite/go-carbon/pull/340
 ARG gocarbon_version=0.14.0
-ARG gocarbon_repo=https://github.com/lomik/go-carbon.git
+ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
  && git checkout tags/v"${gocarbon_version}" \
- && curl https://patch-diff.githubusercontent.com/raw/lomik/go-carbon/pull/340.patch | git apply \
+ && curl https://patch-diff.githubusercontent.com/raw/go-graphite/go-carbon/pull/340.patch | git apply \
  && make \
  && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon
