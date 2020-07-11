@@ -24,12 +24,7 @@ export DJANGO_SETTINGS_MODULE=graphite.settings
 /opt/graphite/bin/django-admin.py makemigrations
 /opt/graphite/bin/django-admin.py migrate auth
 /opt/graphite/bin/django-admin.py migrate --run-syncdb
-if [ -e "/opt/graphite/storage/graphite.db" ]; then
-    # if graphite use sqlite database - create superuser
-    if grep ENGINE /opt/graphite/webapp/graphite/local_settings.py | grep -q django.db.backends.sqlite3; then
-	    /opt/graphite/bin/django_admin_init.exp
-	fi
-fi
+/opt/graphite/bin/django_admin_init.sh || true
 
 if folder_empty /opt/graphite/webapp/graphite/functions/custom; then
 	touch /opt/graphite/webapp/graphite/functions/custom/__init__.py
@@ -42,8 +37,6 @@ export GRAPHITE_WSGI_REQUEST_LINE=${GRAPHITE_WSGI_REQUEST_LINE:-0}
 export GRAPHITE_WSGI_MAX_REQUESTS=${GRAPHITE_WSGI_MAX_REQUESTS:-1000}
 export GRAPHITE_WSGI_WORKER_CLASS=${GRAPHITE_WSGI_WORKER_CLASS:-"sync"}
 export GRAPHITE_WSGI_WORKER_CONNECTIONS=${GRAPHITE_WSGI_WORKER_CONNECTIONS:-1000}
-export PYTHONPATH=/opt/graphite/webapp
-
 if [ "${GRAPHITE_WSGI_WORKER_CLASS}" == "gevent" ]; then
     export GUNICORN_EXTRA_PARAMS="--worker-connections=${GRAPHITE_WSGI_WORKER_CONNECTIONS} "
 else
