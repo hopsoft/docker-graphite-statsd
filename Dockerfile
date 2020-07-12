@@ -107,15 +107,13 @@ RUN git clone "${statsd_repo}" \
  && git checkout tags/v"${statsd_version}" \
  && npm install
 
-# build go-carbon w/pickle patch (experimental)
+# build go-carbon (experimental)
 # https://github.com/go-graphite/go-carbon/pull/340
-ARG gocarbon_version=0.14.0
+ARG gocarbon_version=0.15.0
 ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
  && git checkout tags/v"${gocarbon_version}" \
- && curl https://patch-diff.githubusercontent.com/raw/go-graphite/go-carbon/pull/340.patch | git apply \
  && make \
  && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon
