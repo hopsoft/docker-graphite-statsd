@@ -114,7 +114,7 @@ Then update the root user's profile at: [http://localhost/admin/auth/user/1/](ht
 Additional environment variables can be set to adjust performance.
 
 * GRAPHITE_WSGI_PROCESSES: (4) the number of WSGI daemon processes that should be started
-* GRAPHITE_WSGI_THREADS: (2) the number of threads to be created to handle requests in each daemon process
+* GRAPHITE_WSGI_THREADS: (1) the number of threads to be created to handle requests in each daemon process. See [gunicorn docs](https://docs.gunicorn.org/en/stable/settings.html#threads)
 * GRAPHITE_WSGI_REQUEST_TIMEOUT: (65) maximum number of seconds that a request is allowed to run before the daemon process is restarted
 * GRAPHITE_WSGI_MAX_REQUESTS: (1000) limit on the number of requests a daemon process should process before it is shutdown and restarted.
 * GRAPHITE_WSGI_REQUEST_LINE: (0) The maximum size of HTTP request line in bytes.
