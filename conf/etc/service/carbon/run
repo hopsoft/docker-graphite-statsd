@@ -10,4 +10,6 @@ if [ -n "${CARBON_DISABLE_TAGS}" ]; then
     sed -i 's/ENABLE_TAGS = True/ENABLE_TAGS = False/g' /opt/graphite/conf/carbon.conf
 fi
 
-exec python3 /opt/graphite/bin/carbon-cache.py start --debug 2>&1
+BIN=/opt/graphite/bin/python3
+[[ -f "/opt/graphite/bin/pypy3" ]] && BIN=/opt/graphite/bin/pypy3
+exec ${BIN} /opt/graphite/bin/carbon-cache.py start --debug 2>&1

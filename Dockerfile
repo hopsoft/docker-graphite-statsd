@@ -1,9 +1,11 @@
-FROM alpine:3.12.0 as base
+ARG BASEIMAGE=alpine:3.12.0
+FROM $BASEIMAGE as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 RUN true \
- && apk add --no-cache \
+ && apk add --update --no-cache \
       cairo \
+      cairo-dev \
       collectd \
       collectd-disk \
       collectd-nginx \
@@ -14,17 +16,16 @@ RUN true \
       nginx \
       nodejs \
       npm \
-      py3-pyldap \
       redis \
       runit \
       sqlite \
       expect \
       dcron \
-      py3-mysqlclient \
-      mysql-dev \
+      python3-dev \
       mysql-client \
-      postgresql-dev \
+      mysql-dev \
       postgresql-client \
+      postgresql-dev \
       librdkafka \
       jansson \
  && rm -rf \
@@ -36,26 +37,31 @@ RUN true \
 FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
+ARG python_binary
+
 RUN true \
  && apk add --update \
       alpine-sdk \
       git \
-      libffi-dev \
       pkgconfig \
-      py3-cairo \
+      wget \
+      go \
+      cairo-dev \
+      libffi-dev \
       openldap-dev \
       python3-dev \
       rrdtool-dev \
-      wget \
-      go==1.13.11-r0 \
       jansson-dev \
       librdkafka-dev \
+      mysql-dev \
+      postgresql-dev \
  && curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
- && python3 /tmp/get-pip.py && rm /tmp/get-pip.py \
+ && $python_binary /tmp/get-pip.py && rm /tmp/get-pip.py \
  && pip install virtualenv==16.7.10 \
- && virtualenv /opt/graphite \
+ && virtualenv -p $python_binary /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip install \
+      cairocffi==1.1.0 \
       django==2.2.13 \
       django-statsd-mozilla \
       fadvise \
@@ -78,7 +84,7 @@ ARG whisper_repo=https://github.com/graphite-project/whisper.git
 RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper \
  && cd /usr/local/src/whisper \
  && . /opt/graphite/bin/activate \
- && python3 ./setup.py install
+ && $python_binary ./setup.py install
 
 # install carbon
 ARG carbon_version=${version}
@@ -87,7 +93,7 @@ RUN . /opt/graphite/bin/activate \
  && git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon \
  && cd /usr/local/src/carbon \
  && pip3 install -r requirements.txt \
- && python3 ./setup.py install
+ && $python_binary ./setup.py install
 
 # install graphite
 ARG graphite_version=${version}
@@ -96,7 +102,7 @@ RUN . /opt/graphite/bin/activate \
  && git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web \
  && cd /usr/local/src/graphite-web \
  && pip3 install -r requirements.txt \
- && python3 ./setup.py install
+ && $python_binary ./setup.py install
 
 # install statsd
 ARG statsd_version=0.8.6

@@ -2,4 +2,6 @@
 
 [[ -f "./down" ]] && exit 1
 
-exec python3 /opt/graphite/bin/carbon-aggregator.py start --debug 2>&1
+BIN=python3
+[[ -f "/opt/graphite/bin/pypy3" ]] && BIN=pypy
+exec ${BIN} /opt/graphite/bin/carbon-aggregator.py start --debug 2>&1

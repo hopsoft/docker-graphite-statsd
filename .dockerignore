@@ -1,0 +1,6 @@
+.github
+.idea
+.hadolint*
+.gitignore
+build*
+__build*
