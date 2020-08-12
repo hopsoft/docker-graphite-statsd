@@ -4,6 +4,8 @@ services:
   statsd:
    build:
     context: .
+    args:
+      python_binary: python3
    volumes:
     - ./conf/opt/graphite/conf:/opt/graphite/conf
    ports:
