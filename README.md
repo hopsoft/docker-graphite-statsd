@@ -3,11 +3,14 @@
 
 This is official Graphite docker image repo.
 
-FYI: Autobuild repo https://hub.docker.com/r/graphiteapp/docker-graphite-statsd (development repo, with automatic builds, unstable) is deprecated and was removed from Docker Hub. If you want to use unstable builds please use `master` tag in stable repo (https://hub.docker.com/r/graphiteapp/graphite-statsd)
-
 This repo was based on [@hopsoft's](https://github.com/hopsoft/) [docker-graphite-statsd](https://github.com/hopsoft/docker-graphite-statsd) docker image and was used as base for "official" Graphite docker image with his permission. Also, it contains parts of famous [@obfuscurity's](https://github.com/obfuscurity/) [synthesize](https://github.com/obfuscurity/synthesize) Graphite installer. Thanks a lot, Nathan and Jason!
 
 Any suggestions / patches etc. are welcome!
+
+#### Tags / architectures
+ - Autobuild repo https://hub.docker.com/r/graphiteapp/docker-graphite-statsd (development repo, with automatic builds, unstable) is deprecated and was removed from Docker Hub. If you want to use unstable builds please use `master` tag in stable repo (https://hub.docker.com/r/graphiteapp/graphite-statsd).
+ - Starting from `1.1.7-1` we building arm/arm64 versions too. 
+ - Starting from `1.1.7-6` we building '-pypy' version of x64 image too, use it in case of performance issues (see PR #151 for details).
 
 # Docker Image for Graphite & Statsd
 
