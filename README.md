@@ -316,20 +316,24 @@ Use `BRUBECK=1` environment variable to enable [brubeck]() instance of normal St
 Build the image yourself.
 
 1. `git clone https://github.com/graphite-project/docker-graphite-statsd.git`
-1. `docker build -t graphiteapp/graphite-statsd .`
+2. `docker build --build-arg python_binary=python3 -t graphiteapp/graphite-statsd .`
+#### For using pypy instead of python3
+2. `docker build --build-arg BASEIMAGE=jamiehewland/alpine-pypy:3.6-7.3-alpine3.11 --build-arg python_binary=/usr/local/bin/pypy3 -t graphiteapp/graphite-statsd .`
+
 
 Alternate versions can be specified via `--build-arg`:
 
 * `version` will set the version/branch used for graphite-web, carbon & whisper
 * `graphite_version`, `carbon_version` & `whisper_version` set the version/branch used for individual components
 * `statsd_version` sets the version/branch used for statsd (note statsd version is prefixed with v)
+* `python_binary` sets path to python binary and `BASEIMAGE` sets path to base image. 
 
 Alternate repositories can also be specified with the build args `graphite_repo`, `carbon_repo`, `whisper_repo` & `statsd_repo`.
 
 To build an image from latest graphite, whisper & carbon master, run:
 
-`docker build -t graphiteapp/graphite-statsd . --build-arg version=master`
+`docker build -t graphiteapp/graphite-statsd . --build-arg version=master --build-arg python_binary=python3`
 
 To build an image using a fork of graphite-web, run:
 
-`docker build -t forked/graphite-statsd . --build-arg version=master --build-arg graphite_repo=https://github.com/forked/graphite-web.git`
+`docker build -t forked/graphite-statsd . --build-arg version=master --build-arg graphite_repo=https://github.com/forked/graphite-web.git --build-arg python_binary=python3`
