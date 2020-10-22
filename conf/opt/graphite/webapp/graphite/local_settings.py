@@ -94,6 +94,9 @@ URL_PREFIX = str(os.environ.get('GRAPHITE_URL_ROOT', ''))
 #FIND_TIMEOUT = 3.0  # Timeout for metric find requests
 #FETCH_TIMEOUT = 3.0  # Timeout to fetch series data
 
+# Allow UTF-8 metrics' names (can cause performance issues)
+UTF8_METRICS = os.environ.get('GRAPHITE_UTF8_METRICS', 'false').lower() in ['1', 'true', 'yes']
+
 #####################################
 # Filesystem Paths #
 #####################################

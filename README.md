@@ -128,6 +128,7 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_ALLOWED_HOSTS: (*) In Django 1.5+ set this to the list of hosts your graphite instances is accessible as. See: [https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-ALLOWED_HOSTS)
 * GRAPHITE_TIME_ZONE: (Etc/UTC) Set your local timezone
 * GRAPHITE_DATE_FORMAT: (%m/%d) Set your local date format
+* GRAPHITE_UTF8_METRICS: (false) Allow UTF-8 metrics names (can cause performance issues)
 * GRAPHITE_LOG_ROTATION: (true) rotate logs
 * GRAPHITE_LOG_ROTATION_COUNT: (1) number of logs to keep
 * GRAPHITE_LOG_RENDERING_PERFORMANCE: (true) log performance information
