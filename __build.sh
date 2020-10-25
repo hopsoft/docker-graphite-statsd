@@ -4,4 +4,4 @@ docker buildx build . \
         --build-arg python_binary=python3 \
         --platform linux/arm,linux/arm64,linux/amd64 \
         --no-cache \
-        --tag graphite-statsd:$VERSION
+        --tag graphite-statsd:$VERSION --push

@@ -37,7 +37,7 @@ RUN true \
 FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
-ARG python_binary
+ARG python_binary=python3
 
 RUN true \
  && apk add --update \
@@ -56,13 +56,13 @@ RUN true \
       mysql-dev \
       postgresql-dev \
  && curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
- && $python_binary /tmp/get-pip.py && rm /tmp/get-pip.py \
+ && $python_binary /tmp/get-pip.py pip==20.1.1 setuptools==50.3.2 wheel==0.35.1 && rm /tmp/get-pip.py \
  && pip install virtualenv==16.7.10 \
  && virtualenv -p $python_binary /opt/graphite \
  && . /opt/graphite/bin/activate \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.13 \
+      django==2.2.16 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
@@ -105,7 +105,7 @@ RUN . /opt/graphite/bin/activate \
  && $python_binary ./setup.py install
 
 # install statsd
-ARG statsd_version=0.8.6
+ARG statsd_version=0.9.0
 ARG statsd_repo=https://github.com/statsd/statsd.git
 WORKDIR /opt
 RUN git clone "${statsd_repo}" \
@@ -115,7 +115,7 @@ RUN git clone "${statsd_repo}" \
 
 # build go-carbon (experimental)
 # https://github.com/go-graphite/go-carbon/pull/340
-ARG gocarbon_version=0.15.0
+ARG gocarbon_version=0.15.4
 ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
@@ -125,7 +125,7 @@ RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon
 
 # install brubeck (experimental)
-ARG brubeck_version=7e0fbc33ce44e162470de7778b887a75a5ee70bd
+ARG brubeck_version=e95d95945a9319be38e593e95691344a99fe851d
 ARG brubeck_repo=https://github.com/lukepalmer/brubeck.git
 ENV BRUBECK_NO_HTTP=1
 RUN git clone "${brubeck_repo}" /usr/local/src/brubeck \
