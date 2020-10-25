@@ -9,3 +9,4 @@ Session.vim
 .netrwhist
 *~
 .project
+.build

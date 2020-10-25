@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-VERSION=master
-docker build . --build-arg python_binary=python3 --no-cache --tag graphite-statsd:$VERSION
+VERSION=1.1.7-7
+docker build . --build-arg python_binary=python3 --no-cache --tag graphiteapp/graphite-statsd:$VERSION
