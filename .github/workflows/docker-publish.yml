@@ -1,4 +1,4 @@
-name: Build test images
+name: Build images
 
 on:
   push:
@@ -19,10 +19,10 @@ jobs:
           platforms: all
       # Buildx provides an easier way of building Docker images for other architectures
       - uses: docker/setup-buildx-action@master
-      - name: Build amd64 image
+      - name: Build test amd64 python3 image
         run: |
           docker buildx build --platform=linux/amd64 --load -t graphiteapp/graphite-statsd:test .
-      - name: Run Snyk to check amd64 image for vulnerabilities
+      - name: Run Snyk to check test amd64 python3 image for vulnerabilities
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -35,18 +35,39 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      #- name: Login to ghcr.io
-      #  run: |
-      #    echo "${{ secrets.GHCR_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build and push amd64 python3 image to Docker Hub
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:${VERSION} .
+          # if it's not from master - push also latest
+          [ "$VERSION" == "master" ] || \
+          docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:latest .
       - name: Build and push amd64 pypy image to Docker Hub
         run: |
-          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --push -t graphiteapp/graphite-statsd:test-pypy .
-      #- name: Build and push amd64 pypy image to ghcr.io
-      #  run: |
-      #    docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --push -t ghcr.io/graphite-project/graphite-statsd:test-pypy .
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
+          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --push -t graphiteapp/graphite-statsd:${VERSION}-pypy .
       - name: Build and push multi-platform images to Docker Hub
         run: |
-          docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t graphiteapp/graphite-statsd:test .
-      #- name: Build and push multi-platform images to ghcr.io
-      #  run: |
-      #    docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t ghcr.io/graphite-project/graphite-statsd:test .
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
+          docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t graphiteapp/graphite-statsd:${VERSION} .
+          # if it's not from master - push also latest
+          [ "$VERSION" == "master" ] || \
+          docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t graphiteapp/graphite-statsd:latest .
+#      - name: Login to ghcr.io
+#        run: |
+#          echo "${{ secrets.GHCR_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+#      - name: Build and push amd64 pypy image to ghcr.io
+#        run: |
+#          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --push -t ghcr.io/graphite-project/graphite-statsd:test-pypy .
+#      - name: Build and push multi-platform images to ghcr.io
+#        run: |
+#          docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t ghcr.io/graphite-project/graphite-statsd:test .
