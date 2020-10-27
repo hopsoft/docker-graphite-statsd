@@ -1,0 +1,49 @@
+name: Build master
+
+on:
+  push:
+    branches: [ master ]
+
+env:
+  PYPY_IMAGE: jamiehewland/alpine-pypy:3.6-7.3-alpine3.11
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # QEMU is used to emulated the ARM architecture, allowing us
+      # to build not-x86 images
+      - uses: docker/setup-qemu-action@master
+        with:
+          platforms: all
+      # Buildx provides an easier way of building Docker images for other architectures
+      - uses: docker/setup-buildx-action@master
+      - name: Build amd64 python3 image
+        run: |
+          docker buildx build --platform=linux/amd64 --load -t graphiteapp/graphite-statsd:master .
+      - name: Run Snyk to check amd64 python3 image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+          image: graphiteapp/graphite-statsd:master
+          args: --file=Dockerfile --platform=linux/amd64 --project-name=graphite-project/docker-graphite-statsd
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push amd64 python3 image to Docker Hub
+        run: |
+          docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:master .
+      - name: Build and push amd64 pypy image to Docker Hub
+        run: |
+          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --push -t graphiteapp/graphite-statsd:master-pypy .
+#      - name: Login to ghcr.io
+#        run: |
+#          echo "${{ secrets.GHCR_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+#      - name: Build and push amd64 pypy image to ghcr.io
+#        run: |
+#          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --push -t ghcr.io/graphite-project/graphite-statsd:test-pypy .
