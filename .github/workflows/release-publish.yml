@@ -42,8 +42,6 @@ jobs:
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:${VERSION} .
-          # if it's not from master - push also latest
-          [ "$VERSION" == "master" ] || \
           docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:latest .
       - name: Build and push amd64 pypy image to Docker Hub
         run: |
@@ -59,8 +57,6 @@ jobs:
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
           docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t graphiteapp/graphite-statsd:${VERSION} .
-          # if it's not from master - push also latest
-          [ "$VERSION" == "master" ] || \
           docker buildx build --platform=linux/arm,linux/arm64,linux/amd64 --push -t graphiteapp/graphite-statsd:latest .
 #      - name: Login to ghcr.io
 #        run: |
