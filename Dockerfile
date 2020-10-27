@@ -115,7 +115,7 @@ RUN git clone "${statsd_repo}" \
 
 # build go-carbon (experimental)
 # https://github.com/go-graphite/go-carbon/pull/340
-ARG gocarbon_version=0.15.4
+ARG gocarbon_version=0.15.5
 ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
