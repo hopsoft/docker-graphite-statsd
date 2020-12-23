@@ -129,8 +129,8 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_TIME_ZONE: (Etc/UTC) Set your local timezone
 * GRAPHITE_DATE_FORMAT: (%m/%d) Set your local date format
 * GRAPHITE_UTF8_METRICS: (false) Allow UTF-8 metrics names (can cause performance issues)
-* GRAPHITE_LOG_ROTATION: (true) rotate logs
-* GRAPHITE_LOG_ROTATION_COUNT: (1) number of logs to keep
+* GRAPHITE_LOG_ROTATION: (false) rotate logs using internal log rotation, otherwise use [logrotate](https://github.com/graphite-project/docker-graphite-statsd/blob/master/conf/etc/logrotate.d/graphite-statsd) instead
+* GRAPHITE_LOG_ROTATION_COUNT: (1) number of logs to keep (if GRAPHITE_LOG_ROTATION is true)
 * GRAPHITE_LOG_RENDERING_PERFORMANCE: (true) log performance information
 * GRAPHITE_LOG_CACHE_PERFORMANCE: (true) log cache performance information
 * GRAPHITE_LOG_FILE_INFO: (info.log), set to "-" for stdout/stderr

@@ -32,7 +32,7 @@ DATE_FORMAT = os.environ.get('GRAPHITE_DATE_FORMAT', '%m/%d')
 # Logging
 # These can also be configured using Django's LOGGING:
 # https://docs.djangoproject.com/en/1.11/topics/logging/
-LOG_ROTATION = os.environ.get("GRAPHITE_LOG_ROTATION", "true").lower() in ['1', 'true', 'yes']
+LOG_ROTATION = os.environ.get("GRAPHITE_LOG_ROTATION", "false").lower() in ['1', 'true', 'yes']
 LOG_ROTATION_COUNT = int(os.environ.get('GRAPHITE_LOG_ROTATION_COUNT', '1'))
 LOG_RENDERING_PERFORMANCE = os.environ.get("GRAPHITE_LOG_RENDERING_PERFORMANCE", "true").lower() in ['1', 'true', 'yes']
 LOG_CACHE_PERFORMANCE = os.environ.get("GRAPHITE_LOG_CACHE_PERFORMANCE", "true").lower() in ['1', 'true', 'yes']

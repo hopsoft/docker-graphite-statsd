@@ -1,4 +1,4 @@
-ARG BASEIMAGE=alpine:3.12.0
+ARG BASEIMAGE=alpine:3.12.3
 FROM $BASEIMAGE as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
@@ -62,7 +62,7 @@ RUN true \
  && . /opt/graphite/bin/activate \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.16 \
+      django==2.2.17 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
