@@ -6,9 +6,6 @@ RUN true \
  && apk add --update --no-cache \
       cairo \
       cairo-dev \
-      collectd \
-      collectd-disk \
-      collectd-nginx \
       findutils \
       librrd \
       logrotate \
@@ -33,6 +30,11 @@ RUN true \
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite
+
+# optional packages (e.g. not exist on S390 in alpine 3.13 yet)
+RUN apk add --update \
+      collectd collectd-disk collectd-nginx \
+      || true
 
 FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
@@ -113,7 +115,7 @@ RUN git clone "${statsd_repo}" \
  && git checkout tags/v"${statsd_version}" \
  && npm install
 
-# build go-carbon (experimental)
+# build go-carbon (optional)
 # https://github.com/go-graphite/go-carbon/pull/340
 ARG gocarbon_version=0.15.6
 ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
@@ -122,7 +124,8 @@ RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && git checkout tags/v"${gocarbon_version}" \
  && make \
  && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
- && cp -fv go-carbon /opt/graphite/bin/go-carbon
+ && cp -fv go-carbon /opt/graphite/bin/go-carbon \
+ || true
 
 # install brubeck (experimental)
 ARG brubeck_version=bc1f4d3debe5eec337e7d132d092968ad17b91db
