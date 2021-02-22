@@ -6,9 +6,6 @@ RUN true \
  && apk add --update --no-cache \
       cairo \
       cairo-dev \
-      collectd \
-      collectd-disk \
-      collectd-nginx \
       findutils \
       librrd \
       logrotate \
@@ -33,6 +30,11 @@ RUN true \
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite
+
+# optional packages (e.g. not exist on S390)
+RUN apk add --update \
+      collectd collectd-disk collectd-nginx \
+      || true
 
 FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
