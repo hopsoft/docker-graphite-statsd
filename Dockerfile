@@ -1,4 +1,4 @@
-ARG BASEIMAGE=alpine:3.12.3
+ARG BASEIMAGE=alpine:3.13.2
 FROM $BASEIMAGE as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
@@ -62,7 +62,7 @@ RUN true \
  && . /opt/graphite/bin/activate \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.17 \
+      django==2.2.19 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
@@ -115,7 +115,7 @@ RUN git clone "${statsd_repo}" \
 
 # build go-carbon (experimental)
 # https://github.com/go-graphite/go-carbon/pull/340
-ARG gocarbon_version=0.15.5
+ARG gocarbon_version=0.15.6
 ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
