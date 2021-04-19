@@ -1,4 +1,4 @@
-ARG BASEIMAGE=alpine:3.13.2
+ARG BASEIMAGE=alpine:3.13.5
 FROM $BASEIMAGE as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
@@ -64,7 +64,7 @@ RUN true \
  && . /opt/graphite/bin/activate \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.19 \
+      django==2.2.20 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.0.4 \
@@ -78,7 +78,7 @@ RUN true \
       psycopg2 \
       django-cockroachdb==2.2.*
 
-ARG version=1.1.7
+ARG version=1.1.8
 
 # install whisper
 ARG whisper_version=${version}
