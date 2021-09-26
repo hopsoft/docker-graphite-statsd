@@ -29,7 +29,8 @@ RUN true \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
       /var/log/carbon \
-      /var/log/graphite
+      /var/log/graphite \
+ && touch /var/log/messages
 
 # optional packages (e.g. not exist on S390 in alpine 3.13 yet)
 RUN apk add --update \
