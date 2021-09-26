@@ -1,10 +1,8 @@
-/var/log/*.log /var/log/*/*.log {
+/var/log/*.log /var/log/carbon/*.log /var/log/graphite/*.log {
   daily
-  size 50M
   missingok
   rotate 14
   compress
-  delaycompress
   notifempty
   copytruncate
 }
