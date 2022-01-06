@@ -41,6 +41,7 @@ FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ARG python_binary=python3
+ARG python_extra_flags="--single-version-externally-managed --root=/"
 ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN true \
@@ -89,7 +90,7 @@ ARG whisper_repo=https://github.com/graphite-project/whisper.git
 RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper \
  && cd /usr/local/src/whisper \
  && . /opt/graphite/bin/activate \
- && $python_binary ./setup.py install --single-version-externally-managed --root=/
+ && $python_binary ./setup.py install $python_extra_flags
 
 # install carbon
 ARG carbon_version=${version}
@@ -98,7 +99,7 @@ RUN . /opt/graphite/bin/activate \
  && git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon \
  && cd /usr/local/src/carbon \
  && pip3 install -r requirements.txt \
- && $python_binary ./setup.py install --single-version-externally-managed --root=/
+ && $python_binary ./setup.py install $python_extra_flags
 
 # install graphite
 ARG graphite_version=${version}
@@ -107,7 +108,7 @@ RUN . /opt/graphite/bin/activate \
  && git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web \
  && cd /usr/local/src/graphite-web \
  && pip3 install -r requirements.txt \
- && $python_binary ./setup.py install --single-version-externally-managed --root=/
+ && $python_binary ./setup.py install $python_extra_flags
 
 # install statsd
 ARG statsd_version=0.9.0
