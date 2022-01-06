@@ -1,4 +1,4 @@
-ARG BASEIMAGE=alpine:3.14.2
+ARG BASEIMAGE=alpine:3.15
 FROM $BASEIMAGE as base
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
@@ -64,9 +64,10 @@ RUN true \
  && pip install virtualenv==16.7.10 \
  && virtualenv -p $python_binary /opt/graphite \
  && . /opt/graphite/bin/activate \
+ && echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.24 \
+      django==2.2.26 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.1.0 \
