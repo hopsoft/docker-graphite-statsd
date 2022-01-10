@@ -102,12 +102,14 @@ RUN . /opt/graphite/bin/activate \
  && $python_binary ./setup.py install $python_extra_flags
 
 # install graphite
+# pin pyparsing to 2.4.7 should be removed in 1.1.9 or later
 ARG graphite_version=${version}
 ARG graphite_repo=https://github.com/graphite-project/graphite-web.git
 RUN . /opt/graphite/bin/activate \
  && git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web \
  && cd /usr/local/src/graphite-web \
  && pip3 install -r requirements.txt \
+ && pip3 install --no-deps --force-reinstall pyparsing==2.4.7 \
  && $python_binary ./setup.py install $python_extra_flags
 
 # install statsd
