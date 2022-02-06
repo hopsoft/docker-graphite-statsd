@@ -43,13 +43,13 @@ jobs:
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:${VERSION} .
           docker buildx build --platform=linux/amd64 --push -t graphiteapp/graphite-statsd:latest .
-      - name: Build and push amd64 pypy image to Docker Hub
-        run: |
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
-          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --build-arg python_extra_flags="" --push -t graphiteapp/graphite-statsd:${VERSION}-pypy .
+#      - name: Build and push amd64 pypy image to Docker Hub
+#        run: |
+#          # Strip git ref prefix from version
+#          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+#          # Strip "v" prefix from tag name
+#          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')
+#          docker buildx build --platform=linux/amd64 --build-arg BASEIMAGE=${PYPY_IMAGE} --build-arg python_binary=/usr/local/bin/pypy3 --build-arg python_extra_flags="" --push -t graphiteapp/graphite-statsd:${VERSION}-pypy .
       - name: Build and push multi-platform images to Docker Hub
         run: |
           # Strip git ref prefix from version
