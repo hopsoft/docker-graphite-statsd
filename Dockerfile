@@ -40,7 +40,6 @@ RUN apk add --update \
 FROM base as build
 LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
-ARG python_binary=python3
 ARG python_extra_flags="--single-version-externally-managed --root=/"
 ENV PYTHONDONTWRITEBYTECODE=1
 
@@ -61,9 +60,9 @@ RUN true \
       mysql-dev \
       postgresql-dev \
  && curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py \
- && $python_binary /tmp/get-pip.py pip==20.1.1 setuptools==50.3.2 wheel==0.35.1 && rm /tmp/get-pip.py \
+ && python3 /tmp/get-pip.py pip==20.1.1 setuptools==50.3.2 wheel==0.35.1 && rm /tmp/get-pip.py \
  && pip install virtualenv==16.7.10 \
- && virtualenv -p $python_binary /opt/graphite \
+ && virtualenv -p python3 /opt/graphite \
  && . /opt/graphite/bin/activate \
  && echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so \
  && pip install \
@@ -90,7 +89,7 @@ ARG whisper_repo=https://github.com/graphite-project/whisper.git
 RUN git clone -b ${whisper_version} --depth 1 ${whisper_repo} /usr/local/src/whisper \
  && cd /usr/local/src/whisper \
  && . /opt/graphite/bin/activate \
- && $python_binary ./setup.py install $python_extra_flags
+ && python3 ./setup.py install $python_extra_flags
 
 # install carbon
 ARG carbon_version=${version}
@@ -99,7 +98,7 @@ RUN . /opt/graphite/bin/activate \
  && git clone -b ${carbon_version} --depth 1 ${carbon_repo} /usr/local/src/carbon \
  && cd /usr/local/src/carbon \
  && pip3 install -r requirements.txt \
- && $python_binary ./setup.py install $python_extra_flags
+ && python3 ./setup.py install $python_extra_flags
 
 # install graphite
 # pin pyparsing to 2.4.7 should be removed in 1.1.9 or later
@@ -110,7 +109,7 @@ RUN . /opt/graphite/bin/activate \
  && cd /usr/local/src/graphite-web \
  && pip3 install -r requirements.txt \
  && pip3 install --no-deps --force-reinstall pyparsing==2.4.7 \
- && $python_binary ./setup.py install $python_extra_flags
+ && python3 ./setup.py install $python_extra_flags
 
 # install statsd
 ARG statsd_version=0.9.0
