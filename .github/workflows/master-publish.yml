@@ -40,4 +40,4 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Build and push amd64 image to ghcr.io
         run: |
-          docker buildx build --platform=linux/amd64 --push -t ghcr.io/${{ github.actor }}/graphite-statsd:master .
+          docker buildx build --platform=linux/amd64 --push -t ghcr.io/deniszh/graphite-statsd:master .

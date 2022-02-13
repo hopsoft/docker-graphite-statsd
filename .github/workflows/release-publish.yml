@@ -57,5 +57,5 @@ jobs:
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo ${VERSION} | sed -e 's/^v//')               
-          docker buildx build --platform=linux/arm/v7,linux/arm64/v8,linux/s390x,linux/amd64 --push -t ghcr.io/graphite-project/graphite-statsd:${VERSION} .
-          docker buildx build --platform=linux/arm/v7,linux/arm64/v8,linux/s390x,linux/amd64 --push -t ghcr.io/graphite-project/graphite-statsd:latest .
+          docker buildx build --platform=linux/arm/v7,linux/arm64/v8,linux/s390x,linux/amd64 --push -t ghcr.io/deniszh/graphite-statsd:${VERSION} .
+          docker buildx build --platform=linux/arm/v7,linux/arm64/v8,linux/s390x,linux/amd64 --push -t ghcr.io/deniszh/graphite-statsd:latest .

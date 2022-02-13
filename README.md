@@ -13,7 +13,7 @@ Any suggestions / patches etc. are welcome!
  - Starting from `1.1.7-11` we're building linux/s390x versions too.
  - Starting from `1.1.7-6` and up to `1.1.8-5` we were building '-pypy' version of x64 image, but now pypy building is disabled because lacking recent pypy docker images based on Alpine.
  - Starting from `1.1.9-1` we're building we're building linux/arm/v7 and linux/arm64/v8 by default.
- - Starting from `1.1.9-1` we marked ghcr.io as preferred repository instead of Docker hub.
+ - Starting from `1.1.9-1` we're uploading packages also to ghcr.io/deniszh repository.
 
 # Docker Image for Graphite & Statsd
 
@@ -35,7 +35,18 @@ docker run -d\
  -p 8126:8126\
  graphiteapp/graphite-statsd
 ```
-
+or
+```sh
+docker run -d\
+ --name graphite\
+ --restart=always\
+ -p 80:80\
+ -p 2003-2004:2003-2004\
+ -p 2023-2024:2023-2024\
+ -p 8125:8125/udp\
+ -p 8126:8126\
+ ghcr.io/deniszh/graphite-statsd
+```
 This starts a Docker container named: **graphite**
 
 Please also note that you can freely remap container port to any host port in case of corresponding port is already occupied on host. It's also not mandatory to map all ports, map only required ports - please see table below.
