@@ -50,7 +50,7 @@ jobs:
           docker buildx build --platform=linux/arm/v7,linux/arm64/v8,linux/s390x,linux/amd64 --push -t graphiteapp/graphite-statsd:latest .
       - name: Login to ghcr.io
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u deniszh --password-stdin
       - name: Build and push multi-platform images to ghcr.io
         run: |
           # Strip git ref prefix from version
