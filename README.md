@@ -7,10 +7,13 @@ This repo was based on [@hopsoft's](https://github.com/hopsoft/) [docker-graphit
 
 Any suggestions / patches etc. are welcome!
 
-#### Tags / architectures
+#### Tags / architectures history
  - Autobuild repo https://hub.docker.com/r/graphiteapp/docker-graphite-statsd (development repo, with automatic builds, unstable) is deprecated and was removed from Docker Hub. If you want to use unstable builds please use `master` tag in stable repo (https://hub.docker.com/r/graphiteapp/graphite-statsd).
- - Starting from `1.1.7-1` we building arm/arm64 versions too. 
- - Starting from `1.1.7-6` we building '-pypy' version of x64 image too, use it in case of performance issues (see PR #151 for details).
+ - Starting from `1.1.7-1` we're building arm/arm64 versions too.
+ - Starting from `1.1.7-11` we're building linux/s390x versions too.
+ - Starting from `1.1.7-6` and up to `1.1.8-5` we were building '-pypy' version of x64 image, but now pypy building is disabled because lacking recent pypy docker images based on Alpine.
+ - Starting from `1.1.9-1` we're building we're building linux/arm/v7 and linux/arm64/v8 by default.
+ - Starting from `1.1.9-1` we marked ghcr.io as preferred repository instead of Docker hub.
 
 # Docker Image for Graphite & Statsd
 
