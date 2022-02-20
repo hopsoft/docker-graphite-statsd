@@ -12,8 +12,8 @@ Any suggestions / patches etc. are welcome!
  - Starting from `1.1.7-1` we're building arm/arm64 versions too.
  - Starting from `1.1.7-11` we're building linux/s390x versions too.
  - Starting from `1.1.7-6` and up to `1.1.8-5` we were building '-pypy' version of x64 image, but now pypy building is disabled because lacking recent pypy docker images based on Alpine.
- - Starting from `1.1.9-1` we're building we're building linux/arm/v7 and linux/arm64/v8 by default.
- - Starting from `1.1.9-1` we're uploading packages also to ghcr.io/deniszh repository.
+ - Starting from `1.1.8-8` we're building linux/arm/v7 and linux/arm64/v8 by default.
+ - Starting from `1.1.8-8` we're uploading docker images also to ghcr.io/deniszh repository.
 
 # Docker Image for Graphite & Statsd
 
@@ -316,7 +316,7 @@ Use `GOCARBON=1` environment variable to enable [go-carbon](https://github.com/l
 
 ### brubeck
 
-Use `BRUBECK=1` environment variable to enable [brubeck]() instance of normal Statsd. Please note that brubeck has different config format and not fully compatible with original statsd.
+Use `BRUBECK=1` environment variable to enable [brubeck](https://github.com/lukepalmer/brubeck) instance of normal Statsd. Please note that brubeck has different config format and not fully compatible with original statsd.
 
 
 ## Additional Reading
