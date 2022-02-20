@@ -26,6 +26,7 @@ RUN true \
       postgresql-dev \
       librdkafka \
       jansson \
+      bash \
  && rm -rf \
       /etc/nginx/conf.d/default.conf \
  && mkdir -p \
@@ -68,7 +69,7 @@ RUN true \
  && echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.26 \
+      django==2.2.27 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.1.0 \
@@ -123,12 +124,12 @@ RUN git clone "${statsd_repo}" \
 
 # build go-carbon (optional)
 # https://github.com/go-graphite/go-carbon/pull/340
-ARG gocarbon_version=0.15.6
+ARG gocarbon_version=0.16.2
 ARG gocarbon_repo=https://github.com/go-graphite/go-carbon.git
 RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  && cd /usr/local/src/go-carbon \
  && git checkout tags/v"${gocarbon_version}" \
- && make \
+ && make go-carbon \
  && chmod +x go-carbon && mkdir -p /opt/graphite/bin/ \
  && cp -fv go-carbon /opt/graphite/bin/go-carbon \
  || true
