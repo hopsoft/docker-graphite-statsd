@@ -83,7 +83,7 @@ RUN true \
       psycopg2 \
       django-cockroachdb==2.2.*
 
-ARG version=1.1.9
+ARG version=1.1.10
 
 # install whisper
 ARG whisper_version=${version}
