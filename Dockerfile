@@ -83,7 +83,7 @@ RUN true \
       psycopg2 \
       django-cockroachdb==2.2.*
 
-ARG version=1.1.8
+ARG version=1.1.9
 
 # install whisper
 ARG whisper_version=${version}
@@ -103,14 +103,12 @@ RUN . /opt/graphite/bin/activate \
  && python3 ./setup.py install $python_extra_flags
 
 # install graphite
-# pin pyparsing to 2.4.7 should be removed in 1.1.9 or later
 ARG graphite_version=${version}
 ARG graphite_repo=https://github.com/graphite-project/graphite-web.git
 RUN . /opt/graphite/bin/activate \
  && git clone -b ${graphite_version} --depth 1 ${graphite_repo} /usr/local/src/graphite-web \
  && cd /usr/local/src/graphite-web \
  && pip3 install -r requirements.txt \
- && pip3 install --no-deps --force-reinstall pyparsing==2.4.7 \
  && python3 ./setup.py install $python_extra_flags
 
 # install statsd
@@ -135,7 +133,7 @@ RUN git clone "${gocarbon_repo}" /usr/local/src/go-carbon \
  || true
 
 # install brubeck (experimental)
-ARG brubeck_version=bc1f4d3debe5eec337e7d132d092968ad17b91db
+ARG brubeck_version=f306c25df51181be05a58dcc108bfaefc39f7f4a
 ARG brubeck_repo=https://github.com/lukepalmer/brubeck.git
 ENV BRUBECK_NO_HTTP=1
 RUN git clone "${brubeck_repo}" /usr/local/src/brubeck \
