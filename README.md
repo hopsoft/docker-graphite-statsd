@@ -307,7 +307,7 @@ You can use this 3-rd party repo with Graphite Helm chart - https://github.com/k
 
 ## About `root` process 
 
-This image uses `runit` as init system, to run multiple processes in single container. It's not against Docker guidelines but bit against Docker philosophy. Also, `runit` require root privileges to run, so, it's not possible to stop using root privileges, without completely rewrite this image. This is possible, of course, but it's better to use separate images per component then, and having separate repository for this new project. 
+This image uses `runit` as init system, to run multiple processes in single container. It's not against Docker guidelines but bit against Docker philosophy. Also, `runit` require root privileges to run, so, it's not possible to stop using root privileges, without completely rewrite this image. This is possible, of course, but it's better to use separate images per component then, and having separate repository for this new project. Or you may use this image as base and create set of images to start Graphite components separately, without root access. Probably, result will be quite specific, but may be it's possible to make it generic enough to merge to this repo, we would like to acceppt such PR.
 
 ## Experimental Features
 ### go-carbon 
