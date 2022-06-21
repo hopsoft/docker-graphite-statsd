@@ -202,7 +202,7 @@ Use `RELAY=1` environment variable to enable carbon relay instance. Use `[relay]
           carbon-relay LINE_RECEIVER_PORT in [`statsd`](https://github.com/statsd/statsd/blob/master/exampleConfig.js) config.
 
 ## Logrotate
-By default logs are rotated daily, using built-in `/etc/periodic/daily/logrotate` script. Please note, that according to Docker [logging best practices](https://success.docker.com/article/logging-best-practices) "Ideally, applications log to stdout/stderr, and Docker sends those logs to the configured logging destination.". You can use `-` as log file name for such behaviour.
+By default logs are rotated daily, based on configuration in  `/etc/logrotate.d/graphite-statsd`. You can variate rotation by adding `size 10M` or changing time up to `hourly` (instead of `daily`), because of logrotate is is evaluated hourly by `/etc/periodic/hourly/logrotate`. Please note, that according to Docker [logging best practices](https://success.docker.com/article/logging-best-practices) "Ideally, applications log to stdout/stderr, and Docker sends those logs to the configured logging destination.". You can use `-` as log file name for such behaviour.
 
 ## Runit
 Each service started and controlled by runit will be gracefully shutdown when stopping the container : wait up to 7 seconds for the service to become down, then it will be killed. The runit environment variable `$SVWAIT` overrides this default timeout. Additionnally, a global timeout can be also specified with the docker-run option `--stop-timeout`.

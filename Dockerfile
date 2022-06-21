@@ -32,6 +32,7 @@ RUN true \
  && mkdir -p \
       /var/log/carbon \
       /var/log/graphite \
+ && mv /etc/periodic/daily/logrotate /etc/periodic/hourly/logrotate \
  && touch /var/log/messages
 
 # optional packages (e.g. not exist on S390 in alpine 3.13 yet)
