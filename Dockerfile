@@ -37,7 +37,7 @@ RUN true \
 
 # optional packages (e.g. not exist on S390 in alpine 3.13 yet)
 RUN apk add --update \
-      collectd collectd-disk collectd-nginx \
+      collectd collectd-disk collectd-nginx collectd-battery\
       || true
 
 FROM base as build
@@ -161,10 +161,10 @@ LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ENV STATSD_INTERFACE udp
 
-COPY conf /
-
 # copy from build image
 COPY --from=build /opt /opt
+
+COPY conf /
 
 # defaults
 EXPOSE 80 2003-2004 2013-2014 2023-2024 8080 8125 8125/udp 8126
