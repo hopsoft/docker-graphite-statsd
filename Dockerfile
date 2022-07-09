@@ -71,6 +71,7 @@ RUN true \
  && pip install \
       cairocffi==1.1.0 \
       django==2.2.27 \
+      django-tagging==0.4.3 \
       django-statsd-mozilla \
       fadvise \
       gunicorn==20.1.0 \
@@ -161,10 +162,11 @@ LABEL maintainer="Denys Zhdanov <denis.zhdanov@gmail.com>"
 
 ENV STATSD_INTERFACE udp
 
+# copy config BEFORE build
+COPY conf /
+
 # copy from build image
 COPY --from=build /opt /opt
-
-COPY conf /
 
 # defaults
 EXPOSE 80 2003-2004 2013-2014 2023-2024 8080 8125 8125/udp 8126
