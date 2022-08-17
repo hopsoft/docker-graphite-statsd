@@ -36,6 +36,7 @@ LOG_ROTATION = os.environ.get("GRAPHITE_LOG_ROTATION", "false").lower() in ['1',
 LOG_ROTATION_COUNT = int(os.environ.get('GRAPHITE_LOG_ROTATION_COUNT', '1'))
 LOG_RENDERING_PERFORMANCE = os.environ.get("GRAPHITE_LOG_RENDERING_PERFORMANCE", "true").lower() in ['1', 'true', 'yes']
 LOG_CACHE_PERFORMANCE = os.environ.get("GRAPHITE_LOG_CACHE_PERFORMANCE", "true").lower() in ['1', 'true', 'yes']
+LOG_INFO_PERFORMANCE = os.environ.get("GRAPHITE_LOG_INFO_PERFORMANCE", "false").lower() in ['1', 'true', 'yes']
 
 # Filenames for log output, set to '-' to log to stderr
 LOG_FILE_INFO = os.environ.get("GRAPHITE_LOG_FILE_INFO", 'info.log')

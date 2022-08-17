@@ -147,6 +147,7 @@ Additional environment variables can be set to adjust performance.
 * GRAPHITE_LOG_ROTATION_COUNT: (1) number of logs to keep (if GRAPHITE_LOG_ROTATION is true)
 * GRAPHITE_LOG_RENDERING_PERFORMANCE: (true) log performance information
 * GRAPHITE_LOG_CACHE_PERFORMANCE: (true) log cache performance information
+* GRAPHITE_LOG_INFO_PERFORMANCE: (false) log info performance information
 * GRAPHITE_LOG_FILE_INFO: (info.log), set to "-" for stdout/stderr
 * GRAPHITE_LOG_FILE_EXCEPTION: (exception.log), set to "-" for stdout/stderr
 * GRAPHITE_LOG_FILE_CACHE: (cache.log), set to "-" for stdout/stderr
