@@ -45,6 +45,16 @@ You can change how often data will be stored in the  [storage-schemas.conf](http
 The default one looks like this:
 
 ```
+[sitespeed_crux]
+pattern = ^sitespeed_io\.crux\.
+retentions = 60m:40d
+
+[sitespeed_run]
+pattern = ^sitespeed_io\.(.*)\.(.*)\.run\.
+retentions = 10s:3d
+
+[sitespeed]
+pattern = ^sitespeed_io\.
 retentions = 10m:40d
 ```
 
