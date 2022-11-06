@@ -70,7 +70,7 @@ RUN true \
  && echo 'INPUT ( libldap.so )' > /usr/lib/libldap_r.so \
  && pip install \
       cairocffi==1.1.0 \
-      django==2.2.27 \
+      django==2.2.28 \
       django-tagging==0.4.3 \
       django-statsd-mozilla \
       fadvise \
@@ -82,7 +82,7 @@ RUN true \
       rrdtool \
       python-ldap \
       mysqlclient \
-      psycopg2 \
+      psycopg2==2.8.6 \
       django-cockroachdb==2.2.*
 
 ARG version=1.1.10
